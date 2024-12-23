@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Dispursip</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -46,10 +46,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="index3.html" class="nav-link">Halo, selamat pagi {{ ucfirst(Auth::user()->nama) }}</a>
       </li>
     </ul>
 
@@ -131,13 +128,6 @@
             <i class="fas fa-calendar-alt mr-2"></i> 8 Ajuan Kunjungan
             <span class="float-right text-muted text-sm">12 hours</span>
           </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
       <li class="nav-item">
@@ -159,7 +149,7 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">{{ ucfirst(Auth::user()->role) }}</span>
     </a>
 
     <!-- Sidebar -->
@@ -170,7 +160,7 @@
           <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Welcome {{ ucfirst(Auth::user()->nama) }}</a>
         </div>
       </div>
 
@@ -230,13 +220,14 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="pages/gallery.html" class="nav-link">
-              <i class="nav-icon far fa-image"></i>
-              <p>
-                Gallery
-              </p>
-            </a>
-          </li>
+      <form action="{{ route('logout') }}" method="POST" class="nav-link">
+        @csrf
+        <button type="submit" class="btn btn-link" style="padding: 0; color: inherit; text-align: left; width: 100%; background: none; border: none;">
+          <i class="nav-icon fa fa-power-off"></i>
+          <p>Logout</p>
+        </button>
+      </form>
+    </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -343,7 +334,7 @@
 $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,
@@ -540,5 +531,6 @@ $(function () {
     })
   })
 </script>
+
 </body>
 </html>

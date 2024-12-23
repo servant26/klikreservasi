@@ -9,6 +9,6 @@ class UserController extends Controller
     // Display the user dashboard
     public function index()
     {
-        return view('dashboard.user'); // Assuming you have this view
+        return view('user.dashboard'); // Assuming you have this view
     }
 }

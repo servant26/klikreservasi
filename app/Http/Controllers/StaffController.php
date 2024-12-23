@@ -9,6 +9,6 @@ class StaffController extends Controller
     // Display the staff dashboard
     public function index()
     {
-        return view('dashboard.staff'); // Assuming you have this view
+        return view('staff.dashboard'); // Assuming you have this view
     }
 }

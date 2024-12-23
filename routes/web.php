@@ -14,11 +14,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Controller berdasarkan role
 //admin
-Route::middleware(['auth', 'role:admin'])->get('/dashboard/admin', [AdminController::class, 'index'])->name('dashboard.admin');
+Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
 //staff
-Route::middleware(['auth', 'role:staff'])->get('/dashboard/staff', [StaffController::class, 'index'])->name('dashboard.staff');
+Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', [StaffController::class, 'index'])->name('staff.dashboard');
 
 //user
-Route::middleware(['auth', 'role:user'])->get('/dashboard/user', [UserController::class, 'index'])->name('dashboard.user');
+Route::middleware(['auth', 'role:user'])->get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
 
