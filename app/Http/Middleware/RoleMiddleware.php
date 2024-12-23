@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle($request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, $role)
     {
-        if (Auth::check() && Auth::user()->role === $role) {
+        if (Auth::check() && Auth::user()->role == $role) {
             return $next($request);
         }
 
-        return redirect()->route('login')->withErrors(['unauthorized' => 'Anda tidak memiliki akses ke halaman ini']);
+        return redirect()->route('login'); // Redirect if role does not match
     }
 }
