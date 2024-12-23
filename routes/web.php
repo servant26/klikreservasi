@@ -13,7 +13,12 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Controller berdasarkan role
+//admin
 Route::middleware(['auth', 'role:admin'])->get('/dashboard/admin', [AdminController::class, 'index'])->name('dashboard.admin');
+
+//staff
 Route::middleware(['auth', 'role:staff'])->get('/dashboard/staff', [StaffController::class, 'index'])->name('dashboard.staff');
+
+//user
 Route::middleware(['auth', 'role:user'])->get('/dashboard/user', [UserController::class, 'index'])->name('dashboard.user');
 
