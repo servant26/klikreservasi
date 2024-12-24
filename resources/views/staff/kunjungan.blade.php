@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0">Data Kunjungan Terbaru</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Staff</a></li>
-              <li class="breadcrumb-item active">Dashboard</li>
+              <li class="breadcrumb-item"><a href="{{ route('staff.dashboard') }}">Back to Dashboard</a></li>
+              <li class="breadcrumb-item active">Kunjungan</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -18,98 +18,13 @@
     </div>
     <!-- /.content-header -->
 @endsection
+
 @section('content')
 <!-- Small boxes (Stat box) -->
-<div class="row">
-  <!-- Column 1: New Orders and Bounce Rate -->
-  <div class="col-lg-4 col-6">
-    <!-- New Orders -->
-    <div class="small-box bg-info mb-3">
-      <div class="inner">
-        <h3>{{ $ajuan->count() }}</h3>
-        <p>Kunjungan/Reservasi Bulan Ini</p>
-      </div>
-      <div class="icon">
-        <i class="fas fa-book"></i>
-      </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-    <!-- New Orders -->
-    <div class="small-box bg-warning mb-3">
-      <div class="inner">
-        <h3>{{ $reschedule }}</h3>
-        <p>Re-Schedule</p>
-      </div>
-      <div class="icon">
-        <i class="fas fa-sync"></i>
-      </div>
-      <a href="{{ route('staff.reschedule') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <div class="col-lg-4 col-6">
-    <!-- Bounce Rate -->
-    <div class="small-box bg-danger">
-      <div class="inner">
-        <h3>{{ $kunjungan }}</h3>
-        <p>Ajuan Kunjungan Terbaru</p>
-      </div>
-      <div class="icon">
-        <i class="fas fa-building"></i>
-      </div>
-      <a href="{{ route('staff.kunjungan') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-    <!-- Bounce Rate -->
-    <div class="small-box bg-danger">
-      <div class="inner">
-        <h3>{{ $reservasi }}</h3>
-        <p>Ajuan Reservasi Terbaru</p>
-      </div>
-      <div class="icon">
-        <i class="fas fa-building"></i>
-      </div>
-      <a href="{{ route('staff.reservasi') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <!-- Column 2: Calendar -->
-  <div class="col-lg-4 col-12">
-    <div class="card bg-gradient-success">
-      <div class="card-header border-0">
-        <h3 class="card-title">
-          <i class="far fa-calendar-alt"></i>
-          Calendar
-        </h3>
-        <div class="card-tools">
-          <div class="btn-group">
-            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-              <i class="fas fa-bars"></i>
-            </button>
-            <div class="dropdown-menu" role="menu">
-              <a href="#" class="dropdown-item">Add new event</a>
-              <a href="#" class="dropdown-item">Clear events</a>
-              <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item">View calendar</a>
-            </div>
-          </div>
-          <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      </div>
-      <div class="card-body pt-0">
-        <div id="calendar" style="width: 100%"></div>
-      </div>
-    </div>
-  </div> 
-</div>
 <div class="card">
-    <div class="card-header">
-      <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a>
-    </div>
     <!-- /.card-header -->
     <div class="card-body">
+    <p>Menampilkan data kunjungan terbaru :</p>
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
@@ -125,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($ajuan as $a)
+            @foreach($kunjungan as $a)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $a->nama }}</td>
