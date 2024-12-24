@@ -8,7 +8,7 @@
     <div class="small-box bg-info mb-3">
       <div class="inner">
         <h3>150</h3>
-        <p>Total Kunjungan Bulan Ini</p>
+        <p>Total Kunjungan/Reservasi Bulan Ini</p>
       </div>
       <div class="icon">
         <i class="fas fa-book"></i>
@@ -16,23 +16,23 @@
       <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
     <!-- New Orders -->
-    <div class="small-box bg-info mb-3">
+    <div class="small-box bg-warning mb-3">
       <div class="inner">
         <h3>0</h3>
-        <p>Ajuan Kunjungan Terbaru</p>
+        <p>Re-Schedule</p>
       </div>
       <div class="icon">
-        <i class="fas fa-book"></i>
+        <i class="fa fa-refresh"></i>
       </div>
       <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-4 col-6">
     <!-- Bounce Rate -->
-    <div class="small-box bg-success">
+    <div class="small-box bg-danger">
       <div class="inner">
-        <h3>150</h3>
-        <p>Total Reservasi Bulan Ini</p>
+        <h3>0</h3>
+        <p>Ajuan Kunjungan Terbaru</p>
       </div>
       <div class="icon">
         <i class="fas fa-building"></i>
@@ -40,7 +40,7 @@
       <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
     <!-- Bounce Rate -->
-    <div class="small-box bg-success">
+    <div class="small-box bg-danger">
       <div class="inner">
         <h3>0</h3>
         <p>Ajuan Reservasi Terbaru</p>
@@ -87,7 +87,7 @@
 </div>
 <div class="card">
     <div class="card-header">
-        <a class="btn btn-primary" href="" role="button">Tambah Data</a>
+      <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -99,7 +99,9 @@
                     <th>Asal</th>
                     <th>Kontak</th>
                     <th>Jenis</th>
-                    <th>Detail</th>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                    <th style="width: 15%;">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -109,7 +111,9 @@
                     <td>Win 95+</td>
                     <td>4</td>
                     <td>Reservasi</td>
-                    <td>X</td>
+                    <td>25 Desember 2024</td>
+                    <td>08:00</td>
+                    <td><a class="btn btn-primary" href="" role="button">Sudah direspon</a></td>
                 </tr>
                 <tr>
                     <td>2.</td>
@@ -117,8 +121,9 @@
                     <td>Win 95+</td>
                     <td>5</td>
                     <td>Reservasi</td>
-                    <td>C</td>
-                    
+                    <td>25 Desember 2024</td>
+                    <td>11:00</td>
+                    <td><a class="btn btn-primary" href="" role="button">Sudah direspon</a></td>
                 </tr>
                 <tr>
                     <td>3.</td>
@@ -126,7 +131,9 @@
                     <td>KDE 3.5</td>
                     <td>3.5</td>
                     <td>Kunjungan</td>
-                    <td>A</td>
+                    <td>26 Desember 2024</td>
+                    <td>10:00</td>
+                    <td><a class="btn btn-danger" href="" role="button">Belum direspon</a></td>
                 </tr>
                 <tr>
                     <td>4.</td>
@@ -134,7 +141,9 @@
                     <td>Mac OS 8-9</td>
                     <td>-</td>
                     <td>Reservasi</td>
-                    <td>X</td>
+                    <td>27 Desember 2024</td>
+                    <td>08:00</td>
+                    <td><a class="btn btn-warning" href="" role="button">Re-Schedule</a></td>
                 </tr>
                 <tr>
                     <td>5.</td>
@@ -142,63 +151,9 @@
                     <td>Mac OS 7.6-9</td>
                     <td>1</td>
                     <td>Kunjungan</td>
-                    <td>C</td>
-                </tr>
-                <tr>
-                    <td>6.</td>
-                    <td>Internet Explorer 5.2</td>
-                    <td>Mac OS 8-X</td>
-                    <td>1</td>
-                    <td>Kunjungan</td>
-                    <td>C</td>
-                </tr>
-                <tr>
-                    <td>7.</td>
-                    <td>NetFront 3.1</td>
-                    <td>Embedded devices</td>
-                    <td>-</td>
-                    <td>Kunjungan</td>
-                    <td>C</td>
-                </tr>
-                <tr>
-                    <td>8.</td>
-                    <td>NetFront 3.4</td>
-                    <td>Embedded devices</td>
-                    <td>-</td>
-                    <td>Reservasi</td>
-                    <td>A</td>
-                </tr>
-                <tr>
-                    <td>9.</td>
-                    <td>Dillo 0.8</td>
-                    <td>Embedded devices</td>
-                    <td>-</td>
-                    <td>Reservasi</td>
-                    <td>X</td>
-                </tr>
-                <tr>
-                    <td>10.</td>
-                    <td>Links</td>
-                    <td>Text only</td>
-                    <td>-</td>
-                    <td>Reservasi</td>
-                    <td>X</td>
-                </tr>
-                <tr>
-                    <td>11.</td>
-                    <td>Lynx</td>
-                    <td>Text only</td>
-                    <td>-</td>
-                    <td>Kunjungan</td>
-                    <td>X</td>
-                </tr>
-                <tr>
-                    <td>12.</td>
-                    <td>All others</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>Kunjungan</td>
-                    <td>U</td>
+                    <td>29 Desember 2024</td>
+                    <td>09:00</td>
+                    <td><a class="btn btn-danger" href="" role="button">Belum direspon</a></td>
                 </tr>
                 </tbody>
         </table>

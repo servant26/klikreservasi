@@ -18,6 +18,7 @@ Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminControl
 
 //staff
 Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', [StaffController::class, 'index'])->name('staff.dashboard');
+Route::middleware(['auth', 'role:staff'])->get('tambah', [StaffController::class, 'tambah'])->name('staff.tambah');
 
 //user
 Route::middleware(['auth', 'role:user'])->get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
