@@ -10,7 +10,7 @@ class StaffController extends Controller
     public function index()
     {
         $ajuan = DB::table('ajuan')
-        ->orderBy('created_at', 'desc')
+        ->orderBy('tanggal', 'desc')
         ->get();
         $reschedule = DB::table('ajuan')->where('status', 3)->count();
 
@@ -30,6 +30,35 @@ class StaffController extends Controller
     public function tambah()
     {
         return view('staff.tambah'); // Assuming you have this view
+    }
+
+    public function store(Request $request)
+    {
+        // Validasi data input
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'asal' => 'required|string|max:255',
+            'nomor_wa' => 'required|string|max:20',
+            'jenis' => 'required|string',
+            'tanggal' => 'required|date',
+            'jam' => 'required|date_format:H:i',
+        ]);
+
+        // Insert data ke tabel `ajuan` menggunakan Query Builder
+        DB::table('ajuan')->insert([
+            'nama' => $request->input('nama'),
+            'asal' => $request->input('asal'),
+            'whatsapp' => $request->input('nomor_wa'),
+            'jenis' => $request->input('jenis'),
+            'tanggal' => $request->input('tanggal'),
+            'jam' => $request->input('jam'),
+            'status' => 2, // Default status, bisa disesuaikan
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('staff.dashboard')->with('success', 'Data berhasil ditambahkan.');
     }
 
     public function reschedule()

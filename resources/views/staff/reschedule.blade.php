@@ -35,7 +35,6 @@
                     <th>Tanggal</th>
                     <th>Jam</th>
                     <th style="width: 15%;">Status</th>
-                    <th>Edit Data</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,7 +62,6 @@
                           <a class="btn btn-warning btn-block" href="" role="button">Re-schedule</a>
                       @endif
                     </td>
-                    <td><a class="btn btn-success btn-block" href="" role="button">Edit Data</a></td>
                 </tr>
             @endforeach  
             </tbody>
