@@ -7,7 +7,7 @@
     <!-- New Orders -->
     <div class="small-box bg-info mb-3">
       <div class="inner">
-        <h3>150</h3>
+        <h3>{{ $ajuan->count() }}</h3>
         <p>Total Kunjungan/Reservasi Bulan Ini</p>
       </div>
       <div class="icon">
@@ -18,11 +18,11 @@
     <!-- New Orders -->
     <div class="small-box bg-warning mb-3">
       <div class="inner">
-        <h3>0</h3>
+        <h3>{{ $reschedule }}</h3>
         <p>Re-Schedule</p>
       </div>
       <div class="icon">
-        <i class="fa fa-refresh"></i>
+        <i class="fas fa-sync"></i>
       </div>
       <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
@@ -31,7 +31,7 @@
     <!-- Bounce Rate -->
     <div class="small-box bg-danger">
       <div class="inner">
-        <h3>0</h3>
+        <h3>{{ $kunjungan }}</h3>
         <p>Ajuan Kunjungan Terbaru</p>
       </div>
       <div class="icon">
@@ -42,7 +42,7 @@
     <!-- Bounce Rate -->
     <div class="small-box bg-danger">
       <div class="inner">
-        <h3>0</h3>
+        <h3>{{ $reservasi }}</h3>
         <p>Ajuan Reservasi Terbaru</p>
       </div>
       <div class="icon">
@@ -102,60 +102,38 @@
                     <th>Tanggal</th>
                     <th>Jam</th>
                     <th style="width: 15%;">Status</th>
+                    <th>Edit Data</th>
                 </tr>
             </thead>
             <tbody>
+            @foreach($ajuan as $a)
                 <tr>
-                    <td>1.</td>
-                    <td>Internet Explorer 4.0</td>
-                    <td>Win 95+</td>
-                    <td>4</td>
-                    <td>Reservasi</td>
-                    <td>25 Desember 2024</td>
-                    <td>08:00</td>
-                    <td><a class="btn btn-primary" href="" role="button">Sudah direspon</a></td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $a->nama }}</td>
+                    <td>{{ $a->asal }}</td>
+                    <td>{{ $a->whatsapp }}</td>
+                    <td>
+                        @if($a->jenis == 1)
+                            Reservasi
+                        @elseif($a->jenis == 2)
+                            Kunjungan
+                        @endif
+                    </td>
+                    <td>{{ $a->tanggal }}</td>
+                    <td>{{ $a->jam }}</td>
+                    <td class="text-center">
+                      @if($a->status == 1)
+                          <a class="btn btn-danger btn-block" href="" role="button">Belum ditanggapi</a>
+                      @elseif($a->status == 2)
+                          <a class="btn btn-primary btn-block" href="" role="button">Sudah ditanggapi</a>
+                      @elseif($a->status == 3)
+                          <a class="btn btn-warning btn-block" href="" role="button">Re-schedule</a>
+                      @endif
+                    </td>
+                    <td><a class="btn btn-success btn-block" href="" role="button">Edit Data</a></td>
                 </tr>
-                <tr>
-                    <td>2.</td>
-                    <td>Internet Explorer 5.0</td>
-                    <td>Win 95+</td>
-                    <td>5</td>
-                    <td>Reservasi</td>
-                    <td>25 Desember 2024</td>
-                    <td>11:00</td>
-                    <td><a class="btn btn-primary" href="" role="button">Sudah direspon</a></td>
-                </tr>
-                <tr>
-                    <td>3.</td>
-                    <td>Konqureror 3.5</td>
-                    <td>KDE 3.5</td>
-                    <td>3.5</td>
-                    <td>Kunjungan</td>
-                    <td>26 Desember 2024</td>
-                    <td>10:00</td>
-                    <td><a class="btn btn-danger" href="" role="button">Belum direspon</a></td>
-                </tr>
-                <tr>
-                    <td>4.</td>
-                    <td>Internet Explorer 4.5</td>
-                    <td>Mac OS 8-9</td>
-                    <td>-</td>
-                    <td>Reservasi</td>
-                    <td>27 Desember 2024</td>
-                    <td>08:00</td>
-                    <td><a class="btn btn-warning" href="" role="button">Re-Schedule</a></td>
-                </tr>
-                <tr>
-                    <td>5.</td>
-                    <td>Internet Explorer 5.1</td>
-                    <td>Mac OS 7.6-9</td>
-                    <td>1</td>
-                    <td>Kunjungan</td>
-                    <td>29 Desember 2024</td>
-                    <td>09:00</td>
-                    <td><a class="btn btn-danger" href="" role="button">Belum direspon</a></td>
-                </tr>
-                </tbody>
+            @endforeach  
+            </tbody>
         </table>
     </div>
     <!-- /.card-body -->
