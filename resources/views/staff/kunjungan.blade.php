@@ -29,14 +29,12 @@
             <thead>
                 <tr>
                     <th style="width: 5%;">No.</th>
-                    <th>Nama</th>
-                    <th>Asal</th>
-                    <th>Kontak</th>
-                    <th>Jenis</th>
-                    <th>Tanggal</th>
-                    <th>Jam</th>
-                    <th style="width: 15%;">Status</th>
-                    <th>Edit Data</th>
+                    <th style="width: 10%;">Nama</th>
+                    <th style="width: 15%;">Asal Instansi</th>
+                    <th style="width: 10%;">Jenis</th>
+                    <th style="width: 15%;">Tanggal</th>
+                    <th style="width: 12%;">Status</th>
+                    <th style="width: 8%;">Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,7 +43,6 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $a->nama }}</td>
                     <td>{{ $a->asal }}</td>
-                    <td>{{ $a->whatsapp }}</td>
                     <td>
                         @if($a->jenis == 1)
                             Kunjungan
@@ -53,8 +50,7 @@
                             Reservasi
                         @endif
                     </td>
-                    <td>{{ $a->tanggal }}</td>
-                    <td>{{ $a->jam }}</td>
+                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                     <td class="text-center">
                       @if($a->status == 1)
                           <a class="btn btn-danger btn-block" href="" role="button">Belum ditanggapi</a>
@@ -64,7 +60,7 @@
                           <a class="btn btn-warning btn-block" href="" role="button">Re-schedule</a>
                       @endif
                     </td>
-                    <td><a class="btn btn-success btn-block" href="" role="button">Edit Data</a></td>
+                    <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td>
                 </tr>
             @endforeach  
             </tbody>

@@ -119,7 +119,7 @@
                     <th style="width: 10%;">Jenis</th>
                     <th style="width: 15%;">Tanggal</th>
                     <th style="width: 15%;">Status</th>
-                    <th style="width: 10%;">Edit</th>
+                    <th style="width: 8%;">Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -145,7 +145,7 @@
                           <a class="btn btn-warning btn-block" href="" role="button">Re-schedule</a>
                       @endif
                     </td>
-                    <td><a class="btn btn-success btn-block" href="" role="button">Edit</a></td>
+                    <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td>
                 </tr>
             @endforeach  
             </tbody>

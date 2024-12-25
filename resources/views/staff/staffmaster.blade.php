@@ -158,53 +158,32 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+          <li class="nav-item">
+            <a href="/staff/dashboard" class="nav-link active">
+              <i class="nav-icon fa fa-home"></i>
               <p>
-                Dashboard
-                <i class="right fas fa-angle-left"></i>
+                Home
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item">
-            <a href="pages/calendar.html" class="nav-link">
-              <i class="nav-icon far fa-calendar-alt"></i>
+            <a href="/staff/saran" class="nav-link">
+              <i class="nav-icon fa fa-list"></i>
               <p>
-                Calendar
+                Kotak Saran
                 <span class="badge badge-info right">2</span>
               </p>
             </a>
           </li>
           <li class="nav-item">
-      <form action="{{ route('logout') }}" method="POST" class="nav-link">
-        @csrf
-        <button type="submit" class="btn btn-link" style="padding: 0; color: inherit; text-align: left; width: 100%; background: none; border: none;">
-          <i class="nav-icon fa fa-power-off"></i>
-          <p>Logout</p>
-        </button>
-      </form>
-    </li>
+            <form action="{{ route('logout') }}" method="POST" class="nav-link">
+              @csrf
+              <button type="submit" class="btn btn-link" style="padding: 0; color: inherit; text-align: left; width: 100%; background: none; border: none;">
+                <i class="nav-icon fa fa-power-off"></i>
+                <p>Logout</p>
+              </button>
+            </form>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
