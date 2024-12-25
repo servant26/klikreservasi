@@ -14,10 +14,10 @@ class UserController extends Controller
         return view('user.dashboard', compact('ajuan'));
     }
 
-    // public function tambah()
-    // {
-    //     return view('staff.tambah'); // Assuming you have this view
-    // }
+    public function tambah()
+    {
+        return view('user.tambah'); // Assuming you have this view
+    }
 
     // public function store(Request $request)
     // {
@@ -48,18 +48,19 @@ class UserController extends Controller
     //     return redirect()->route('staff.dashboard')->with('success', 'Data berhasil ditambahkan.');
     // }
 
-    // public function edit($id)
-    // {
-    //     // Ambil data berdasarkan ID
-    //     $ajuan = DB::table('ajuan')->where('id', $id)->first();
+    public function edit($id)
+    {
+        // Ambil data berdasarkan ID
+        // $ajuan = DB::table('ajuan')->where('id', $id)->first();
 
-    //     // Periksa apakah data ditemukan
-    //     if (!$ajuan) {
-    //         return redirect()->route('staff.dashboard')->with('error', 'Data tidak ditemukan.');
-    //     }
+        // // Periksa apakah data ditemukan
+        // if (!$ajuan) {
+        //     return redirect()->route('staff.dashboard')->with('error', 'Data tidak ditemukan.');
+        // }
 
-    //     return view('staff.edit', compact('ajuan'));
-    // }
+        // return view('staff.edit', compact('ajuan'));
+        return view('staff.edit');
+    }
 
     // public function update(Request $request, $id)
     // {

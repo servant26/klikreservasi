@@ -24,21 +24,22 @@
     <div class="col-lg-12 col-12">
         <!-- small box -->
         <div class="small-box bg-warning text-white">
-            <div class="inner">
-                <h3>Status ajuan Reservasi/Kunjungan</h3>
+            <div class="inner text-left"> <!-- Menambahkan kelas text-left -->
+                <h4>Status ajuan Reservasi/Kunjungan</h4>
                 <p>Status ajuan anda masih dalam proses</p>
-                <a class="btn btn-outline-light" href="{{ route('staff.tambah') }}" role="button">Re-Schedule</a>
+                <a class="btn btn-outline-light" href="" role="button">Ubah Ajuan</a>
                 <!-- <button type="button" class="btn btn-outline-dark">Dark</button> -->
             </div>
             <div class="icon">
-                <i class="ion ion-person-add"></i>
+                <i class="fas fa-hourglass-half"></i>
             </div>
         </div>
     </div>
 </div>
+
 <div class="card">
     <div class="card-header">
-      <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a>
+      <a class="btn btn-primary" href="{{ route('user.tambah') }}" role="button">Ajukan Kunjungan/Reservasi</a>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
