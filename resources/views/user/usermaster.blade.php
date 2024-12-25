@@ -101,7 +101,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="/staff/dashboard" class="nav-link {{ Request::is('staff/dashboard') ? 'active' : '' }}">
+            <a href="/user/dashboard" class="nav-link {{ Request::is('user/dashboard') ? 'active' : '' }}">
               <i class="nav-icon fa fa-home"></i>
               <p>
                 Home
@@ -109,11 +109,10 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/staff/saran" class="nav-link {{ Request::is('staff/saran') ? 'active' : '' }}">
+            <a href="/user/saran" class="nav-link {{ Request::is('user/saran') ? 'active' : '' }}">
               <i class="nav-icon fa fa-list"></i>
               <p>
-                Kotak Saran
-                <span class="badge badge-info right">2</span>
+                Masukkan Saran
               </p>
             </a>
           </li>
@@ -216,7 +215,7 @@
 $(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+      "buttons": ["colvis"],
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,
@@ -248,7 +247,7 @@ $(function () {
       datasets: [
         {
           label               : 'Digital Goods',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
+          backgroundColor     : 'rgba(69, 115, 141, 0.9)',
           borderColor         : 'rgba(60,141,188,0.8)',
           pointRadius          : false,
           pointColor          : '#3b8bba',

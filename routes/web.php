@@ -29,4 +29,7 @@ Route::middleware(['auth', 'role:staff'])->get('/staff/saran', [StaffController:
 
 //user
 Route::middleware(['auth', 'role:user'])->get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
-
+Route::middleware(['auth', 'role:user'])->get('/user/tambah', [UserController::class, 'tambah'])->name('user.tambah');
+Route::middleware(['auth', 'role:user'])->post('/user/tambah', [UserController::class, 'store'])->name('user.store');
+Route::middleware(['auth', 'role:user'])->get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+Route::middleware(['auth', 'role:user'])->post('/user/edit/{id}', [UserController::class, 'update'])->name('user.update');
