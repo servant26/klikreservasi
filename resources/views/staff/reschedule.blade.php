@@ -5,7 +5,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Re-Schedule</h1>
+            <h1 class="m-0">Reschedule</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -23,17 +23,18 @@
 <div class="card">
     <!-- /.card-header -->
     <div class="card-body">
-    <p>Ubah jadwal yang telah diajukan :</p>
+    <p>Menampilkan data user yang melakukan perubahan jadwal :</p>
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
                     <th style="width: 5%;">No.</th>
                     <th style="width: 10%;">Nama</th>
-                    <th style="width: 15%;">Asal Instansi</th>
-                    <th style="width: 10%;">Jenis</th>
                     <th style="width: 15%;">Tanggal</th>
+                    <th style="width: 10%;">Kontak</th>
+                    <th style="width: 15%;">Asal Instansi</th>
+                    <th style="width: 15%;">Jenis</th>
                     <th style="width: 10%;">Status</th>
-                    <th style="width: 8%;">Edit</th>
+                    <!-- <th style="width: 8%;">Edit</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -41,25 +42,26 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $a->nama }}</td>
+                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
+                    <td>{{ $a->whatsapp }}</td>
                     <td>{{ $a->asal }}</td>
                     <td>
                         @if($a->jenis == 1)
-                            Kunjungan
+                            Kunjungan Perpustakaan
                         @elseif($a->jenis == 2)
-                            Reservasi
+                            Reservasi Aula
                         @endif
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                     <td class="text-center">
                       @if($a->status == 1)
                           <a class="btn btn-danger btn-block" href="" role="button">Belum ditanggapi</a>
                       @elseif($a->status == 2)
                           <a class="btn btn-primary btn-block" href="" role="button">Sudah ditanggapi</a>
                       @elseif($a->status == 3)
-                          <a class="btn btn-warning btn-block" href="" role="button">Re-schedule</a>
+                          <a class="btn btn-warning btn-block" href="" role="button">Reschedule</a>
                       @endif
                     </td>
-                    <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td>
+                    <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->
                 </tr>
             @endforeach  
             </tbody>

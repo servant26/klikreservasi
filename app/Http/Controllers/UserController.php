@@ -8,7 +8,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $ajuan = DB::table('ajuan')->where('status', 2)
+        $ajuan = DB::table('ajuan')
         ->orderBy('tanggal', 'desc')
         ->get();
         return view('user.dashboard', compact('ajuan'));

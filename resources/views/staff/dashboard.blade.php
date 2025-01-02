@@ -38,7 +38,7 @@
     <div class="small-box bg-warning mb-3">
       <div class="inner">
         <h3>{{ $reschedule }}</h3>
-        <p>Re-Schedule</p>
+        <p>Reschedule</p>
       </div>
       <div class="icon">
         <i class="fas fa-sync"></i>
@@ -51,7 +51,7 @@
     <div class="small-box bg-danger">
       <div class="inner">
         <h3>{{ $kunjungan }}</h3>
-        <p>Ajuan Kunjungan Terbaru</p>
+        <p>Ajuan Kunjungan Perpustakaan</p>
       </div>
       <div class="icon">
         <i class="fas fa-building"></i>
@@ -62,7 +62,7 @@
     <div class="small-box bg-danger">
       <div class="inner">
         <h3>{{ $reservasi }}</h3>
-        <p>Ajuan Reservasi Terbaru</p>
+        <p>Ajuan Reservasi Aula</p>
       </div>
       <div class="icon">
         <i class="fas fa-building"></i>
@@ -106,7 +106,8 @@
 </div>
 <div class="card">
     <div class="card-header">
-      <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a>
+      <!-- <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a> -->
+       <h5>Daftar Ajuan :</h5>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -115,11 +116,12 @@
                 <tr>
                     <th style="width: 5%;">No.</th>
                     <th style="width: 10%;">Nama</th>
-                    <th style="width: 15%;">Asal Instansi</th>
-                    <th style="width: 10%;">Jenis</th>
                     <th style="width: 15%;">Tanggal</th>
+                    <th style="width: 10%;">Kontak</th>
+                    <th style="width: 15%;">Asal Instansi</th>
+                    <th style="width: 15%;">Jenis</th>
                     <th style="width: 15%;">Status</th>
-                    <th style="width: 8%;">Edit</th>
+                    <!-- <th style="width: 8%;">Edit</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -127,25 +129,26 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $a->nama }}</td>
+                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
+                    <td>{{ $a->whatsapp }}</td>
                     <td>{{ $a->asal }}</td>
                     <td>
                         @if($a->jenis == 1)
-                            Kunjungan
+                            Kunjungan Perpustakaan
                         @elseif($a->jenis == 2)
-                            Reservasi
+                            Reservasi Aula
                         @endif
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                     <td class="text-center">
                       @if($a->status == 1)
                           <a class="btn btn-danger btn-block" href="" role="button">Belum ditanggapi</a>
                       @elseif($a->status == 2)
                           <a class="btn btn-primary btn-block" href="" role="button">Sudah ditanggapi</a>
                       @elseif($a->status == 3)
-                          <a class="btn btn-warning btn-block" href="" role="button">Re-schedule</a>
+                          <a class="btn btn-warning btn-block" href="" role="button">Reschedule</a>
                       @endif
                     </td>
-                    <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td>
+                    <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->
                 </tr>
             @endforeach  
             </tbody>

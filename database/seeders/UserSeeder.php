@@ -19,10 +19,10 @@ class UserSeeder extends Seeder
                 'role' => 'admin',
             ],
             [
-                'nama' => 'Staff',
-                'email' => 'staff@gmail.com',
+                'nama' => 'Staf',
+                'email' => 'staf@gmail.com',
                 'password' => Hash::make('12345678'),
-                'role' => 'staff',
+                'role' => 'staf',
             ]
         ]);
     }
