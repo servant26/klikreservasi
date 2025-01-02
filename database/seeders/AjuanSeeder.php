@@ -31,3 +31,6 @@ class AjuanSeeder extends Seeder
         }
     }
 }
+
+
+

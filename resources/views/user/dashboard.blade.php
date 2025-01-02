@@ -20,22 +20,33 @@
 @endsection
 @section('content')
 <!-- Small boxes (Stat box) -->
+@foreach($ajuan as $a)
 <div class="row">
     <div class="col-lg-12 col-12">
         <!-- small box -->
-        <div class="small-box bg-warning text-white">
-            <div class="inner text-left"> <!-- Menambahkan kelas text-left -->
+        <div class="small-box {{ $a->status == 1 || $a->status == 3 ? 'bg-warning' : 'bg-primary' }} text-white p-2">
+            <div class="inner text-left">
                 <h4>Status ajuan Reservasi/Kunjungan</h4>
-                <p>Status ajuan anda masih dalam proses</p>
-                <a class="btn btn-outline-light" href="" role="button">Ubah Ajuan</a>
-                <!-- <button type="button" class="btn btn-outline-dark">Dark</button> -->
+                  <p>
+                      @if($a->status == 1 || $a->status == 3)
+                          Status ajuan anda masih dalam proses
+                      @elseif($a->status == 2)
+                          Status ajuan anda telah selesai, dipersilahkan untuk hadir sesuai jadwal yang telah ditentukan
+                      @endif
+                  </p>
+                <!-- Add buttons for details and edit -->
+                <a href="{{ route('user.ajuan.show', $a->id) }}" class="btn btn-light btn-sm">Detail Ajuan</a>
+                <a href="{{ route('user.edit', $a->id) }}" class="btn btn-light btn-sm">Reschedule</a>
             </div>
             <div class="icon">
-                <i class="fas fa-hourglass-half"></i>
+            <i class="fas {{ $a->status == 1 || $a->status == 3 ? 'fa-hourglass-half' : 'fa-check-circle' }}"></i>
             </div>
         </div>
     </div>
 </div>
+@endforeach
+
+
 
 <div class="card">
     <div class="card-header">
@@ -47,9 +58,9 @@
             <thead>
                 <tr>
                     <th style="width: 5%;">No.</th>
-                    <th>Asal Instansi</th>
-                    <th>Jenis</th>
+                    <th>Nama</th>
                     <th>Tanggal</th>
+                    <th>Jenis</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,14 +68,14 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $a->nama }}</td>
+                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                     <td>
                         @if($a->jenis == 1)
-                            Kunjungan
+                            Kunjungan Perpustakaan
                         @elseif($a->jenis == 2)
-                            Reservasi
+                            Reservasi Aula
                         @endif
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                 </tr>
             @endforeach  
             </tbody>
