@@ -14,6 +14,7 @@ class CreateAjuanTable extends Migration
             $table->string('nama');
             $table->string('asal');
             $table->string('whatsapp');
+            $table->integer('jumlah_orang');
             $table->enum('jenis', [1, 2]);
             $table->date('tanggal');
             $table->time('jam');

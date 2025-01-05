@@ -115,8 +115,9 @@
                 <tr>
                     <th style="width: 5%;">No.</th>
                     <th style="width: 10%;">Nama</th>
-                    <th style="width: 15%;">Tanggal</th>
+                    <th style="width: 15%;">Jadwal</th>
                     <th style="width: 10%;">Kontak</th>
+                    <th style="width: 15%;">Jumlah Orang</th>
                     <th style="width: 15%;">Asal Instansi</th>
                     <th style="width: 10%;">Jenis</th>
                     <th style="width: 15%;">Status</th>
@@ -130,6 +131,7 @@
                     <td>{{ $a->nama }}</td>
                     <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                     <td>{{ $a->whatsapp }}</td>
+                    <td>{{ $a->jumlah_orang }} Orang</td>
                     <td>{{ $a->asal }}</td>
                     <td>
                         @if($a->jenis == 1)

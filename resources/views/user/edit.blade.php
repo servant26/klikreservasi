@@ -36,6 +36,10 @@
                 <input type="tel" name="nomor_wa" class="form-control" required value="{{ $ajuan->whatsapp }}" placeholder="Masukkan nomor yang bisa dihubungi">
             </div>
             <div class="form-group">
+                <label>Jumlah Orang</label>
+                <input type="number" name="jumlah_orang" class="form-control" required value="{{ $ajuan->jumlah_orang }}" placeholder="Masukkan jumlah orang">
+            </div>
+            <div class="form-group">
                 <label>Jenis Ajuan</label>
                 <select name="jenis" class="form-control" required>
                     <option value="" disabled>Pilih Jenis</option>

@@ -37,6 +37,10 @@
               <input type="tel" name="nomor_wa" class="form-control" required placeholder="Masukkan nomor yang bisa dihubungi">
           </div>
           <div class="form-group">
+              <label>Jumlah Orang</label>
+              <input type="number" name="jumlah_orang" class="form-control" required placeholder="Masukkan angka saja, misal 50, bukan 50 orang..">
+          </div>
+          <div class="form-group">
               <label>Jenis Ajuan</label>
               <select name="jenis" class="form-control" required>
                   <option value="" disabled selected>Pilih Jenis</option>

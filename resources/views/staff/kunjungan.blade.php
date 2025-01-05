@@ -32,6 +32,7 @@
                     <th style="width: 10%;">Nama</th>
                     <th style="width: 15%;">Tanggal</th>
                     <th style="width: 10%;">Kontak</th>
+                    <th style="width: 15%;">Jumlah Orang</th>
                     <th style="width: 15%;">Asal Instansi</th>
                     <th style="width: 15%;">Jenis</th>
                     <th style="width: 12%;">Status</th>
@@ -45,6 +46,7 @@
                     <td>{{ $a->nama }}</td>
                     <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                     <td>{{ $a->whatsapp }}</td>
+                    <td>{{ $a->jumlah_orang }}</td>
                     <td>{{ $a->asal }}</td>
                     <td>
                         @if($a->jenis == 1)
@@ -54,13 +56,18 @@
                         @endif
                     </td>
                     <td class="text-center">
-                      @if($a->status == 1)
-                          <a class="btn btn-danger btn-block" href="" role="button">Belum ditanggapi</a>
-                      @elseif($a->status == 2)
-                          <a class="btn btn-primary btn-block" href="" role="button">Sudah ditanggapi</a>
-                      @elseif($a->status == 3)
-                          <a class="btn btn-warning btn-block" href="" role="button">Reschedule</a>
-                      @endif
+                        @if($a->status == 1 || $a->status == 3)
+                            <a class="btn 
+                                @if($a->status == 1) btn-danger @elseif($a->status == 3) btn-warning @endif 
+                                btn-block" 
+                                href="javascript:void(0);" 
+                                onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
+                                role="button">
+                                @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
+                            </a>
+                        @elseif($a->status == 2)
+                            <a class="btn btn-primary btn-block" href="javascript:void(0);" role="button">Sudah ditanggapi</a>
+                        @endif
                     </td>
                     <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->
                 </tr>
