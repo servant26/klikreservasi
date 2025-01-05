@@ -106,8 +106,7 @@
 </div>
 <div class="card">
     <div class="card-header">
-      <!-- <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a> -->
-       <h5>Daftar Ajuan :</h5>
+      <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -119,9 +118,9 @@
                     <th style="width: 15%;">Tanggal</th>
                     <th style="width: 10%;">Kontak</th>
                     <th style="width: 15%;">Asal Instansi</th>
-                    <th style="width: 15%;">Jenis</th>
+                    <th style="width: 10%;">Jenis</th>
                     <th style="width: 15%;">Status</th>
-                    <!-- <th style="width: 8%;">Edit</th> -->
+                    <th style="width: 8%;">Edit</th>
                 </tr>
             </thead>
             <tbody>
@@ -148,7 +147,7 @@
                           <a class="btn btn-warning btn-block" href="" role="button">Reschedule</a>
                       @endif
                     </td>
-                    <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->
+                    <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td>
                 </tr>
             @endforeach  
             </tbody>

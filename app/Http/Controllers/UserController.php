@@ -8,14 +8,13 @@ class UserController extends Controller
 {
     public function index()
     {
-        // Ambil data ajuan milik user yang login dan urutkan berdasarkan tanggal
+        // Ambil seluruh data ajuan tanpa filter berdasarkan user_id
         $ajuan = DB::table('ajuan')
-            ->where('user_id', auth()->id())
             ->orderBy('tanggal', 'desc')  // Urutkan berdasarkan tanggal terbaru
             ->get();  // Gunakan get() untuk mengambil banyak data
     
         return view('user.dashboard', compact('ajuan'));
-    }
+    }    
     
 
     public function tambah()

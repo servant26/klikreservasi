@@ -1,48 +1,39 @@
 @extends('user.usermaster')
-@section('menu')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Reschedule</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Back to Dashboard</a></li>
-              <li class="breadcrumb-item active">Reschedule</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-@endsection
+
 @section('content')
 <div class="container">
+    <h2>Edit Ajuan</h2>
     <form action="{{ route('user.update', $ajuan->id) }}" method="POST">
         @csrf
-        @method('POST')
+        @method('PUT') <!-- Tambahkan ini -->
+        <div class="form-group">
+            <label for="nama">Nama</label>
+            <input type="text" class="form-control" id="nama" name="nama" value="{{ $ajuan->nama }}" required>
+        </div>
+        <div class="form-group">
+            <label for="asal">Asal</label>
+            <input type="text" class="form-control" id="asal" name="asal" value="{{ $ajuan->asal }}" required>
+        </div>
+        <div class="form-group">
+            <label for="whatsapp">Nomor WhatsApp</label>
+            <input type="text" class="form-control" id="whatsapp" name="whatsapp" value="{{ $ajuan->whatsapp }}" required>
+        </div>
         <div class="form-group">
             <label for="jenis">Jenis</label>
             <select class="form-control" id="jenis" name="jenis" required>
-                <option value="Kunjungan" {{ $ajuan->jenis == 1 ? 'selected' : '' }}>Kunjungan</option>
-                <option value="Reservasi" {{ $ajuan->jenis == 2 ? 'selected' : '' }}>Reservasi</option>
+                <option value="1" {{ $ajuan->jenis == 1 ? 'selected' : '' }}>Reservasi</option>
+                <option value="2" {{ $ajuan->jenis == 2 ? 'selected' : '' }}>Kunjungan</option>
             </select>
         </div>
-
         <div class="form-group">
             <label for="tanggal">Tanggal</label>
-            <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ old('tanggal', $ajuan->tanggal) }}" required>
+            <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ $ajuan->tanggal }}" required>
         </div>
-
         <div class="form-group">
-             <label>Jam</label>
-             <!-- <input type="time" name="jam" class="form-control" required value="{{ \Carbon\Carbon::parse($ajuan->jam)->format('H:i') }}"> -->
-             <input type="time" name="jam" class="form-control" required value="">
+            <label for="jam">Jam</label>
+            <input type="time" class="form-control" id="jam" name="jam" value="{{ $ajuan->jam }}" required>
         </div>
-            <a class="btn btn-danger" href="{{ route('user.dashboard') }}" role="button">Kembali</a>
-            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
     </form>
 </div>
 @endsection

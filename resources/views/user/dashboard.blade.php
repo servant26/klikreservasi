@@ -21,30 +21,32 @@
 @section('content')
 <!-- Small boxes (Stat box) -->
 @foreach($ajuan as $a)
-<div class="row">
-    <div class="col-lg-12 col-12">
-        <!-- small box -->
-        <div class="small-box {{ $a->status == 1 || $a->status == 3 ? 'bg-warning' : 'bg-primary' }} text-white p-2">
-            <div class="inner text-left">
-                <h4>Status ajuan Reservasi/Kunjungan</h4>
-                  <p>
-                      @if($a->status == 1 || $a->status == 3)
-                          Status ajuan anda masih dalam proses
-                      @elseif($a->status == 2)
-                          Status ajuan anda telah selesai, dipersilahkan untuk hadir sesuai jadwal yang telah ditentukan
-                      @endif
-                  </p>
-                <!-- Add buttons for details and edit -->
-                <a href="{{ route('user.ajuan.show', $a->id) }}" class="btn btn-light btn-sm">Detail Ajuan</a>
-                <a href="{{ route('user.edit', $a->id) }}" class="btn btn-light btn-sm">Reschedule</a>
-            </div>
-            <div class="icon">
-            <i class="fas {{ $a->status == 1 || $a->status == 3 ? 'fa-hourglass-half' : 'fa-check-circle' }}"></i>
+    @if($a->user_id == auth()->id()) <!-- Filter by user_id -->
+    <div class="row">
+        <div class="col-lg-12 col-12">
+            <!-- small box -->
+            <div class="small-box {{ $a->status == 1 || $a->status == 3 ? 'bg-warning' : 'bg-primary' }} text-white p-2">
+                <div class="inner text-left">
+                    <h4>Status ajuan Reservasi/Kunjungan</h4>
+                    <p>
+                        @if($a->status == 1 || $a->status == 3)
+                            Status ajuan anda masih dalam proses
+                        @elseif($a->status == 2)
+                            Status ajuan anda telah selesai, dipersilahkan untuk hadir sesuai jadwal yang telah ditentukan
+                        @endif
+                    </p>
+                    <!-- Add buttons for details and edit -->
+                    <a href="{{ route('user.edit', $a->id) }}" class="btn btn-outline-light btn-sm">Reschedule</a>
+                </div>
+                <div class="icon">
+                    <i class="fas {{ $a->status == 1 || $a->status == 3 ? 'fa-hourglass-half' : 'fa-check-circle' }}"></i>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    @endif
 @endforeach
+
 
 
 
