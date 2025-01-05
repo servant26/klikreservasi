@@ -25,30 +25,36 @@
     <div class="row">
         <div class="col-lg-12 col-12">
             <!-- small box -->
-            <div class="small-box {{ $a->status == 1 || $a->status == 3 ? 'bg-warning' : 'bg-primary' }} text-white p-2">
+            <div class="small-box 
+                {{ $a->status == 1 ? 'bg-danger' : ($a->status == 2 ? 'bg-primary' : 'bg-warning') }} 
+                <text-dark p-2">
                 <div class="inner text-left">
-                    <h4>Status ajuan Reservasi/Kunjungan</h4>
+                    <h4>Status Ajuan Reservasi/Kunjungan</h4>
                     <p>
-                        @if($a->status == 1 || $a->status == 3)
-                            Status ajuan anda masih dalam proses
+                        @if($a->status == 1)
+                            Ajuan anda sedang diproses
                         @elseif($a->status == 2)
-                            Status ajuan anda telah selesai, dipersilahkan untuk hadir sesuai jadwal yang telah ditentukan
+                            Ajuan anda selesai diproses, silahkan datang pada waktu yang telah ditentukan
+                        @elseif($a->status == 3)
+                            Reschedule anda sedang diproses
                         @endif
                     </p>
                     <!-- Add buttons for details and edit -->
-                    <a href="{{ route('user.edit', $a->id) }}" class="btn btn-outline-light btn-sm">Reschedule</a>
+                    <a href="{{ route('user.edit', $a->id) }}" 
+                      class="btn {{ in_array($a->status, [1, 2]) ? 'btn-outline-light' : ($a->status == 3 ? 'btn-outline-dark' : 'btn-outline-secondary') }} btn-sm">
+                      Reschedule
+                    </a>
                 </div>
                 <div class="icon">
-                    <i class="fas {{ $a->status == 1 || $a->status == 3 ? 'fa-hourglass-half' : 'fa-check-circle' }}"></i>
+                    <i class="fas 
+                        {{ $a->status == 1 ? 'fa-hourglass-half' : ($a->status == 2 ? 'fa-check-circle' : 'fa-sync-alt') }}">
+                    </i>
                 </div>
             </div>
         </div>
     </div>
     @endif
 @endforeach
-
-
-
 
 <div class="card">
     <div class="card-header">

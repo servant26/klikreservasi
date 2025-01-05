@@ -57,18 +57,17 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        // Ambil data berdasarkan ID dan pastikan user_id sesuai dengan user yang sedang login
-        $ajuan = DB::table('ajuan')->where('id', $id)->where('user_id', auth()->id())->first();
-    
+        // Ambil data berdasarkan ID
+        $ajuan = DB::table('ajuan')->where('id', $id)->first();
+
         // Periksa apakah data ditemukan
         if (!$ajuan) {
             return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
-    
+
         return view('user.edit', compact('ajuan'));
     }
-    
-    
+
     public function update(Request $request, $id)
     {
         // Validasi input
@@ -80,11 +79,10 @@ class UserController extends Controller
             'tanggal' => 'required|date',
             'jam' => 'required|date_format:H:i',
         ]);
-    
-        // Update data hanya jika user_id sesuai dengan yang sedang login
-        $updated = DB::table('ajuan')
+
+        // Update data
+        DB::table('ajuan')
             ->where('id', $id)
-            ->where('user_id', auth()->id()) // Pastikan hanya bisa mengupdate data milik user yang sedang login
             ->update([
                 'nama' => $request->nama,
                 'asal' => $request->asal,
@@ -92,17 +90,12 @@ class UserController extends Controller
                 'jenis' => $request->jenis === 'Kunjungan' ? 1 : 2,
                 'tanggal' => $request->tanggal,
                 'jam' => $request->jam,
-                'status' => 3, // Menetapkan status baru atau menyesuaikan dengan logika yang diinginkan
+                'status' => 3, // Nilai default
                 'updated_at' => now(),
             ]);
-    
-        if ($updated) {
-            return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
-        } else {
-            return redirect()->route('user.dashboard')->with('error', 'Data gagal diperbarui.');
-        }
+
+        return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
     }
-    
 
     public function show($id)
     {
