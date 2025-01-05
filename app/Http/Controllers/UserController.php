@@ -96,18 +96,5 @@ class UserController extends Controller
 
         return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
     }
-
-    public function show($id)
-    {
-        // Ambil data berdasarkan ID dan pastikan user_id sesuai dengan user yang sedang login
-        $ajuan = DB::table('ajuan')->where('id', $id)->where('user_id', auth()->id())->first();
-    
-        // Periksa apakah data ditemukan
-        if (!$ajuan) {
-            return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
-        }
-    
-        return view('user.detail', compact('ajuan'));
-    }
     
 }    

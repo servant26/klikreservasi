@@ -211,7 +211,24 @@
 <script src="{{ asset('dist/js/demo.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+    function confirmStatusChange(url) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Status akan diubah menjadi 'Sudah ditanggapi'.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, ubah!',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
 //datatable
 $(function () {
     $("#example1").DataTable({

@@ -22,17 +22,17 @@ Route::middleware(['auth', 'role:staff'])->get('/staff/tambah', [StaffController
 Route::middleware(['auth', 'role:staff'])->post('/staff/tambah', [StaffController::class, 'store'])->name('staff.store');
 Route::middleware(['auth', 'role:staff'])->get('/staff/edit/{id}', [StaffController::class, 'edit'])->name('staff.edit');
 Route::middleware(['auth', 'role:staff'])->post('/staff/edit/{id}', [StaffController::class, 'update'])->name('staff.update');
+Route::middleware(['auth', 'role:staff'])->get('/staff/update-status/{id}', [StaffController::class, 'updateStatus'])->name('staff.updateStatus');
 Route::middleware(['auth', 'role:staff'])->get('/staff/reschedule', [StaffController::class, 'reschedule'])->name('staff.reschedule');
 Route::middleware(['auth', 'role:staff'])->get('/staff/kunjungan', [StaffController::class, 'kunjungan'])->name('staff.kunjungan');
 Route::middleware(['auth', 'role:staff'])->get('/staff/reservasi', [StaffController::class, 'reservasi'])->name('staff.reservasi');
 Route::middleware(['auth', 'role:staff'])->get('/staff/saran', [StaffController::class, 'saran'])->name('staff.saran');
 
+
 //user
 Route::middleware(['auth', 'role:user'])->get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
 Route::middleware(['auth', 'role:user'])->get('/user/tambah', [UserController::class, 'tambah'])->name('user.tambah');
 Route::middleware(['auth', 'role:user'])->post('/user/tambah', [UserController::class, 'store'])->name('user.store');
-Route::middleware(['auth', 'role:user'])->get('/user/ajuan/{id}', [UserController::class, 'show'])->name('user.ajuan.show');
-
 Route::middleware(['auth', 'role:user'])->get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::middleware(['auth', 'role:user'])->post('/user/edit/{id}', [UserController::class, 'update'])->name('user.update');
 
