@@ -5,12 +5,12 @@
       <div class="container">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Tambah Data</h1>
+            <h1 class="m-0">Pengajuan Reservasi/Kunjungan</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Back to Dashboard</a></li>
-              <li class="breadcrumb-item active">Tambah Data</li>
+              <li class="breadcrumb-item active">Pengajuan Reservasi/Kunjungan</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
