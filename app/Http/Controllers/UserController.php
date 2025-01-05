@@ -16,6 +16,25 @@ class UserController extends Controller
         return view('user.dashboard', compact('ajuan'));
     }    
     
+    private function formatWhatsAppNumber($number)
+    {
+        // Remove any non-numeric characters
+        $number = preg_replace('/\D/', '', $number);
+    
+        // Check the number format
+        if (strpos($number, '+62') === 0) {
+            return $number; // Already in the correct format
+        } elseif (strpos($number, '62') === 0) {
+            return $number; // Starts with 62, no changes needed
+        } elseif (strpos($number, '08') === 0) {
+            return '62' . substr($number, 1); // Replace leading 08 with 62
+        } elseif (strpos($number, '8') === 0) {
+            return '62' . $number; // Prepend 62 to leading 8
+        }
+    
+        // Return the original number if no matches
+        return $number;
+    }    
 
     public function tambah()
     {
@@ -42,7 +61,7 @@ class UserController extends Controller
         DB::table('ajuan')->insert([
             'nama' => $request->input('nama'),
             'asal' => $request->input('asal'),
-            'whatsapp' => $request->input('nomor_wa'),
+            'whatsapp' => $this->formatWhatsAppNumber($request->input('nomor_wa')),
             'jumlah_orang' => $request->input('jumlah_orang'),
             'jenis' => $request->input('jenis'),
             'tanggal' => $request->input('tanggal'),
@@ -89,7 +108,7 @@ class UserController extends Controller
             ->update([
                 'nama' => $request->nama,
                 'asal' => $request->asal,
-                'whatsapp' => $request->nomor_wa,
+                'whatsapp' => $this->formatWhatsAppNumber($request->input('nomor_wa')),
                 'jumlah_orang' => $request->jumlah_orang,
                 'jenis' => $request->jenis === 'Kunjungan' ? 1 : 2,
                 'tanggal' => $request->tanggal,
