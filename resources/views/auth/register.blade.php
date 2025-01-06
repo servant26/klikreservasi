@@ -6,7 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Tambahkan link Font Awesome untuk ikon -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <title>Register</title>
+    <title>Dispursip Samarinda</title>
+    <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
 </head>
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center vh-100">

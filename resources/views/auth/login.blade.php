@@ -27,7 +27,8 @@
             }
         }
     </style>
-    <title>Login</title>
+    <title>Dispursip Samarinda</title>
+    <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
 </head>
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center vh-100">
