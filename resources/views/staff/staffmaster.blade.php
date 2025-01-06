@@ -215,20 +215,21 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    function confirmStatusChange(url) {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Status akan diubah menjadi 'Sudah ditanggapi'.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, konfirmasi agenda!',
-            cancelButtonText: 'Batal',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = url;
-            }
-        });
-    }
+function confirmStatusChange(url) {
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Status akan diubah.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, ubah status!',
+        cancelButtonText: 'Batal',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+}
+
 //datatable
 $(function () {
     $("#example1").DataTable({

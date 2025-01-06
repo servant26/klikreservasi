@@ -151,7 +151,12 @@
                                 @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
                             </a>
                         @elseif($a->status == 2)
-                            <a class="btn btn-primary btn-block" href="javascript:void(0);" role="button">Sudah ditanggapi</a>
+                            <a class="btn btn-primary btn-block" 
+                                href="javascript:void(0);" 
+                                onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
+                                role="button">
+                                Sudah ditanggapi
+                            </a>
                         @endif
                     </td>
                     <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->

@@ -28,49 +28,52 @@
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th style="width: 5%;">No.</th>
+                <th style="width: 5%;">No.</th>
                     <th style="width: 10%;">Nama</th>
-                    <th style="width: 15%;">Tanggal</th>
+                    <th style="width: 15%;">Jadwal</th>
                     <th style="width: 10%;">Kontak</th>
                     <th style="width: 15%;">Jumlah Orang</th>
                     <th style="width: 15%;">Asal Instansi</th>
-                    <th style="width: 15%;">Jenis</th>
-                    <th style="width: 12%;">Status</th>
+                    <th style="width: 10%;">Jenis</th>
+                    <th style="width: 15%;">Status</th>
                     <!-- <th style="width: 8%;">Edit</th> -->
                 </tr>
             </thead>
             <tbody>
             @foreach($kunjungan as $a)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $a->nama }}</td>
-                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                    <td>{{ $a->whatsapp }}</td>
-                    <td>{{ $a->jumlah_orang }}</td>
-                    <td>{{ $a->asal }}</td>
-                    <td>
-                        @if($a->jenis == 1)
-                            Kunjungan Perpustakaan
-                        @elseif($a->jenis == 2)
-                            Reservasi Aula
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        @if($a->status == 1 || $a->status == 3)
-                            <a class="btn 
-                                @if($a->status == 1) btn-danger @elseif($a->status == 3) btn-warning @endif 
-                                btn-block" 
-                                href="javascript:void(0);" 
-                                onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
-                                role="button">
-                                @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
-                            </a>
-                        @elseif($a->status == 2)
-                            <a class="btn btn-primary btn-block" href="javascript:void(0);" role="button">Sudah ditanggapi</a>
-                        @endif
-                    </td>
-                    <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->
-                </tr>
+              <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $a->nama }}</td>
+                <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
+                <td><a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a></td>
+                <td>{{ $a->jumlah_orang }} Orang</td>
+                <td>{{ $a->asal }}</td>
+                <td>
+                  @if($a->jenis == 1)
+                    Kunjungan Perpustakaan
+                  @elseif($a->jenis == 2)
+                    Reservasi Aula
+                  @endif
+                </td>
+                <td class="text-center">
+                    @if($a->status == 1 || $a->status == 3)
+                        <a class="btn 
+                            @if($a->status == 1) btn-danger @elseif($a->status == 3) btn-warning @endif 
+                            btn-block" 
+                            href="javascript:void(0);" 
+                            onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
+                            role="button">
+                            @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
+                        </a>
+                    @elseif($a->status == 2)
+                        <a class="btn btn-primary btn-block" 
+                            href="javascript:void(0);" 
+                            onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
+                            role="button">
+                            Sudah ditanggapi
+                        </a>
+                    @endif
+                </td>
             @endforeach  
             </tbody>
         </table>

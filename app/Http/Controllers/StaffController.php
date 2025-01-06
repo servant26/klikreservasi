@@ -28,20 +28,27 @@ class StaffController extends Controller
 
     public function updateStatus($id)
     {
-        // Menggunakan Query Builder untuk mengupdate status hanya jika status 1 atau 3
-        $updated = DB::table('ajuan')
-            ->where('id', $id)
-            ->whereIn('status', [1, 3])  // Hanya ubah jika status 1 atau 3
-            ->update(['status' => 2]);  // Ubah status menjadi 2 (Sudah ditanggapi)
+        $currentStatus = DB::table('ajuan')->where('id', $id)->value('status');
     
-        // Cek apakah update berhasil
+        // Toggle status logic
+        if ($currentStatus == 2) {
+            // Kembali ke status 'Belum ditanggapi' (default status 1)
+            $newStatus = 1;
+        } else {
+            // Ubah status menjadi 'Sudah ditanggapi' (status 2)
+            $newStatus = 2;
+        }
+    
+        // Update status
+        $updated = DB::table('ajuan')->where('id', $id)->update(['status' => $newStatus]);
+    
         if ($updated) {
             return redirect()->route('staff.dashboard')->with('success', 'Status berhasil diubah!');
         }
     
-        // Jika update gagal (misal data tidak ditemukan atau status tidak cocok)
         return redirect()->route('staff.dashboard')->with('error', 'Gagal mengubah status!');
     }
+    
 
     // private function formatWhatsAppNumber($number)
     // {
@@ -143,6 +150,12 @@ class StaffController extends Controller
 
     //     return redirect()->route('staff.dashboard')->with('success', 'Data berhasil diperbarui.');
     // }
+
+    public function history()
+    {
+        $history = DB::table('ajuan')->where('status', 3)->get();
+        return view('staff.history', compact('history'));
+    }
 
     public function reschedule()
     {
