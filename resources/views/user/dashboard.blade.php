@@ -81,7 +81,7 @@
 
 <div class="card">
     <div class="card-header">
-      Daftar Reservasi/Kunjungan yang telah dibook :
+      Daftar Reservasi/Kunjungan yang telah diajukan :
     </div>
     <!-- /.card-header -->
     <div class="card-body">
