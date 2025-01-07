@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
     public function index()
     {
-        // Ambil seluruh data ajuan tanpa filter berdasarkan user_id
         $ajuan = DB::table('ajuan')
-            ->orderBy('tanggal', 'desc')  // Urutkan berdasarkan tanggal terbaru
-            ->get();  // Gunakan get() untuk mengambil banyak data
+                    ->whereDate('tanggal', '>=', Carbon::today()) // Data dari hari ini dan seterusnya
+                    ->orderBy('tanggal', 'asc') // Urutkan berdasarkan tanggal
+                    ->get();
     
         return view('user.dashboard', compact('ajuan'));
-    }    
+    }   
     
     private function formatWhatsAppNumber($number)
     {

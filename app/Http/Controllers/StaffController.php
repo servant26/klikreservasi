@@ -9,7 +9,7 @@ class StaffController extends Controller
     public function index()
     {
         $ajuan = DB::table('ajuan')
-        ->orderBy('tanggal', 'desc')
+        ->orderBy('tanggal', 'asc')
         ->get();
         $reschedule = DB::table('ajuan')->where('status', 3)->count();
 

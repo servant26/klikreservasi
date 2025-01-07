@@ -44,19 +44,27 @@
         @if($a->user_id == auth()->id())
             <div class="row">
                 <div class="col-lg-12 col-12">
-                    <!-- Card untuk user yang sudah mengajukan -->
                     <div class="small-box 
                         {{ $a->status == 1 ? 'bg-danger text-white' : ($a->status == 2 ? 'bg-primary text-white' : 'bg-warning') }} 
                         p-2">
                         <div class="inner text-left">
                             <h4>Status Ajuan Reservasi/Kunjungan</h4>
                             <p>
+                                Anda telah mengajukan 
+                                @if($a->jenis == 1)
+                                    kunjungan perpustakaan
+                                @elseif($a->jenis == 2)
+                                    reservasi aula
+                                @endif
+                                pada {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} pukul {{ substr($a->jam, 0, 5) }}
+                                dengan jumlah {{ $a->jumlah_orang }} orang.
+                                <br>
                                 @if($a->status == 1)
-                                    Mohon tunggu, ajuan anda sedang diproses
+                                    Mohon tunggu, data ajuan anda sedang diproses.
                                 @elseif($a->status == 2)
-                                    Ajuan anda selesai diproses, silahkan datang pada waktu yang telah ditentukan
+                                    Ajuan anda selesai diproses. Silakan datang pada waktu yang telah ditentukan.
                                 @elseif($a->status == 3)
-                                    Mohon tunggu, reschedule anda sedang diproses
+                                    Mohon tunggu, reschedule anda sedang diproses.
                                 @endif
                             </p>
                             <!-- Tombol untuk reschedule -->
@@ -79,6 +87,7 @@
 
 
 
+
 <div class="card">
     <div class="card-header">
       Daftar Reservasi/Kunjungan yang telah diajukan :
@@ -96,7 +105,10 @@
             </thead>
             <tbody>
             @foreach($ajuan as $a)
-                <tr>
+                @php
+                  $isToday = \Carbon\Carbon::parse($a->tanggal)->isToday();
+                @endphp
+                  <tr class="{{ $isToday ? '' : '' }}">
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $a->nama }}</td>
                     <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
