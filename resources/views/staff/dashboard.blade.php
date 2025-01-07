@@ -27,7 +27,7 @@
     <div class="small-box bg-info mb-3">
       <div class="inner">
         <h3>{{ $ajuan->count() }}</h3>
-        <p>Kunjungan/Reservasi Bulan Ini</p>
+        <p>Total Kunjungan/Reservasi Bulan Ini</p>
       </div>
       <div class="icon">
         <i class="fas fa-book"></i>
