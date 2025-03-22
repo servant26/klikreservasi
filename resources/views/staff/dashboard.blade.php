@@ -115,12 +115,12 @@
                 <tr>
                     <th style="width: 5%;">No.</th>
                     <th style="width: 10%;">Nama</th>
-                    <th style="width: 15%;">Jadwal</th>
+                    <th style="width: 18%;">Jadwal</th>
                     <th style="width: 10%;">Kontak</th>
-                    <th style="width: 15%;">Jumlah Orang</th>
+                    <th style="width: 8%;">Jumlah Orang</th>
                     <th style="width: 15%;">Asal Instansi</th>
                     <th style="width: 10%;">Jenis</th>
-                    <th style="width: 15%;">Status</th>
+                    <th style="width: 17%;">Status</th>
                     <!-- <th style="width: 8%;">Edit</th> -->
                 </tr>
             </thead>
