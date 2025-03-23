@@ -30,8 +30,8 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
 </head>
-<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-<div class="wrapper">
+<body class="hold-transition light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+  <div class="wrapper">
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
@@ -117,13 +117,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <form action="{{ route('logout') }}" method="POST" class="nav-link">
-              @csrf
-              <button type="submit" class="btn btn-link" style="padding: 0; color: inherit; text-align: left; width: 100%; background: none; border: none;">
-                <i class="nav-icon fa fa-power-off"></i>
-                <p>Logout</p>
-              </button>
-            </form>
+              <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <i class="nav-icon fa fa-power-off"></i>
+                  <p>Logout</p>
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
           </li>
         </ul>
       </nav>
