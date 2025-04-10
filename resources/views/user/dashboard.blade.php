@@ -27,11 +27,11 @@
             <div class="small-box bg-secondary text-white p-2">
                 <div class="inner text-left">
                     <h4>Selamat datang di Web Reservasi Kunjungan Perpustakaan</h4>
-                    <p>Silahkan ajukan data anda pada tombol di bawah.</p>
+                    <p>Silahkan pilih layanan yang anda inginkan</p>
                     <!-- Tombol untuk mengajukan reservasi -->
-                    <a class="btn btn-outline-light btn-sm" href="{{ route('user.tambah') }}" role="button">
+                    <!-- <a class="btn btn-outline-light btn-sm" href="{{ route('user.tambah') }}" role="button">
                         Ajukan Kunjungan/Reservasi
-                    </a>
+                    </a> -->
                 </div>
                 <div class="icon">
                     <i class="fas fa-info-circle"></i>
@@ -86,13 +86,65 @@
 @endif
 
 
+<div class="row">
+  <!-- Column 1: New Orders and Bounce Rate -->
+  <div class="col-lg-6 col-6">
+    <!-- New Orders -->
+    <div class="small-box bg-info mb-3">
+      <div class="inner">
+        <h4>Reservasi Aula</h4>
+        <p><br><br></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-building"></i>
+      </div>
+      <a href="{{ route('user.tambah') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-6 col-6">
+    <!-- Bounce Rate -->
+    <div class="small-box bg-success">
+      <div class="inner">
+        <h4>Kunjungan Perpustakaan</h4>
+        <p><br><br></p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <a href="{{ route('user.tambah') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-danger">
+      <div class="card-header">
+        <h3 class="card-title">Petunjuk Penggunaan</h3>
+      </div>
+      <div class="card-body">
+        Berikut merupakan tata cara pembuatan ajuan layanan pada perpustakaan :<br><br>
+        <ol>
+          <li>Pengunjung melakukan registrasi terlebih dahulu pada halaman register.</li>
+          <li>Setelah melakukan registrasi dan berhasil masuk ke halaman web, akan tampil 2 layanan pilihan seperti yang tertera di atas, yaitu reservasi aula, dan kunjungan perpustakaan.</li>
+          <li>Ketika masuk ke salah satu halaman layanan, sistem web akan menunjukkan sebuah form yang harus diisi oleh user, salah satunya seperti tanggal ajuan, form tersebut tentunya berkaitan dengan data yang ingin diajukan.</li>
+          <li>User juga dapat melihat jadwal yang tersedia pada halaman form tersebut.</li>
+          <li>User tidak dapat membuat ajuan pada waktu yang sama dengan user lainnya, jika hal tersebut terjadi, maka sistem web akan memberikan notifikasi untuk memberitahukan hal tersebut.</li>
+          <li>Setelah membuat ajuan, akan muncul status bar pada halaman atas yang menampilkan status ajuan yang telah dibuat oleh user, merah berarti sedang diproses, kuning berarti reschedule, dan biru berarti ajuan tersebut telah diterima.</li>
+          <li>User dapat mengubah data yang telah diajukan, tidak ada batasan tertentu terkait hal tersebut.</li>
+        </ol>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
 
-<div class="card">
+<!-- <div class="card">
     <div class="card-header">
       Daftar Reservasi/Kunjungan yang telah diajukan :
     </div>
-    <!-- /.card-header -->
     <div class="card-body">
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
@@ -124,8 +176,7 @@
             </tbody>
         </table>
     </div>
-    <!-- /.card-body -->
-</div>
+</div> -->
 
 <div class="card bg-gradient-primary" style="display: none;">
   <div class="card-header border-0">

@@ -29,7 +29,7 @@ class AjuanSeeder extends Seeder
             $asal = 'Universitas ' . $faker->city;
 
             // Generate date that is not on Saturday or Sunday
-            $tanggal = $this->generateWeekdayDate('2025-01-01', '2025-01-31');
+            $tanggal = $this->generateWeekdayDate('2025-03-25', '2025-5-31');
 
             // Generate time between 08:00 and 16:00 with random minutes
             $jam = $faker->dateTimeBetween('08:00:00', '16:00:00')->format('H') . ':' . $faker->randomElement(['00', '15', '30', '45']);

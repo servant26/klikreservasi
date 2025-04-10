@@ -67,17 +67,25 @@
                             <input type="text" id="nama" name="nama" class="form-control form-control-lg bg-light fs-6" placeholder="Masukkan Nama" required>
                         </div>
                         <div class="input-group mb-3">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            <input type="email" id="email" name="email" class="form-control form-control-lg bg-light fs-6" placeholder="Masukkan Email" required>
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" id="nama" name="nama" class="form-control form-control-lg bg-light fs-6" placeholder="Masukkan Email" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" id="nama" name="nama" class="form-control form-control-lg bg-light fs-6" placeholder="Nomor Whatsapp" required>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" id="nama" name="nama" class="form-control form-control-lg bg-light fs-6" placeholder="Asal (misal Universitas, TK.. dsj)" required>
                         </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                             <input type="password" id="password" name="password" class="form-control form-control-lg bg-light fs-6" placeholder="Masukkan Password" required>
                         </div>
-                        <div class="input-group mb-3">
+                        <!-- <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                             <input type="password" id="password_confirmation" name="password_confirmation" class="form-control form-control-lg bg-light fs-6" placeholder="Konfirmasi Password" required>
-                        </div>
+                        </div> -->
                         <div class="input-group mb-3">
                             <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Daftar</button>
                         </div>
