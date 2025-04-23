@@ -19,7 +19,7 @@
     <!-- /.content-header -->
 @endsection
 @section('content')
-<div class="row">
+<div class="row" style="display: none;">>
           <!-- Left col -->
           <section class="col-lg-7 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
@@ -115,7 +115,7 @@
 
               <div class="info-box-content">
                 <span class="info-box-text">Total ajuan bulan ini</span>
-                <span class="info-box-number">1,410</span>
+                <span class="info-box-number">30</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -124,11 +124,11 @@
           <!-- /.col -->
           <div class="col-md-4 col-sm-4 col-12">
             <div class="info-box">
-              <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+              <span class="info-box-icon bg-success"><i class="fas fa-building"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">Reservasi Aula</span>
-                <span class="info-box-number">410</span>
+                <span class="info-box-number">0</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -137,11 +137,11 @@
           <!-- /.col -->
           <div class="col-md-4 col-sm-4 col-12">
             <div class="info-box">
-              <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+              <span class="info-box-icon bg-warning"><i class="fas fa-book"></i></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">Kunjungan Perpustakaan</span>
-                <span class="info-box-number">13,648</span>
+                <span class="info-box-number">2</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -149,7 +149,7 @@
           </div>
           <!-- /.col -->
         </div>
-        <!-- /.row -->
+        <!-- /.row --><br>
         <div class="row">
           <div class="col-md-6">
             <!-- AREA CHART -->

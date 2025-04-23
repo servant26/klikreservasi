@@ -30,7 +30,7 @@
         <p>Total Kunjungan/Reservasi Bulan Ini</p>
       </div>
       <div class="icon">
-        <i class="fas fa-book"></i>
+        <i class="far fa-envelope"></i>
       </div>
       <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
@@ -54,7 +54,7 @@
         <p>Ajuan Kunjungan Perpustakaan</p>
       </div>
       <div class="icon">
-        <i class="fas fa-building"></i>
+        <i class="fas fa-book"></i>
       </div>
       <a href="{{ route('staff.kunjungan') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
@@ -104,70 +104,30 @@
     </div>
   </div> 
 </div>
-<div class="card">
-    <div class="card-header">
-      <!-- <a class="btn btn-primary" href="{{ route('staff.tambah') }}" role="button">Tambah Data</a> -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-danger">
+      <div class="card-header">
+        <h3 class="card-title">Petunjuk Penggunaan</h3>
+      </div>
+      <div class="card-body">
+        Berikut merupakan tata cara pembuatan ajuan layanan pada perpustakaan :<br><br>
+        <ol>
+          <li>Pengunjung melakukan registrasi terlebih dahulu pada halaman register.</li>
+          <li>Setelah melakukan registrasi dan berhasil masuk ke halaman web, akan tampil 2 layanan pilihan seperti yang tertera di atas, yaitu reservasi aula, dan kunjungan perpustakaan.</li>
+          <li>Ketika masuk ke salah satu halaman layanan, sistem web akan menunjukkan sebuah form yang harus diisi oleh user, salah satunya seperti tanggal ajuan, form tersebut tentunya berkaitan dengan data yang ingin diajukan.</li>
+          <li>User juga dapat melihat jadwal yang tersedia pada halaman form tersebut.</li>
+          <li>User tidak dapat membuat ajuan pada waktu yang sama dengan user lainnya, jika hal tersebut terjadi, maka sistem web akan memberikan notifikasi untuk memberitahukan hal tersebut.</li>
+          <li>Setelah membuat ajuan, akan muncul status bar pada halaman atas yang menampilkan status ajuan yang telah dibuat oleh user, merah berarti sedang diproses, kuning berarti reschedule, dan biru berarti ajuan tersebut telah diterima.</li>
+          <li>User dapat mengubah data yang telah diajukan, tidak ada batasan tertentu terkait hal tersebut.</li>
+        </ol>
+      </div>
+      <!-- /.card-body -->
     </div>
-    <!-- /.card-header -->
-    <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th style="width: 5%;">No.</th>
-                    <th style="width: 10%;">Nama</th>
-                    <th style="width: 18%;">Jadwal</th>
-                    <th style="width: 10%;">Kontak</th>
-                    <th style="width: 8%;">Jumlah Orang</th>
-                    <th style="width: 15%;">Asal Instansi</th>
-                    <th style="width: 10%;">Jenis</th>
-                    <th style="width: 17%;">Status</th>
-                    <!-- <th style="width: 8%;">Edit</th> -->
-                </tr>
-            </thead>
-            <tbody>
-            @foreach($ajuan as $a)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $a->nama }}</td>
-                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                    <td><a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a></td>
-                    <td>{{ $a->jumlah_orang }} Orang</td>
-                    <td>{{ $a->asal }}</td>
-                    <td>
-                        @if($a->jenis == 1)
-                            Kunjungan Perpustakaan
-                        @elseif($a->jenis == 2)
-                            Reservasi Aula
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        @if($a->status == 1 || $a->status == 3)
-                            <a class="btn 
-                                @if($a->status == 1) btn-danger @elseif($a->status == 3) btn-warning @endif 
-                                btn-block" 
-                                href="javascript:void(0);" 
-                                onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
-                                role="button">
-                                @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
-                            </a>
-                        @elseif($a->status == 2)
-                            <a class="btn btn-primary btn-block" 
-                                href="javascript:void(0);" 
-                                onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
-                                role="button">
-                                Sudah ditanggapi
-                            </a>
-                        @endif
-                    </td>
-                    <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->
-                </tr>
-            @endforeach  
-            </tbody>
-        </table>
-    </div>
-    <!-- /.card-body -->
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
 </div>
-
 <div class="card bg-gradient-primary" style="display: none;">
   <div class="card-header border-0">
     <h3 class="card-title">
