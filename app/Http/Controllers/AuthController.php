@@ -45,14 +45,18 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8',
+            'whatsapp' => 'required|string|max:20',
+            'asal' => 'required|string|max:255', // harus pakai 'asal' karena kolom DB-nya begitu
         ]);
 
         User::create([
-            'nama' => $request->nama,
+            'name' => $request->name,
             'email' => $request->email,
+            'whatsapp' => $request->whatsapp,
+            'asal' => $request->asal,
             'password' => Hash::make($request->password),
             'role' => 'user',
         ]);

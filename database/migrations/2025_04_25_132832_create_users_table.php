@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
+            $table->string('name');
             $table->string('email')->unique();
+            $table->string('whatsapp')->nullable();
+            $table->string('asal')->nullable();
+            $table->enum('role', ['user', 'staf', 'admin'])->default('user');
             $table->string('password');
-            $table->enum('role', ['admin', 'staff', 'user']);
             $table->timestamps();
         });
     }
@@ -33,4 +35,3 @@ return new class extends Migration
         Schema::dropIfExists('users');
     }
 };
-

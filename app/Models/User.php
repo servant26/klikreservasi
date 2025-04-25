@@ -9,13 +9,16 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'nama', 'email', 'password', 'role',
-    ];
+    protected $fillable = ['name', 'email', 'whatsapp', 'asal', 'role', 'password'];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function ajuan()
+    {
+        return $this->hasOne(Ajuan::class);
+    }
 }

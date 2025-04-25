@@ -28,7 +28,6 @@ Route::middleware(['auth', 'role:staff'])->get('/staff/kunjungan', [StaffControl
 Route::middleware(['auth', 'role:staff'])->get('/staff/reservasi', [StaffController::class, 'reservasi'])->name('staff.reservasi');
 Route::middleware(['auth', 'role:staff'])->get('/staff/saran', [StaffController::class, 'saran'])->name('staff.saran');
 
-
 //user
 Route::middleware(['auth', 'role:user'])->get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
 Route::middleware(['auth', 'role:user'])->get('/user/tambah', [UserController::class, 'tambah'])->name('user.tambah');

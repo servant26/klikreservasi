@@ -54,34 +54,29 @@
               </div>
 
       <!-- <form action="{{ route('user.store') }}" method="POST"> -->
-      <form action="" method="POST">
+      <form action="{{ route('user.store') }}" method="POST">
           @csrf
           <div class="card-body">
           <div class="form-group">
               <label>Nama</label>
-              <input type="text" name="nama" class="form-control" required placeholder="Masukkan nama anda">
-          </div>
-          <!-- 
-          <div class="form-group">
-              <label>Asal</label>
-              <input type="text" name="asal" class="form-control" required placeholder="Misal, dari TK... dari Universitas... dsb...">
+              <input type="text" name="nama" class="form-control" value="{{ $user->name }}">
           </div>
           <div class="form-group">
-              <label>Nomor Whatsapp</label>
-              <input type="tel" name="nomor_wa" class="form-control" required placeholder="Masukkan nomor yang bisa dihubungi">
-          </div> -->
+              <label>Email</label>
+              <input type="email" class="form-control" value="{{ $user->email }}">
+          </div>
+          <div class="form-group">
+              <label>Whatsapp</label>
+              <input type="text" class="form-control" value="{{ $user->whatsapp }}">
+          </div>
+          <div class="form-group">
+              <label>Asal Instansi</label>
+              <input type="text" class="form-control" value="{{ $user->asal }}">
+          </div>
           <div class="form-group">
               <label>Jumlah Orang</label>
               <input type="number" name="jumlah_orang" class="form-control" required placeholder="Masukkan angka saja, misal 50, bukan 50 orang..">
           </div>
-          <!-- <div class="form-group">
-              <label>Jenis Ajuan</label>
-              <select name="jenis" class="form-control" required>
-                  <option value="" disabled selected>Pilih Jenis</option>
-                  <option value="1">Kunjungan Perpustakaan</option>
-                  <option value="2">Reservasi Aula</option>
-              </select>
-          </div> -->
           <div class="form-group">
               <label>Tanggal</label>
               <input type="date" name="tanggal" class="form-control" required>

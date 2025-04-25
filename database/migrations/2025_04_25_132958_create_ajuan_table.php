@@ -13,14 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users2', function (Blueprint $table) {
+        Schema::create('ajuan', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->unsignedBigInteger('user_id');
+            $table->integer('jumlah_orang');
+            $table->enum('jenis', [1, 2]);
+            $table->date('tanggal');
+            $table->time('jam');
+            $table->enum('status', [1, 2, 3])->default(1);
             $table->timestamps();
+    
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users2');
+        Schema::dropIfExists('ajuan');
     }
 };

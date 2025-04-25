@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Ajuan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -39,38 +43,27 @@ class UserController extends Controller
 
     public function tambah()
     {
-        return view('user.tambah'); // Assuming you have this view
+        $user = Auth::user();
+        return view('user.ajuan', compact('user'));
+        // return view('user.tambah'); // Assuming you have this view
     }
 
     public function store(Request $request)
     {
         // Validasi data input
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'asal' => 'required|string|max:255',
-            'nomor_wa' => 'required|string|max:20',
             'jumlah_orang' => 'required|integer',
             'jenis' => 'required|string',
             'tanggal' => 'required|date',
             'jam' => 'required|date_format:H:i',
         ]);
     
-        // Ambil ID user yang sedang login
-        $userId = auth()->id();
-    
-        // Insert data ke tabel `ajuan` menggunakan Query Builder
-        DB::table('ajuan')->insert([
-            'nama' => $request->input('nama'),
-            'asal' => $request->input('asal'),
-            'whatsapp' => $this->formatWhatsAppNumber($request->input('nomor_wa')),
-            'jumlah_orang' => $request->input('jumlah_orang'),
-            'jenis' => $request->input('jenis'),
-            'tanggal' => $request->input('tanggal'),
-            'jam' => $request->input('jam'),
-            'status' => 1, // Default status, bisa disesuaikan
-            'user_id' => $userId, // Menambahkan user_id
-            'created_at' => now(),
-            'updated_at' => now(),
+        Ajuan::create([
+            'user_id' => Auth::id(),
+            'jumlah_orang' => $request->jumlah_orang,
+            'jenis' => $request->jenis,
+            'tanggal' => $request->tanggal,
+            'jam' => $request->jam,
         ]);
     
         // Redirect dengan pesan sukses
