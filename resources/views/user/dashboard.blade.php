@@ -29,7 +29,7 @@
                     <h4>Selamat datang di Web Reservasi Kunjungan Perpustakaan</h4>
                     <p>Silahkan pilih layanan yang anda inginkan</p>
                     <!-- Tombol untuk mengajukan reservasi -->
-                    <!-- <a class="btn btn-outline-light btn-sm" href="{{ route('user.tambah') }}" role="button">
+                    <!-- <a class="btn btn-outline-light btn-sm" href="" role="button">
                         Ajukan Kunjungan/Reservasi
                     </a> -->
                 </div>
@@ -52,9 +52,9 @@
                             <p>
                                 Anda telah mengajukan 
                                 @if($a->jenis == 1)
-                                    kunjungan perpustakaan
+                                    Reservasi Aula
                                 @elseif($a->jenis == 2)
-                                    reservasi aula
+                                    Kunjungan Perpustakaan
                                 @endif
                                 pada {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} pukul {{ substr($a->jam, 0, 5) }}
                                 dengan jumlah {{ $a->jumlah_orang }} orang.
@@ -98,7 +98,7 @@
       <div class="icon">
         <i class="fas fa-building"></i>
       </div>
-      <a href="{{ route('user.tambah') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="{{ route('user.reservasi') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-6 col-6">
@@ -111,12 +111,12 @@
       <div class="icon">
         <i class="fas fa-book"></i>
       </div>
-      <a href="{{ route('user.tambah') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="{{ route('user.kunjungan') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
 </div>
 
-<div class="row">
+<!-- <div class="row">
   <div class="col-md-12">
     <div class="card card-danger">
       <div class="card-header">
@@ -134,12 +134,9 @@
           <li>User dapat mengubah data yang telah diajukan, tidak ada batasan tertentu terkait hal tersebut.</li>
         </ol>
       </div>
-      <!-- /.card-body -->
     </div>
-    <!-- /.card -->
   </div>
-  <!-- /.col -->
-</div>
+</div> -->
 
 <div class="card bg-gradient-primary" style="display: none;">
   <div class="card-header border-0">

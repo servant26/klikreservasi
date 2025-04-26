@@ -41,18 +41,31 @@ class UserController extends Controller
         return $number;
     }    
 
-    public function tambah()
+    // public function tambah()
+    // {
+    //     $user = Auth::user(); // Ambil user yang sedang login
+    //     return view('user.tambah', compact('user'));
+    // }
+
+    public function reservasi()
     {
-        $user = Auth::user(); // Ambil user yang sedang login
-        return view('user.tambah', compact('user'));
+        $user = Auth::user(); 
+        $jenis = 1; // 1 = reservasi
+        return view('user.reservasi', compact('user', 'jenis'));
     }
+    
+    public function kunjungan()
+    {
+        $user = Auth::user(); 
+        $jenis = 2; // 2 = kunjungan
+        return view('user.kunjungan', compact('user', 'jenis'));
+    }    
 
     public function store(Request $request)
     {
-        // Validasi data input
         $request->validate([
             'jumlah_orang' => 'required|integer',
-            'jenis' => 'string',
+            'jenis' => 'required|in:1,2', // Pastikan cuma 1 atau 2
             'tanggal' => 'required|date',
             'jam' => 'required|date_format:H:i',
         ]);
@@ -60,14 +73,14 @@ class UserController extends Controller
         Ajuan::create([
             'user_id' => Auth::id(),
             'jumlah_orang' => $request->jumlah_orang,
-            'jenis' => $request->jenis,
+            'jenis' => $request->jenis, // Data jenis dikirim dari form
             'tanggal' => $request->tanggal,
             'jam' => $request->jam,
         ]);
     
-        // Redirect dengan pesan sukses
         return redirect()->route('user.dashboard')->with('success', 'Data berhasil ditambahkan.');
-    }    
+    }
+    
 
     public function edit($id)
     {
