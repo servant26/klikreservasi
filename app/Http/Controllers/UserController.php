@@ -84,46 +84,48 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        // Ambil data berdasarkan ID
-        $ajuan = DB::table('ajuan')->where('id', $id)->first();
-
-        // Periksa apakah data ditemukan
+        $ajuan = DB::table('ajuan')
+            ->join('users', 'ajuan.user_id', '=', 'users.id')
+            ->select('ajuan.*', 'users.name', 'users.email', 'users.whatsapp')
+            ->where('ajuan.id', $id)
+            ->first();
+    
         if (!$ajuan) {
             return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
-
+    
         return view('user.edit', compact('ajuan'));
     }
+    
 
     public function update(Request $request, $id)
     {
-        // Validasi input
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'asal' => 'required|string|max:255',
-            'nomor_wa' => 'required|string|max:20',
-            'jumlah_orang' => 'required|string',
-            'jenis' => 'required|string',
+            'jumlah_orang' => 'required|integer',
             'tanggal' => 'required|date',
             'jam' => 'required|date_format:H:i',
         ]);
 
-        // Update data
+        // Ambil data ajuan yang lama
+        $ajuan = DB::table('ajuan')->where('id', $id)->first();
+
+        if (!$ajuan) {
+            return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
+        }
+
         DB::table('ajuan')
             ->where('id', $id)
             ->update([
-                'nama' => $request->nama,
-                'asal' => $request->asal,
-                'whatsapp' => $this->formatWhatsAppNumber($request->input('nomor_wa')),
                 'jumlah_orang' => $request->jumlah_orang,
-                'jenis' => $request->jenis === 'Kunjungan' ? 1 : 2,
+                'jenis' => $ajuan->jenis, // tetap pakai data lama
                 'tanggal' => $request->tanggal,
                 'jam' => $request->jam,
-                'status' => 3, // Nilai default
+                'status' => 3,
                 'updated_at' => now(),
-            ]);
+        ]);
 
         return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
     }
+
     
 }    
