@@ -141,43 +141,6 @@
   <!-- /.col -->
 </div>
 
-<!-- <div class="card">
-    <div class="card-header">
-      Daftar Reservasi/Kunjungan yang telah diajukan :
-    </div>
-    <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th style="width: 5%;">No.</th>
-                    <th>Nama</th>
-                    <th>Tanggal</th>
-                    <th>Jenis</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach($ajuan as $a)
-                @php
-                  $isToday = \Carbon\Carbon::parse($a->tanggal)->isToday();
-                @endphp
-                  <tr class="{{ $isToday ? '' : '' }}">
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $a->nama }}</td>
-                    <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                    <td>
-                        @if($a->jenis == 1)
-                            Kunjungan Perpustakaan
-                        @elseif($a->jenis == 2)
-                            Reservasi Aula
-                        @endif
-                    </td>
-                </tr>
-            @endforeach  
-            </tbody>
-        </table>
-    </div>
-</div> -->
-
 <div class="card bg-gradient-primary" style="display: none;">
   <div class="card-header border-0">
     <h3 class="card-title">

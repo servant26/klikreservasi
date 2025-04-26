@@ -13,11 +13,11 @@ class UserController extends Controller
 {
     public function index()
     {
-        $ajuan = DB::table('ajuan')
-                    ->whereDate('tanggal', '>=', Carbon::today()) // Data dari hari ini dan seterusnya
-                    ->orderBy('tanggal', 'asc') // Urutkan berdasarkan tanggal
+        $ajuan = Ajuan::with('user') // relasi ke tabel users
+                    ->whereDate('tanggal', '>=', Carbon::today()) // filter tanggal hari ini dan seterusnya
+                    ->orderBy('tanggal', 'asc') // urutkan berdasarkan tanggal
                     ->get();
-    
+        
         return view('user.dashboard', compact('ajuan'));
     }   
     
@@ -43,9 +43,8 @@ class UserController extends Controller
 
     public function tambah()
     {
-        $user = Auth::user();
-        return view('user.ajuan', compact('user'));
-        // return view('user.tambah'); // Assuming you have this view
+        $user = Auth::user(); // Ambil user yang sedang login
+        return view('user.tambah', compact('user'));
     }
 
     public function store(Request $request)
@@ -53,7 +52,7 @@ class UserController extends Controller
         // Validasi data input
         $request->validate([
             'jumlah_orang' => 'required|integer',
-            'jenis' => 'required|string',
+            'jenis' => 'string',
             'tanggal' => 'required|date',
             'jam' => 'required|date_format:H:i',
         ]);

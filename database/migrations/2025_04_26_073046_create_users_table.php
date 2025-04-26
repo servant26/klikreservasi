@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('whatsapp')->nullable();
             $table->string('asal')->nullable();
-            $table->enum('role', ['user', 'staf', 'admin'])->default('user');
+            $table->enum('role', ['user', 'staff', 'admin'])->default('user');
             $table->string('password');
             $table->timestamps();
         });

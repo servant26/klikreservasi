@@ -56,38 +56,33 @@
       <!-- <form action="{{ route('user.store') }}" method="POST"> -->
       <form action="{{ route('user.store') }}" method="POST">
           @csrf
-          <div class="card-body">
-          <div class="form-group">
-              <label>Nama</label>
-              <input type="text" name="nama" class="form-control" value="{{ $user->name }}">
-          </div>
-          <div class="form-group">
-              <label>Email</label>
-              <input type="email" class="form-control" value="{{ $user->email }}">
-          </div>
-          <div class="form-group">
-              <label>Whatsapp</label>
-              <input type="text" class="form-control" value="{{ $user->whatsapp }}">
-          </div>
-          <div class="form-group">
-              <label>Asal Instansi</label>
-              <input type="text" class="form-control" value="{{ $user->asal }}">
-          </div>
-          <div class="form-group">
-              <label>Jumlah Orang</label>
-              <input type="number" name="jumlah_orang" class="form-control" required placeholder="Masukkan angka saja, misal 50, bukan 50 orang..">
-          </div>
-          <div class="form-group">
-              <label>Tanggal</label>
-              <input type="date" name="tanggal" class="form-control" required>
-          </div>
-          <div class="form-group">
-              <label>Jam</label>
-              <input type="time" name="jam" class="form-control" required>
-          </div>
-          <a class="btn btn-danger" href="{{ route('user.dashboard') }}" role="button">Kembali</a>
-          <button type="submit" class="btn btn-primary">Kirim</button>
-        </div>
+            <div class="card-body">
+                <!-- <div class="form-group">
+                    <label>Nama</label>
+                    <input type="text" class="form-control" value="{{ $user->name }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Asal</label>
+                    <input type="text" class="form-control" value="{{ $user->asal }}" readonly>
+                </div> -->
+
+                <!-- Form input untuk data ajuan -->
+                <div class="form-group">
+                    <label>Jumlah Orang</label>
+                    <input type="number" name="jumlah_orang" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" name="tanggal" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Jam</label>
+                    <input type="time" name="jam" class="form-control" required>
+                </div>
+                
+                <a class="btn btn-danger" href="{{ route('user.dashboard') }}">Kembali</a>
+                <button type="submit" class="btn btn-primary">Kirim</button>
+            </div>
       </form>
         <br><br>
     </div>
