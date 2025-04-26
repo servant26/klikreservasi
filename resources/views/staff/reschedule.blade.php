@@ -27,14 +27,14 @@
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
             <tr>
-              <th style="width: 5%;">No.</th>
-              <th style="width: 10%;">Nama</th>
-              <th style="width: 15%;">Jadwal</th>
+              <th style="width: 2%;">No.</th>
+              <th style="width: 5%;">Nama</th>
+              <th style="width: 20%;">Jadwal</th>
               <th style="width: 10%;">Kontak</th>
-              <th style="width: 15%;">Jumlah Orang</th>
+              <th style="width: 10%;">Jumlah Orang</th>
               <th style="width: 15%;">Asal Instansi</th>
               <th style="width: 10%;">Jenis</th>
-              <th style="width: 15%;">Status</th>
+              <th style="width: 18%;">Status</th>
               <!-- <th style="width: 8%;">Edit</th> -->
             </tr>
             </thead>
@@ -49,9 +49,9 @@
                     <td>{{ $a->asal }}</td>
                     <td>
                         @if($a->jenis == 1)
-                            Kunjungan Perpustakaan
-                        @elseif($a->jenis == 2)
                             Reservasi Aula
+                        @elseif($a->jenis == 2)
+                            Kunjungan Perpustakaan
                         @endif
                     </td>
                     <td class="text-center">

@@ -26,6 +26,7 @@ Route::middleware(['auth', 'role:staff'])->get('/staff/update-status/{id}', [Sta
 Route::middleware(['auth', 'role:staff'])->get('/staff/reschedule', [StaffController::class, 'reschedule'])->name('staff.reschedule');
 Route::middleware(['auth', 'role:staff'])->get('/staff/kunjungan', [StaffController::class, 'kunjungan'])->name('staff.kunjungan');
 Route::middleware(['auth', 'role:staff'])->get('/staff/reservasi', [StaffController::class, 'reservasi'])->name('staff.reservasi');
+Route::middleware(['auth', 'role:staff'])->get('/staff/history', [StaffController::class, 'history'])->name('staff.history');
 Route::middleware(['auth', 'role:staff'])->get('/staff/saran', [StaffController::class, 'saran'])->name('staff.saran');
 
 //user

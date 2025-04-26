@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Data Kunjungan Perpustakaan</h1>
+            <h1 class="m-0">History Penerimaan Ajuan</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('staff.dashboard') }}">Back to Dashboard</a></li>
-              <li class="breadcrumb-item active">Kunjungan Perpustakaan</li>
+              <li class="breadcrumb-item active">History</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -24,7 +24,7 @@
 <div class="card">
     <!-- /.card-header -->
     <div class="card-body">
-    <p>Menampilkan data kunjungan perpustakaan :</p>
+    <p>History Penerimaan Ajuan :</p>
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($kunjungan as $a)
+            @foreach($history as $a)
               <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $a->nama }}</td>

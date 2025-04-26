@@ -6,6 +6,7 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0">Dashboard</h1>
+            
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -26,13 +27,13 @@
     <!-- New Orders -->
     <div class="small-box bg-info mb-3">
       <div class="inner">
-        <h3>{{ $ajuan->count() }}</h3>
-        <p>Total Kunjungan/Reservasi Bulan Ini</p>
+        <h3>{{ $history }}</h3>
+        <p>History Penerimaan Ajuan</p>
       </div>
       <div class="icon">
         <i class="far fa-envelope"></i>
       </div>
-      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="{{ route('staff.history') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
     <!-- New Orders -->
     <div class="small-box bg-warning mb-3">
@@ -103,30 +104,6 @@
       </div>
     </div>
   </div> 
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <div class="card card-danger">
-      <div class="card-header">
-        <h3 class="card-title">Petunjuk Penggunaan</h3>
-      </div>
-      <div class="card-body">
-        Berikut merupakan tata cara pembuatan ajuan layanan pada perpustakaan :<br><br>
-        <ol>
-          <li>Pengunjung melakukan registrasi terlebih dahulu pada halaman register.</li>
-          <li>Setelah melakukan registrasi dan berhasil masuk ke halaman web, akan tampil 2 layanan pilihan seperti yang tertera di atas, yaitu reservasi aula, dan kunjungan perpustakaan.</li>
-          <li>Ketika masuk ke salah satu halaman layanan, sistem web akan menunjukkan sebuah form yang harus diisi oleh user, salah satunya seperti tanggal ajuan, form tersebut tentunya berkaitan dengan data yang ingin diajukan.</li>
-          <li>User juga dapat melihat jadwal yang tersedia pada halaman form tersebut.</li>
-          <li>User tidak dapat membuat ajuan pada waktu yang sama dengan user lainnya, jika hal tersebut terjadi, maka sistem web akan memberikan notifikasi untuk memberitahukan hal tersebut.</li>
-          <li>Setelah membuat ajuan, akan muncul status bar pada halaman atas yang menampilkan status ajuan yang telah dibuat oleh user, merah berarti sedang diproses, kuning berarti reschedule, dan biru berarti ajuan tersebut telah diterima.</li>
-          <li>User dapat mengubah data yang telah diajukan, tidak ada batasan tertentu terkait hal tersebut.</li>
-        </ol>
-      </div>
-      <!-- /.card-body -->
-    </div>
-    <!-- /.card -->
-  </div>
-  <!-- /.col -->
 </div>
 <div class="card bg-gradient-primary" style="display: none;">
   <div class="card-header border-0">
