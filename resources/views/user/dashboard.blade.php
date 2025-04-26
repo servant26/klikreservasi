@@ -70,7 +70,7 @@
                             <!-- Tombol untuk reschedule -->
                             <a href="{{ route('user.edit', $a->id) }}" 
                               class="btn {{ in_array($a->status, [1, 2]) ? 'btn-outline-light' : ($a->status == 3 ? 'btn-outline-dark' : 'btn-outline-secondary') }} btn-sm">
-                              Reschedule/Ganti Jadwal
+                              Reschedule
                             </a>
                         </div>
                         <div class="icon">
