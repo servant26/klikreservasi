@@ -67,13 +67,14 @@
               <input type="number" name="jumlah_orang" class="form-control" required value="{{ $ajuan->jumlah_orang }}" autofocus>
           </div>
 
-          <!-- <div class="form-group">
+          <div class="form-group">
               <label>Jenis Ajuan</label>
               <select name="jenis" class="form-control" required>
-                  <option value="1" {{ $ajuan->jenis == 1 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
-                  <option value="2" {{ $ajuan->jenis == 2 ? 'selected' : '' }}>Reservasi Aula</option>
+                  <option value="1" {{ old('jenis', $ajuan->jenis) == 1 ? 'selected' : '' }}>Reservasi Aula</option>
+                  <option value="2" {{ old('jenis', $ajuan->jenis) == 2 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
               </select>
-          </div> -->
+          </div>
+
 
           <div class="form-group">
               <label>Tanggal</label>

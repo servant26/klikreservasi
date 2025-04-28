@@ -64,7 +64,7 @@
                                 @endif
                             </p>
                             <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm">
-                                Ubah jadwal
+                                Ubah Data Ajuan
                             </a>
                           <!-- Form Cancel (hidden) -->
                           <form id="delete-form-{{ $a->id }}" action="{{ route('user.destroy', $a->id) }}" method="POST" style="display: none;">
@@ -74,7 +74,7 @@
 
                           <!-- Tombol Cancel dengan SweetAlert konfirmasi -->
                           <button type="button" class="btn btn-dark btn-sm" onclick="confirmDelete({{ $a->id }})">
-                              Batalkan ajuan
+                              Batalkan Ajuan
                           </button>
                         </div>
                         <div class="icon">

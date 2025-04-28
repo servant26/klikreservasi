@@ -104,28 +104,33 @@ class UserController extends Controller
             'jumlah_orang' => 'required|integer',
             'tanggal' => 'required|date',
             'jam' => 'required|date_format:H:i',
+            'jenis' => 'required|in:1,2', // Validasi untuk jenis
         ]);
-
+    
         // Ambil data ajuan yang lama
         $ajuan = DB::table('ajuan')->where('id', $id)->first();
-
+    
         if (!$ajuan) {
             return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
-
+    
+        // Update data ajuan dengan jenis yang baru
         DB::table('ajuan')
             ->where('id', $id)
             ->update([
                 'jumlah_orang' => $request->jumlah_orang,
-                'jenis' => $ajuan->jenis, // tetap pakai data lama
+                'jenis' => $request->jenis, // Ambil nilai jenis baru dari form
                 'tanggal' => $request->tanggal,
                 'jam' => $request->jam,
                 'status' => 3,
                 'updated_at' => now(),
         ]);
-
+    
         return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
     }
+    
+    
+    
     public function destroy($id)
     {
         $ajuan = \App\Models\Ajuan::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
