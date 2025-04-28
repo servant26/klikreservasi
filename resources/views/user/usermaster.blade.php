@@ -9,6 +9,7 @@
     transform: scale(1.1);
     }
   </style>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -169,6 +170,8 @@
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Section untuk JS khusus tiap halaman -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 @yield('scripts')
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
@@ -228,6 +231,22 @@ $(function () {
       "responsive": true,
     });
   });
+
+  $(document).ready(function() {
+            $("#tanggal").datepicker({
+                dateFormat: "dd/mm/yy" // Mengatur format tanggal
+            });
+        });
+        $(document).ready(function() {
+        $("#tanggal").datepicker({
+            dateFormat: "dd/mm/yy", // Menetapkan format yang diinginkan
+            onSelect: function(dateText) {
+                var date = $(this).datepicker('getDate'); 
+                $(this).val($.datepicker.formatDate('dd/mm/yy', date)); // Memastikan nilai tanggal yang dimasukkan sesuai dengan format
+            }
+        });
+    });
+
 </script>
 
 </body>

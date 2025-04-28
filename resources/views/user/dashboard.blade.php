@@ -25,7 +25,7 @@
         <div class="col-lg-12 col-12">
             <div class="small-box p-3" style="background-color: #f0f0f0; border: 1px solid black;">
                 <div class="inner text-left">
-                    <h4>Selamat datang di Web Reservasi Kunjungan Perpustakaan</h4>
+                    <h4>Selamat datang di Web Reservasi Aula dan Kunjungan Perpustakaan</h4>
                     <p>Silahkan pilih layanan yang anda inginkan</p>
                 </div>
                 <div class="icon">

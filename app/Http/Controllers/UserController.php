@@ -40,13 +40,6 @@ class UserController extends Controller
         // Return the original number if no matches
         return $number;
     }    
-
-    // public function tambah()
-    // {
-    //     $user = Auth::user(); // Ambil user yang sedang login
-    //     return view('user.tambah', compact('user'));
-    // }
-
     public function reservasi()
     {
         $user = Auth::user(); 
@@ -63,23 +56,24 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'jumlah_orang' => 'required|integer',
-            'jenis' => 'required|in:1,2', // Pastikan cuma 1 atau 2
-            'tanggal' => 'required|date',
-            'jam' => 'required|date_format:H:i',
-        ]);
+        // Ambil data tanggal yang dikirim dari form
+        $tanggal = $request->input('tanggal'); 
+        
+        // Ubah tanggal ke format yang sesuai dengan database (yyyy-mm-dd)
+        $tanggal = Carbon::createFromFormat('d/m/Y', $tanggal)->format('Y-m-d'); // Mengonversi ke format yang sesuai
     
+        // Menyimpan data Ajuan ke database
         Ajuan::create([
             'user_id' => Auth::id(),
-            'jumlah_orang' => $request->jumlah_orang,
-            'jenis' => $request->jenis, // Data jenis dikirim dari form
-            'tanggal' => $request->tanggal,
-            'jam' => $request->jam,
+            'jumlah_orang' => $request->input('jumlah_orang'),
+            'jenis' => $request->input('jenis'),
+            'tanggal' => $tanggal,
+            'jam' => $request->input('jam'),
         ]);
     
-        return redirect()->route('user.dashboard')->with('success', 'Data berhasil ditambahkan.');
+        return redirect()->route('user.dashboard');
     }
+    
     
 
     public function edit($id)
@@ -96,38 +90,40 @@ class UserController extends Controller
     
         return view('user.edit', compact('ajuan'));
     }
-    
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'jumlah_orang' => 'required|integer',
+        'tanggal' => 'required|date',
+        'jam' => 'required|date_format:H:i',
+        'jenis' => 'required|in:1,2',
+    ]);
 
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'jumlah_orang' => 'required|integer',
-            'tanggal' => 'required|date',
-            'jam' => 'required|date_format:H:i',
-            'jenis' => 'required|in:1,2', // Validasi untuk jenis
-        ]);
-    
-        // Ambil data ajuan yang lama
-        $ajuan = DB::table('ajuan')->where('id', $id)->first();
-    
-        if (!$ajuan) {
-            return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
-        }
-    
-        // Update data ajuan dengan jenis yang baru
-        DB::table('ajuan')
-            ->where('id', $id)
-            ->update([
-                'jumlah_orang' => $request->jumlah_orang,
-                'jenis' => $request->jenis, // Ambil nilai jenis baru dari form
-                'tanggal' => $request->tanggal,
-                'jam' => $request->jam,
-                'status' => 3,
-                'updated_at' => now(),
-        ]);
-    
-        return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
+    $ajuan = DB::table('ajuan')->where('id', $id)->first();
+
+    if (!$ajuan) {
+        return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
     }
+
+    // Update data ajuan
+    $updated = DB::table('ajuan')
+        ->where('id', $id)
+        ->update([
+            'jumlah_orang' => $request->jumlah_orang,
+            'jenis' => $request->jenis,
+            'tanggal' => $request->tanggal,
+            'jam' => $request->jam,
+            'status' => 3,
+            'updated_at' => now(),
+        ]);
+
+    if ($updated) {
+        return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
+    } else {
+        return redirect()->route('user.dashboard')->with('error', 'Gagal memperbarui data.');
+    }
+}
+
     
     
     

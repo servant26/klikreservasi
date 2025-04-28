@@ -63,7 +63,7 @@
 
                         <div class="form-group">
                             <label>Tanggal</label>
-                            <input type="date" name="tanggal" class="form-control" required>
+                            <input type="text" id="tanggal" name="tanggal" class="form-control" required />
                         </div>
 
                         <div class="form-group">
