@@ -9,7 +9,9 @@ class StaffController extends Controller
     public function index()
     {
         $ajuan = DB::table('ajuan')
-            ->orderBy('tanggal', 'asc')
+            ->join('users', 'ajuan.user_id', '=', 'users.id')
+            ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
+            ->orderBy('ajuan.tanggal', 'asc')
             ->get();
     
         $reschedule = DB::table('ajuan')->where('status', 3)->count();
@@ -48,10 +50,10 @@ class StaffController extends Controller
         $updated = DB::table('ajuan')->where('id', $id)->update(['status' => $newStatus]);
     
         if ($updated) {
-            return redirect()->route('staff.dashboard')->with('success', 'Status berhasil diubah!');
+            return redirect()->back()->with('success', 'Status berhasil diubah!');
         }
     
-        return redirect()->route('staff.dashboard')->with('error', 'Gagal mengubah status!');
+        return redirect()->back()->with('error', 'Gagal mengubah status!');
     }
     
     // public function history()
@@ -76,7 +78,6 @@ class StaffController extends Controller
         $reschedule = DB::table('ajuan')
                         ->join('users', 'ajuan.user_id', '=', 'users.id')
                         ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
-                        ->where('ajuan.status', 3)
                         ->orderBy('ajuan.tanggal', 'asc')
                         ->get();
     
@@ -90,7 +91,6 @@ class StaffController extends Controller
                         ->join('users', 'ajuan.user_id', '=', 'users.id')
                         ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
                         ->where('ajuan.jenis', 2) // harusnya jenis 2 untuk kunjungan
-                        ->where('ajuan.status', 1)
                         ->orderBy('ajuan.tanggal', 'asc')
                         ->get();
     
@@ -104,7 +104,6 @@ class StaffController extends Controller
                         ->join('users', 'ajuan.user_id', '=', 'users.id')
                         ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
                         ->where('ajuan.jenis', 1) // harusnya jenis 1 untuk reservasi
-                        ->where('ajuan.status', 1)
                         ->orderBy('ajuan.tanggal', 'asc')
                         ->get();
     

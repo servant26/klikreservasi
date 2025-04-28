@@ -210,10 +210,10 @@
     var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
 
     var areaChartData = {
-      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels  : ['Minggu-1', 'Minggu-2', 'Minggu-3', 'Minggu-4'],
       datasets: [
         {
-          label               : 'Digital Goods',
+          label               : 'Kunjungan Perpustakaan',
           backgroundColor     : 'rgba(69, 115, 141, 0.9)',
           borderColor         : 'rgba(60,141,188,0.8)',
           pointRadius          : false,
@@ -224,7 +224,7 @@
           data                : [28, 48, 40, 19, 86, 27, 90]
         },
         {
-          label               : 'Electronics',
+          label               : 'Reservasi Aula',
           backgroundColor     : 'rgba(210, 214, 222, 1)',
           borderColor         : 'rgba(210, 214, 222, 1)',
           pointRadius         : false,
@@ -287,17 +287,13 @@
     var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
     var donutData        = {
       labels: [
-          'Chrome',
-          'IE',
-          'FireFox',
-          'Safari',
-          'Opera',
-          'Navigator',
+          'Reservasi Aula',
+          'Kunjungan Perpustakaan',
       ],
       datasets: [
         {
-          data: [700,500,400,600,300,100],
-          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+          data: [500,300],
+          backgroundColor : ['#3c8dbc','#00a65a'],
         }
       ]
     }

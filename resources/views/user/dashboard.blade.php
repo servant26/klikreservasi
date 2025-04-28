@@ -23,15 +23,10 @@
 @if($ajuan->where('user_id', auth()->id())->isEmpty())
     <div class="row">
         <div class="col-lg-12 col-12">
-            <!-- Card abu-abu untuk user yang belum mengajukan -->
-            <div class="small-box bg-secondary text-white p-2">
+            <div class="small-box p-3" style="background-color: #f0f0f0; border: 1px solid black;">
                 <div class="inner text-left">
                     <h4>Selamat datang di Web Reservasi Kunjungan Perpustakaan</h4>
                     <p>Silahkan pilih layanan yang anda inginkan</p>
-                    <!-- Tombol untuk mengajukan reservasi -->
-                    <!-- <a class="btn btn-outline-light btn-sm" href="" role="button">
-                        Ajukan Kunjungan/Reservasi
-                    </a> -->
                 </div>
                 <div class="icon">
                     <i class="fas fa-info-circle"></i>
@@ -44,9 +39,10 @@
         @if($a->user_id == auth()->id())
             <div class="row">
                 <div class="col-lg-12 col-12">
-                    <div class="small-box 
-                        {{ $a->status == 1 ? 'bg-danger text-white' : ($a->status == 2 ? 'bg-primary text-white' : 'bg-warning') }} 
-                        p-2">
+                    <div class="small-box p-3" 
+                         style="background-color: 
+                         {{ $a->status == 1 ? '#f77267' : ($a->status == 2 ? '#d0e6ff' : '#ffe07d') }};
+                         border: 1px solid black;">
                         <div class="inner text-left">
                             <h4>Status Ajuan Reservasi/Kunjungan</h4>
                             <p>
@@ -67,10 +63,8 @@
                                     Mohon tunggu, reschedule anda sedang diproses.
                                 @endif
                             </p>
-                            <!-- Tombol untuk reschedule -->
-                            <a href="{{ route('user.edit', $a->id) }}" 
-                              class="btn {{ in_array($a->status, [1, 2]) ? 'btn-outline-light' : ($a->status == 3 ? 'btn-outline-dark' : 'btn-outline-secondary') }} btn-sm">
-                              Reschedule
+                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-outline-dark btn-sm">
+                                Reschedule
                             </a>
                         </div>
                         <div class="icon">
@@ -86,35 +80,53 @@
 @endif
 
 
+
 <div class="row">
-  <!-- Column 1: New Orders and Bounce Rate -->
+  <!-- Reservasi Aula -->
   <div class="col-lg-6 col-6">
-    <!-- New Orders -->
-    <div class="small-box bg-info mb-3">
-      <div class="inner">
-        <h4>Reservasi Aula</h4>
-        <p><br><br></p>
+    <a href="{{ route('user.reservasi') }}" style="text-decoration: none;">
+      <div class="small-box" 
+        style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;" 
+        onmouseover="this.querySelector('.desc').style.opacity='1'" 
+        onmouseout="this.querySelector('.desc').style.opacity='0'">
+        
+        <div class="bg-image" style="background: url('{{ asset('dist/img/reservasi.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
+        
+        <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1;"></div>
+        
+        <div class="inner text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; color: #fff; width: 90%;">
+          <h4 style="margin-bottom: 10px;">Reservasi Aula</h4>
+          <p class="desc" style="font-size: 14px; margin: 0; opacity: 0; transition: opacity 0.5s ease;">
+            Ajukan pemesanan aula untuk kegiatanmu di sini!
+          </p>
+        </div>
       </div>
-      <div class="icon">
-        <i class="fas fa-building"></i>
-      </div>
-      <a href="{{ route('user.reservasi') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
+    </a>
   </div>
+
+  <!-- Kunjungan Perpustakaan -->
   <div class="col-lg-6 col-6">
-    <!-- Bounce Rate -->
-    <div class="small-box bg-success">
-      <div class="inner">
-        <h4>Kunjungan Perpustakaan</h4>
-        <p><br><br></p>
+    <a href="{{ route('user.kunjungan') }}" style="text-decoration: none;">
+      <div class="small-box" 
+        style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;" 
+        onmouseover="this.querySelector('.desc').style.opacity='1'" 
+        onmouseout="this.querySelector('.desc').style.opacity='0'">
+        
+        <div class="bg-image" style="background: url('{{ asset('dist/img/kunjungan.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
+        
+        <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1;"></div>
+        
+        <div class="inner text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; color: #fff; width: 90%;">
+          <h4 style="margin-bottom: 10px;">Kunjungan Perpustakaan</h4>
+          <p class="desc" style="font-size: 14px; margin: 0; opacity: 0; transition: opacity 0.5s ease;">
+            Laporkan kunjunganmu ke perpustakaan dengan mudah!
+          </p>
+        </div>
       </div>
-      <div class="icon">
-        <i class="fas fa-book"></i>
-      </div>
-      <a href="{{ route('user.kunjungan') }}" class="small-box-footer">Buat Ajuan <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
+    </a>
   </div>
 </div>
+
 
 <!-- <div class="row">
   <div class="col-md-12">
