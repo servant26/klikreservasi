@@ -126,6 +126,15 @@ class UserController extends Controller
 
         return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
     }
-
+    public function destroy($id)
+    {
+        $ajuan = \App\Models\Ajuan::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        $ajuan->delete();
+    
+        // Mengarahkan kembali ke dashboard dengan pesan sukses
+        return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibatalkan.');
+    }
+    
+    
     
 }    

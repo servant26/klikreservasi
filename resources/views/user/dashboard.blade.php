@@ -60,12 +60,22 @@
                                 @elseif($a->status == 2)
                                     Ajuan anda selesai diproses. Silakan datang pada waktu yang telah ditentukan.
                                 @elseif($a->status == 3)
-                                    Mohon tunggu, reschedule anda sedang diproses.
+                                    Mohon tunggu, perubahan jadwal anda sedang diproses.
                                 @endif
                             </p>
-                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-outline-dark btn-sm">
-                                Reschedule
+                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm">
+                                Ubah jadwal
                             </a>
+                          <!-- Form Cancel (hidden) -->
+                          <form id="delete-form-{{ $a->id }}" action="{{ route('user.destroy', $a->id) }}" method="POST" style="display: none;">
+                              @csrf
+                              @method('DELETE')
+                          </form>
+
+                          <!-- Tombol Cancel dengan SweetAlert konfirmasi -->
+                          <button type="button" class="btn btn-dark btn-sm" onclick="confirmDelete({{ $a->id }})">
+                              Batalkan ajuan
+                          </button>
                         </div>
                         <div class="icon">
                             <i class="fas 
@@ -129,7 +139,7 @@
 
 
 <!-- <div class="row">
-  <div class="col-md-12">
+  <div class="colmd-12">
     <div class="card card-danger">
       <div class="card-header">
         <h3 class="card-title">Petunjuk Penggunaan</h3>
@@ -186,4 +196,48 @@
   </div>
 </div>
 <!-- /.row -->
+@endsection
+@section('scripts')
+<script>
+    // Fungsi untuk konfirmasi delete menggunakan SweetAlert
+    function confirmDelete(id) {
+        Swal.fire({
+        title: 'Yakin ingin membatalkan ajuan?',
+        text: "Data yang dihapus tidak bisa dikembalikan!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Batalkan ajuan!',
+        cancelButtonText: 'Kembali',
+        reverseButtons: true // Membalikkan posisi tombol
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Menampilkan notifikasi bahwa data berhasil dihapus
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Ajuan berhasil dihapus!',
+                    text: 'Ajuan Anda telah dihapus.',
+                    showConfirmButton: false,
+                    timer: 1500 // Notifikasi akan ditampilkan selama 1.5 detik
+                }).then(() => {
+                    // Setelah notifikasi selesai, submit form untuk menghapus data
+                    document.getElementById('delete-form-' + id).submit();
+                });
+            }
+        });
+    }
+</script>
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 1500
+        })
+    </script>
+@endif
 @endsection

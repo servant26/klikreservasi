@@ -7,8 +7,8 @@
   <style>
   .small-box:hover .bg-image {
     transform: scale(1.1);
-  }
-</style>
+    }
+  </style>
   <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -167,6 +167,9 @@
 
 <!-- jQuery -->
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Section untuk JS khusus tiap halaman -->
+@yield('scripts')
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
