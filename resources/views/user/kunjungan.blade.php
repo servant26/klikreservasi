@@ -52,32 +52,48 @@
               <div class="card-header">
                 <h3 class="card-title">Silahkan isi datanya</h3>
               </div>
-                <form action="{{ route('user.store') }}" method="POST">
-                    @csrf
-                    <div class="card-body">
+              <form action="{{ route('user.store') }}" method="POST">
+                  @csrf
+                  <div class="card-body">
 
-                        <div class="form-group">
-                            <label>Jumlah Orang</label>
-                            <input type="number" name="jumlah_orang" class="form-control" required autofocus>
-                        </div>
+                      <div class="form-group">
+                          <label>Jumlah Orang</label>
+                          <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" required autofocus>
+                          @error('jumlah_orang')
+                              <div class="invalid-feedback">
+                                  {{ $message }}
+                              </div>
+                          @enderror
+                      </div>
 
-                        <div class="form-group">
-                            <label>Tanggal</label>
-                            <input type="text" id="tanggal" name="tanggal" class="form-control" required />
-                        </div>
+                      <div class="form-group">
+                          <label>Tanggal</label>
+                          <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" required />
+                          @error('tanggal')
+                              <div class="invalid-feedback">
+                                  {{ $message }}
+                              </div>
+                          @enderror
+                      </div>
 
-                        <div class="form-group">
-                            <label>Jam</label>
-                            <input type="time" name="jam" class="form-control" required>
-                        </div>
+                      <div class="form-group">
+                          <label>Jam</label>
+                          <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" required>
+                          @error('jam')
+                              <div class="invalid-feedback">
+                                  {{ $message }}
+                              </div>
+                          @enderror
+                      </div>
 
-                        <!-- Hidden input untuk 'jenis' -->
-                        <input type="hidden" name="jenis" value="{{ $jenis }}">
+                      <!-- Hidden input untuk 'jenis' -->
+                      <input type="hidden" name="jenis" value="{{ $jenis }}">
 
-                        <a class="btn btn-danger" href="{{ route('user.dashboard') }}">Back</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+                      <a class="btn btn-danger" href="{{ route('user.dashboard') }}">Back</a>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+              </form>
+
         <br><br>
     </div>
 </div>

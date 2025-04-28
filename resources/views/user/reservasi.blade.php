@@ -56,20 +56,35 @@
                     @csrf
                     <div class="card-body">
 
-                        <div class="form-group">
-                            <label>Jumlah Orang</label>
-                            <input type="number" name="jumlah_orang" class="form-control" required autofocus>
-                        </div>
+                    <div class="form-group">
+                        <label>Jumlah Orang</label>
+                        <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" value="{{ old('jumlah_orang') }}" required autofocus>
+                        @error('jumlah_orang')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
 
-                        <div class="form-group">
-                            <label>Tanggal</label>
-                            <input type="text" id="tanggal" name="tanggal" class="form-control" required />
-                        </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required />
+                        @error('tanggal')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
 
-                        <div class="form-group">
-                            <label>Jam</label>
-                            <input type="time" name="jam" class="form-control" required>
-                        </div>
+                    <div class="form-group">
+                        <label>Jam</label>
+                        <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" value="{{ old('jam') }}" required>
+                        @error('jam')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
 
                         <!-- Hidden input untuk 'jenis' -->
                         <input type="hidden" name="jenis" value="{{ $jenis }}">

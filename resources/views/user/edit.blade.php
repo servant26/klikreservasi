@@ -62,29 +62,49 @@
               <input type="text" class="form-control" value="{{ $ajuan->whatsapp }}" readonly>
           </div>-->
 
-          <div class="form-group">
-              <label>Jumlah Orang</label>
-              <input type="number" name="jumlah_orang" class="form-control" required value="{{ $ajuan->jumlah_orang }}" autofocus>
-          </div>
+<div class="form-group">
+    <label>Jumlah Orang</label>
+    <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" required value="{{ old('jumlah_orang', $ajuan->jumlah_orang) }}" autofocus>
+    @error('jumlah_orang')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
 
-          <div class="form-group">
-              <label>Jenis Ajuan</label>
-              <select name="jenis" class="form-control" required>
-                  <option value="1" {{ old('jenis', $ajuan->jenis) == 1 ? 'selected' : '' }}>Reservasi Aula</option>
-                  <option value="2" {{ old('jenis', $ajuan->jenis) == 2 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
-              </select>
-          </div>
+<div class="form-group">
+    <label>Jenis Ajuan</label>
+    <select name="jenis" class="form-control @error('jenis') is-invalid @enderror" required>
+        <option value="1" {{ old('jenis', $ajuan->jenis) == 1 ? 'selected' : '' }}>Reservasi Aula</option>
+        <option value="2" {{ old('jenis', $ajuan->jenis) == 2 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
+    </select>
+    @error('jenis')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
 
+<div class="form-group">
+    <label>Tanggal</label>
+    <input type="date" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" required value="{{ old('tanggal', $ajuan->tanggal) }}">
+    @error('tanggal')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
 
-          <div class="form-group">
-              <label>Tanggal</label>
-              <input type="date" name="tanggal" class="form-control" required value="{{ $ajuan->tanggal }}">
-          </div>
+<div class="form-group">
+    <label>Jam</label>
+    <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" required value="{{ old('jam', \Carbon\Carbon::parse($ajuan->jam)->format('H:i')) }}">
+    @error('jam')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
 
-          <div class="form-group">
-              <label>Jam</label>
-              <input type="time" name="jam" class="form-control" required value="{{ \Carbon\Carbon::parse($ajuan->jam)->format('H:i') }}">
-          </div>
 
           <a href="{{ route('user.dashboard') }}" class="btn btn-danger">Back</a>
           <button type="submit" class="btn btn-primary">Update</button>

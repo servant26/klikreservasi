@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Ajuan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -56,22 +57,73 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // Ambil data tanggal yang dikirim dari form
-        $tanggal = $request->input('tanggal'); 
-        
-        // Ubah tanggal ke format yang sesuai dengan database (yyyy-mm-dd)
-        $tanggal = Carbon::createFromFormat('d/m/Y', $tanggal)->format('Y-m-d'); // Mengonversi ke format yang sesuai
+        // Ambil semua input
+        $input = $request->all();
     
-        // Menyimpan data Ajuan ke database
+        // Validasi input awal
+        $validator = Validator::make($input, [
+            'jumlah_orang' => 'required|integer|min:1',
+            'tanggal' => 'required|string',
+            'jam' => 'required|string',
+            'jenis' => 'required|in:1,2',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+    
+        // Ubah tanggal dari d/m/Y ke Y-m-d
+        try {
+            $tanggal = Carbon::createFromFormat('d/m/Y', $request->input('tanggal'))->format('Y-m-d');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid'])->withInput();
+        }
+    
+        $jam = $request->input('jam');
+    
+        // Cek 1: Tidak boleh ajukan untuk hari kemarin
+        if (Carbon::parse($tanggal)->lt(Carbon::today())) {
+            return redirect()->back()->withErrors(['tanggal' => 'Tidak bisa membuat ajuan untuk tanggal yang sudah lewat'])->withInput();
+        }
+    
+        // Cek 2: Tidak boleh ajukan di hari Sabtu atau Minggu
+        $hari = Carbon::parse($tanggal)->dayOfWeek; // 0=Sunday, 1=Monday, ..., 6=Saturday
+        if ($hari == 0 || $hari == 6) {
+            return redirect()->back()->withErrors(['tanggal' => 'Ajuan hanya bisa dibuat pada hari kerja (Senin - Jumat)'])->withInput();
+        }
+    
+        // Cek 3: Validasi jam operasional
+        if ($hari >= 1 && $hari <= 4) {
+            // Senin - Kamis (8:00 - 16:00)
+            if ($jam < '08:00' || $jam > '16:00') {
+                return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Senin-Kamis hanya antara 08:00 - 16:00'])->withInput();
+            }
+        } elseif ($hari == 5) {
+            // Jumat (8:00 - 15:00)
+            if ($jam < '08:00' || $jam > '15:00') {
+                return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Jumat hanya antara 08:00 - 15:00'])->withInput();
+            }
+        }
+    
+        // Cek 4: Tidak boleh ada duplikasi tanggal+jam
+        $exists = Ajuan::where('tanggal', $tanggal)
+            ->where('jam', $jam)
+            ->exists();
+    
+        if ($exists) {
+            return redirect()->back()->withErrors(['jam' => 'Sudah ada ajuan di tanggal dan jam tersebut'])->withInput();
+        }
+    
+        // Jika semua validasi lolos, buat ajuan
         Ajuan::create([
             'user_id' => Auth::id(),
             'jumlah_orang' => $request->input('jumlah_orang'),
             'jenis' => $request->input('jenis'),
             'tanggal' => $tanggal,
-            'jam' => $request->input('jam'),
+            'jam' => $jam,
         ]);
     
-        return redirect()->route('user.dashboard');
+        return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
     
     
@@ -90,42 +142,76 @@ class UserController extends Controller
     
         return view('user.edit', compact('ajuan'));
     }
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'jumlah_orang' => 'required|integer',
-        'tanggal' => 'required|date',
-        'jam' => 'required|date_format:H:i',
-        'jenis' => 'required|in:1,2',
-    ]);
-
-    $ajuan = DB::table('ajuan')->where('id', $id)->first();
-
-    if (!$ajuan) {
-        return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
-    }
-
-    // Update data ajuan
-    $updated = DB::table('ajuan')
-        ->where('id', $id)
-        ->update([
-            'jumlah_orang' => $request->jumlah_orang,
-            'jenis' => $request->jenis,
-            'tanggal' => $request->tanggal,
-            'jam' => $request->jam,
-            'status' => 3,
-            'updated_at' => now(),
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'jumlah_orang' => 'required|integer|min:1',
+            'tanggal' => 'required|date',
+            'jam' => 'required|date_format:H:i',
+            'jenis' => 'required|in:1,2',
         ]);
 
-    if ($updated) {
-        return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
-    } else {
-        return redirect()->route('user.dashboard')->with('error', 'Gagal memperbarui data.');
-    }
-}
+        $ajuan = DB::table('ajuan')->where('id', $id)->first();
 
-    
-    
+        if (!$ajuan) {
+            return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
+        }
+
+        // Ubah format tanggal ke Carbon
+        $tanggalInput = Carbon::parse($request->input('tanggal'));
+        $jamInput = $request->input('jam');
+
+        // Validasi tidak boleh tanggal kemarin
+        if ($tanggalInput->isPast() && !$tanggalInput->isToday()) {
+            return back()->withErrors(['tanggal' => 'Tanggal tidak boleh kurang dari hari ini.'])->withInput();
+        }
+
+        // Validasi hari kerja dan jam kerja
+        $dayOfWeek = $tanggalInput->dayOfWeek; // 0 = Minggu, 1 = Senin, dst
+
+        if ($dayOfWeek == 0 || $dayOfWeek == 6) {
+            return back()->withErrors(['tanggal' => 'Ajuan hanya bisa dilakukan pada hari kerja (Senin sampai Jumat).'])->withInput();
+        }
+
+        if ($dayOfWeek >= 1 && $dayOfWeek <= 4) { // Senin-Kamis
+            if ($jamInput < '08:00' || $jamInput > '16:00') {
+                return back()->withErrors(['jam' => 'Jam reservasi Senin-Kamis hanya antara 08:00 sampai 16:00.'])->withInput();
+            }
+        } elseif ($dayOfWeek == 5) { // Jumat
+            if ($jamInput < '08:00' || $jamInput > '15:00') {
+                return back()->withErrors(['jam' => 'Jam reservasi pada Jumat hanya antara 08:00 sampai 15:00.'])->withInput();
+            }
+        }
+
+        // Cek duplikasi (tapi abaikan dirinya sendiri)
+        $existing = DB::table('ajuan')
+            ->where('tanggal', $tanggalInput->format('Y-m-d'))
+            ->where('jam', $jamInput)
+            ->where('id', '!=', $id) // abaikan data yang lagi diedit
+            ->first();
+
+        if ($existing) {
+            return back()->withErrors(['tanggal' => 'Sudah ada reservasi pada tanggal dan jam tersebut.'])->withInput();
+        }
+
+        // Update data
+        $updated = DB::table('ajuan')
+            ->where('id', $id)
+            ->update([
+                'jumlah_orang' => $request->jumlah_orang,
+                'jenis' => $request->jenis,
+                'tanggal' => $tanggalInput->format('Y-m-d'),
+                'jam' => $jamInput,
+                'status' => 3, // status ajuan setelah di-edit
+                'updated_at' => now(),
+            ]);
+
+        if ($updated) {
+            return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
+        } else {
+            return redirect()->route('user.dashboard')->with('error', 'Gagal memperbarui data.');
+        }
+    }
     
     public function destroy($id)
     {
