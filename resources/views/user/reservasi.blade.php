@@ -52,41 +52,55 @@
               <div class="card-header">
                 <h3 class="card-title">Silahkan isi datanya</h3>
               </div>
-                <form action="{{ route('user.store') }}" method="POST">
+                <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
 
-                    <div class="form-group">
-                        <label>Jumlah Orang</label>
-                        <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" value="{{ old('jumlah_orang') }}" required autofocus>
-                        @error('jumlah_orang')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
+                        <!-- Jumlah Orang -->
+                        <div class="form-group">
+                            <label>Jumlah Orang</label>
+                            <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" value="{{ old('jumlah_orang') }}" required autofocus>
+                            @error('jumlah_orang')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <label>Tanggal</label>
-                        <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required />
-                        @error('tanggal')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
+                        <!-- Tanggal -->
+                        <div class="form-group">
+                            <label>Tanggal</label>
+                            <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required />
+                            @error('tanggal')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <label>Jam</label>
-                        <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" value="{{ old('jam') }}" required>
-                        @error('jam')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
+                        <!-- Jam -->
+                        <div class="form-group">
+                            <label>Jam</label>
+                            <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" value="{{ old('jam') }}" required>
+                            @error('jam')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                        <!-- Hidden input untuk 'jenis' -->
+                        <!-- Deskripsi (khusus reservasi) -->
+                        <div class="form-group">
+                            <label>Deskripsi</label>
+                            <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror">{{ old('deskripsi') }}</textarea>
+                            @error('deskripsi')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Upload Surat (JPG) -->
+                        <div class="form-group">
+                            <label>Upload Surat (JPG)</label>
+                            <input type="file" name="surat" accept=".jpg" class="form-control @error('surat') is-invalid @enderror">
+                            @error('surat')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <input type="hidden" name="jenis" value="{{ $jenis }}">
 
                         <a class="btn btn-danger" href="{{ route('user.dashboard') }}">Back</a>

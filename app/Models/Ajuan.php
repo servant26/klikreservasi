@@ -12,8 +12,15 @@ class Ajuan extends Model
     protected $table = 'ajuan';
 
     protected $fillable = [
-        'user_id', 'jumlah_orang', 'jenis', 'tanggal', 'jam', 'status'
-    ];
+        'user_id',
+        'jumlah_orang',
+        'jenis',
+        'tanggal',
+        'jam',
+        'status',
+        'surat',       // tambahkan ini
+        'deskripsi',   // tambahkan ini
+    ];    
 
     public function user()
     {

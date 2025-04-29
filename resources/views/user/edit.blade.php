@@ -45,7 +45,7 @@
         </div>
 <div class="container">
     <div class="mx-1">
-      <form action="{{ route('user.update', $ajuan->id) }}" method="POST">
+    <form action="{{ route('user.update', $ajuan->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           <!-- <div class="form-group">
               <label>Nama</label>
@@ -102,6 +102,22 @@
         <div class="invalid-feedback">
             {{ $message }}
         </div>
+    @enderror
+</div>
+
+<div class="form-group">
+    <label>Deskripsi</label>
+    <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
+    @error('deskripsi')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+<div class="form-group">
+    <label>Upload Surat (JPG saja)</label>
+    <input type="file" name="surat" accept=".jpg,.jpeg" class="form-control @error('surat') is-invalid @enderror">
+    @error('surat')
+        <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
 

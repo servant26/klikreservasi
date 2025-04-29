@@ -21,11 +21,13 @@ return new class extends Migration
             $table->date('tanggal');
             $table->time('jam');
             $table->enum('status', [1, 2, 3])->default(1);
+            $table->string('surat')->nullable(); // nama file surat
+            $table->text('deskripsi')->nullable(); // hanya digunakan saat jenis == 1
             $table->timestamps();
     
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
-    }
+    }    
 
     /**
      * Reverse the migrations.
@@ -37,4 +39,3 @@ return new class extends Migration
         Schema::dropIfExists('ajuan');
     }
 };
-
