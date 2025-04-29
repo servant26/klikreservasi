@@ -121,7 +121,7 @@
           </li>
           <li class="nav-item">
             <a href="/user/saran" class="nav-link {{ Request::is('user/saran') ? 'active' : '' }}">
-              <i class="nav-icon fa fa-list"></i>
+              <i class="nav-icon far fa-envelope"></i>
               <p>
                 Masukkan Saran
               </p>

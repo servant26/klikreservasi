@@ -49,20 +49,34 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'whatsapp' => 'required|string|max:20',
-            'asal' => 'required|string|max:255', // harus pakai 'asal' karena kolom DB-nya begitu
+            'asal' => 'required|string|max:255',
         ]);
-
+    
+        // Normalisasi nomor WhatsApp ke format 0815xxxx
+        $rawWhatsapp = preg_replace('/[^0-9]/', '', $request->whatsapp); // hapus karakter non-angka
+    
+        if (str_starts_with($rawWhatsapp, '62')) {
+            $normalizedWhatsapp = '0' . substr($rawWhatsapp, 2);
+        } elseif (str_starts_with($rawWhatsapp, '8')) {
+            $normalizedWhatsapp = '0' . $rawWhatsapp;
+        } elseif (str_starts_with($rawWhatsapp, '0')) {
+            $normalizedWhatsapp = $rawWhatsapp;
+        } else {
+            // fallback jika input tidak dikenali
+            $normalizedWhatsapp = $rawWhatsapp;
+        }
+    
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'whatsapp' => $request->whatsapp,
+            'whatsapp' => $normalizedWhatsapp,
             'asal' => $request->asal,
             'password' => Hash::make($request->password),
             'role' => 'user',
         ]);
-
+    
         return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login!');
-    }
+    }    
 
     // Logout
     public function logout()

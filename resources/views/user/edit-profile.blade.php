@@ -10,7 +10,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Back to Dashboard</a></li>
-              <li class="breadcrumb-item active">Profile</li>
+              <li class="breadcrumb-item active">Edit Profile</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -55,7 +55,7 @@
         </div>
 
         
-        <a href="{{ route('user.profile') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
+        <a href="{{ route('user.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
         <button type="submit" class="btn btn-primary">Submit</button>
 
         <br><br><br>

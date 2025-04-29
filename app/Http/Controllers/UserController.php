@@ -21,26 +21,7 @@ class UserController extends Controller
         
         return view('user.dashboard', compact('ajuan'));
     }   
-    
-    private function formatWhatsAppNumber($number)
-    {
-        // Remove any non-numeric characters
-        $number = preg_replace('/\D/', '', $number);
-    
-        // Check the number format
-        if (strpos($number, '+62') === 0) {
-            return $number; // Already in the correct format
-        } elseif (strpos($number, '62') === 0) {
-            return $number; // Starts with 62, no changes needed
-        } elseif (strpos($number, '08') === 0) {
-            return '62' . substr($number, 1); // Replace leading 08 with 62
-        } elseif (strpos($number, '8') === 0) {
-            return '62' . $number; // Prepend 62 to leading 8
-        }
-    
-        // Return the original number if no matches
-        return $number;
-    }    
+      
     public function reservasi()
     {
         $user = Auth::user(); 
@@ -133,10 +114,6 @@ class UserController extends Controller
 
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
-
-    
-    
-
     public function edit($id)
     {
         $ajuan = DB::table('ajuan')
@@ -263,12 +240,28 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'whatsapp' => 'nullable|string|max:20',
             'asal' => 'nullable|string|max:100',
-            'password' => 'nullable|string|min:8|confirmed', // password opsional, tapi harus konfirmasi
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
+    
+        // Normalisasi WhatsApp ke format 0815xxxxxx
+        $normalizedWhatsapp = null;
+        if ($request->filled('whatsapp')) {
+            $rawWhatsapp = preg_replace('/[^0-9]/', '', $request->whatsapp);
+    
+            if (str_starts_with($rawWhatsapp, '62')) {
+                $normalizedWhatsapp = '0' . substr($rawWhatsapp, 2);
+            } elseif (str_starts_with($rawWhatsapp, '8')) {
+                $normalizedWhatsapp = '0' . $rawWhatsapp;
+            } elseif (str_starts_with($rawWhatsapp, '0')) {
+                $normalizedWhatsapp = $rawWhatsapp;
+            } else {
+                $normalizedWhatsapp = $rawWhatsapp;
+            }
+        }
     
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->whatsapp = $request->whatsapp;
+        $user->whatsapp = $normalizedWhatsapp;
         $user->asal = $request->asal;
     
         if ($request->filled('password')) {
@@ -279,7 +272,5 @@ class UserController extends Controller
     
         return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
     }
-    
-    
 
 }    
