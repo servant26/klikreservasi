@@ -59,7 +59,7 @@ class UserController extends Controller
     {
         // Ambil semua input
         $input = $request->all();
-    
+
         // Validasi input awal
         $validator = Validator::make($input, [
             'jumlah_orang' => 'required|integer|min:1',
@@ -67,64 +67,73 @@ class UserController extends Controller
             'jam' => 'required|string',
             'jenis' => 'required|in:1,2',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-    
+
+        // Validasi jumlah_orang maksimal berdasarkan jenis
+        $jumlah_orang = (int) $request->input('jumlah_orang');
+        $jenis = (int) $request->input('jenis');
+
+        if ($jenis === 1 && $jumlah_orang > 100) {
+            return redirect()->back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk reservasi aula adalah 100 orang'])->withInput();
+        } elseif ($jenis === 2 && $jumlah_orang > 50) {
+            return redirect()->back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk kunjungan perpustakaan adalah 50 orang'])->withInput();
+        }
+
         // Ubah tanggal dari d/m/Y ke Y-m-d
         try {
             $tanggal = Carbon::createFromFormat('d/m/Y', $request->input('tanggal'))->format('Y-m-d');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid'])->withInput();
         }
-    
+
         $jam = $request->input('jam');
-    
+
         // Cek 1: Tidak boleh ajukan untuk hari kemarin
         if (Carbon::parse($tanggal)->lt(Carbon::today())) {
             return redirect()->back()->withErrors(['tanggal' => 'Tidak bisa membuat ajuan untuk tanggal yang sudah lewat'])->withInput();
         }
-    
+
         // Cek 2: Tidak boleh ajukan di hari Sabtu atau Minggu
-        $hari = Carbon::parse($tanggal)->dayOfWeek; // 0=Sunday, 1=Monday, ..., 6=Saturday
+        $hari = Carbon::parse($tanggal)->dayOfWeek;
         if ($hari == 0 || $hari == 6) {
             return redirect()->back()->withErrors(['tanggal' => 'Ajuan hanya bisa dibuat pada hari kerja (Senin - Jumat)'])->withInput();
         }
-    
+
         // Cek 3: Validasi jam operasional
         if ($hari >= 1 && $hari <= 4) {
-            // Senin - Kamis (8:00 - 16:00)
             if ($jam < '08:00' || $jam > '16:00') {
                 return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Senin-Kamis hanya antara 08:00 - 16:00'])->withInput();
             }
         } elseif ($hari == 5) {
-            // Jumat (8:00 - 15:00)
             if ($jam < '08:00' || $jam > '15:00') {
                 return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Jumat hanya antara 08:00 - 15:00'])->withInput();
             }
         }
-    
+
         // Cek 4: Tidak boleh ada duplikasi tanggal+jam
         $exists = Ajuan::where('tanggal', $tanggal)
             ->where('jam', $jam)
             ->exists();
-    
+
         if ($exists) {
             return redirect()->back()->withErrors(['jam' => 'Sudah ada ajuan di tanggal dan jam tersebut'])->withInput();
         }
-    
-        // Jika semua validasi lolos, buat ajuan
+
+        // Simpan data
         Ajuan::create([
             'user_id' => Auth::id(),
-            'jumlah_orang' => $request->input('jumlah_orang'),
-            'jenis' => $request->input('jenis'),
+            'jumlah_orang' => $jumlah_orang,
+            'jenis' => $jenis,
             'tanggal' => $tanggal,
             'jam' => $jam,
         ]);
-    
+
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
+
     
     
 
@@ -150,62 +159,73 @@ class UserController extends Controller
             'jam' => 'required|date_format:H:i',
             'jenis' => 'required|in:1,2',
         ]);
-
+    
+        // Ambil nilai jumlah_orang dan jenis
+        $jumlahOrang = (int) $request->jumlah_orang;
+        $jenis = (int) $request->jenis;
+    
+        // Validasi jumlah orang maksimal
+        if ($jenis === 1 && $jumlahOrang > 100) {
+            return back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk reservasi aula adalah 100 orang.'])->withInput();
+        } elseif ($jenis === 2 && $jumlahOrang > 50) {
+            return back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk kunjungan perpustakaan adalah 50 orang.'])->withInput();
+        }
+    
         $ajuan = DB::table('ajuan')->where('id', $id)->first();
-
+    
         if (!$ajuan) {
             return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
-
+    
         // Ubah format tanggal ke Carbon
         $tanggalInput = Carbon::parse($request->input('tanggal'));
         $jamInput = $request->input('jam');
-
+    
         // Validasi tidak boleh tanggal kemarin
         if ($tanggalInput->isPast() && !$tanggalInput->isToday()) {
             return back()->withErrors(['tanggal' => 'Tanggal tidak boleh kurang dari hari ini.'])->withInput();
         }
-
+    
         // Validasi hari kerja dan jam kerja
-        $dayOfWeek = $tanggalInput->dayOfWeek; // 0 = Minggu, 1 = Senin, dst
-
+        $dayOfWeek = $tanggalInput->dayOfWeek;
+    
         if ($dayOfWeek == 0 || $dayOfWeek == 6) {
             return back()->withErrors(['tanggal' => 'Ajuan hanya bisa dilakukan pada hari kerja (Senin sampai Jumat).'])->withInput();
         }
-
-        if ($dayOfWeek >= 1 && $dayOfWeek <= 4) { // Senin-Kamis
+    
+        if ($dayOfWeek >= 1 && $dayOfWeek <= 4) {
             if ($jamInput < '08:00' || $jamInput > '16:00') {
                 return back()->withErrors(['jam' => 'Jam reservasi Senin-Kamis hanya antara 08:00 sampai 16:00.'])->withInput();
             }
-        } elseif ($dayOfWeek == 5) { // Jumat
+        } elseif ($dayOfWeek == 5) {
             if ($jamInput < '08:00' || $jamInput > '15:00') {
                 return back()->withErrors(['jam' => 'Jam reservasi pada Jumat hanya antara 08:00 sampai 15:00.'])->withInput();
             }
         }
-
-        // Cek duplikasi (tapi abaikan dirinya sendiri)
+    
+        // Cek duplikasi (abaikan dirinya sendiri)
         $existing = DB::table('ajuan')
             ->where('tanggal', $tanggalInput->format('Y-m-d'))
             ->where('jam', $jamInput)
-            ->where('id', '!=', $id) // abaikan data yang lagi diedit
+            ->where('id', '!=', $id)
             ->first();
-
+    
         if ($existing) {
             return back()->withErrors(['tanggal' => 'Sudah ada reservasi pada tanggal dan jam tersebut.'])->withInput();
         }
-
+    
         // Update data
         $updated = DB::table('ajuan')
             ->where('id', $id)
             ->update([
-                'jumlah_orang' => $request->jumlah_orang,
-                'jenis' => $request->jenis,
+                'jumlah_orang' => $jumlahOrang,
+                'jenis' => $jenis,
                 'tanggal' => $tanggalInput->format('Y-m-d'),
                 'jam' => $jamInput,
-                'status' => 3, // status ajuan setelah di-edit
+                'status' => 3,
                 'updated_at' => now(),
             ]);
-
+    
         if ($updated) {
             return redirect()->route('user.dashboard')->with('success', 'Data berhasil diperbarui.');
         } else {
@@ -222,6 +242,44 @@ class UserController extends Controller
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibatalkan.');
     }
     
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('user.profile', compact('user'));
+    }
+    
+    public function editProfile()
+    {
+        $user = Auth::user();
+        return view('user.edit-profile', compact('user'));
+    }
+    
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+    
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'whatsapp' => 'nullable|string|max:20',
+            'asal' => 'nullable|string|max:100',
+            'password' => 'nullable|string|min:8|confirmed', // password opsional, tapi harus konfirmasi
+        ]);
+    
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->whatsapp = $request->whatsapp;
+        $user->asal = $request->asal;
+    
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+    
+        $user->save();
+    
+        return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
+    }
     
     
+
 }    

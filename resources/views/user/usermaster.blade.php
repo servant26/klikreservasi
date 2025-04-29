@@ -112,6 +112,14 @@
             </a>
           </li>
           <li class="nav-item">
+          <a href="/user/profile" class="nav-link {{ Request::is('user/profile*') ? 'active' : '' }}">
+              <i class="nav-icon fa fa-user"></i>
+              <p>
+                Profile
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="/user/saran" class="nav-link {{ Request::is('user/saran') ? 'active' : '' }}">
               <i class="nav-icon fa fa-list"></i>
               <p>

@@ -37,4 +37,8 @@ Route::middleware(['auth', 'role:user'])->post('/user/store', [UserController::c
 Route::middleware(['auth', 'role:user'])->get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::middleware(['auth', 'role:user'])->post('/user/edit/{id}', [UserController::class, 'update'])->name('user.update');
 Route::middleware(['auth', 'role:user'])->delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+// Profil user
+Route::middleware(['auth', 'role:user'])->get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
+Route::middleware(['auth', 'role:user'])->get('/user/profile/edit', [UserController::class, 'editProfile'])->name('user.profile.edit');
+Route::middleware(['auth', 'role:user'])->post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
 

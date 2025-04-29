@@ -63,7 +63,7 @@
                                     Mohon tunggu, perubahan jadwal anda sedang diproses.
                                 @endif
                             </p>
-                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm">
+                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm" style="margin-right: 6px;">
                                 Ubah Data Ajuan
                             </a>
                           <!-- Form Cancel (hidden) -->
