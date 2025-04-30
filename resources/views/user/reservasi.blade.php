@@ -5,7 +5,7 @@
       <div class="container">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Pengajuan Reservasi Aula</h1>
+            <h1 class="m-0">Form Ajuan Reservasi Aula</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
