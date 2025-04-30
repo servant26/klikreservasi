@@ -20,9 +20,9 @@
 @endsection
 
 @section('content')
-<div class="container mt-4">
+<div class="container mt-3">
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-primary">{{ session('success') }}</div>
     @endif
 
     <div class="card shadow-sm border-0">

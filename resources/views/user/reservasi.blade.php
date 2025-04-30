@@ -60,19 +60,11 @@
                             <label>Atas Nama</label>
                             <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
                         </div>
-                        <!-- Jumlah Orang -->
-                        <div class="form-group">
-                            <label>Jumlah Orang</label>
-                            <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" value="{{ old('jumlah_orang') }}" required autofocus>
-                            @error('jumlah_orang')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
                         <!-- Tanggal -->
                         <div class="form-group">
                             <label>Tanggal</label>
-                            <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required />
+                            <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required/>
                             @error('tanggal')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -92,6 +84,15 @@
                             <label>Deskripsi</label>
                             <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi') }}</textarea>
                             @error('deskripsi')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Jumlah Orang -->
+                        <div class="form-group">
+                            <label>Jumlah Orang</label>
+                            <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" value="{{ old('jumlah_orang') }}" required>
+                            @error('jumlah_orang')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

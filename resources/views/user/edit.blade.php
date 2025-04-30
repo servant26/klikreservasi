@@ -46,92 +46,90 @@
 <div class="container">
     <div class="mx-1">
     <form action="{{ route('user.update', $ajuan->id) }}" method="POST" enctype="multipart/form-data">
-          @csrf
-          <!-- <div class="form-group">
-              <label>Nama</label>
-              <input type="text" class="form-control" value="{{ $ajuan->name }}" readonly>
-          </div>
-
-          <div class="form-group">
-              <label>Email</label>
-              <input type="email" class="form-control" value="{{ $ajuan->email }}" readonly>
-          </div>
-
-          <div class="form-group">
-              <label>Kontak Whatsapp</label>
-              <input type="text" class="form-control" value="{{ $ajuan->whatsapp }}" readonly>
-          </div>-->
-
-<div class="form-group">
-    <label>Jumlah Orang</label>
-    <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" required value="{{ old('jumlah_orang', $ajuan->jumlah_orang) }}" autofocus>
-    @error('jumlah_orang')
-        <div class="invalid-feedback">
-            {{ $message }}
+        @csrf
+        <div class="form-group">
+            <label>Atas Nama</label>
+            <input type="text" class="form-control" value="{{ $ajuan->name }}" readonly>
         </div>
-    @enderror
-</div>
 
-<div class="form-group">
-    <label>Jenis Ajuan</label>
-    <select name="jenis" class="form-control @error('jenis') is-invalid @enderror" required>
-        <option value="1" {{ old('jenis', $ajuan->jenis) == 1 ? 'selected' : '' }}>Reservasi Aula</option>
-        <option value="2" {{ old('jenis', $ajuan->jenis) == 2 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
-    </select>
-    @error('jenis')
-        <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+            <label>Tanggal</label>
+            <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" required value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
+            @error('tanggal')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
-    @enderror
-</div>
 
-<div class="form-group">
-    <label>Tanggal</label>
-    <input type="date" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" required value="{{ old('tanggal', $ajuan->tanggal) }}">
-    @error('tanggal')
-        <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+            <label>Jam</label>
+            <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" required value="{{ old('jam', \Carbon\Carbon::parse($ajuan->jam)->format('H:i')) }}">
+            @error('jam')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
-    @enderror
-</div>
 
-<div class="form-group">
-    <label>Jam</label>
-    <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" required value="{{ old('jam', \Carbon\Carbon::parse($ajuan->jam)->format('H:i')) }}">
-    @error('jam')
-        <div class="invalid-feedback">
-            {{ $message }}
+        <div class="form-group">
+            <label>Jenis Ajuan</label>
+            <select name="jenis" class="form-control @error('jenis') is-invalid @enderror" required>
+                <option value="1" {{ old('jenis', $ajuan->jenis) == 1 ? 'selected' : '' }}>Reservasi Aula</option>
+                <option value="2" {{ old('jenis', $ajuan->jenis) == 2 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
+            </select>
+            @error('jenis')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
-    @enderror
-</div>
 
-<div class="form-group">
-    <label>Deskripsi</label>
-    <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
-    @error('deskripsi')
-        <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
+        <div class="form-group">
+            <label>Deskripsi</label>
+            <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
+            @error('deskripsi')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-<div class="form-group">
-    <label>Upload Surat (JPG)</label>
-    <input type="file" name="surat" accept=".jpg,.jpeg" class="form-control @error('surat') is-invalid @enderror">
-    
-    <!-- Tampilkan keterangan surat lama jika ada -->
-    @if($ajuan->surat)
-        <p>Telah diunggah : {{ $ajuan->surat }}</p>
-    @endif
-    
-    @error('surat')
-        <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-</div>
+        <div class="form-group">
+            <label>Jumlah Orang</label>
+            <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" required value="{{ old('jumlah_orang', $ajuan->jumlah_orang) }}">
+            @error('jumlah_orang')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
 
+        <div class="form-group">
+            <label>Upload Surat (JPG)</label>
+            <input type="file" name="surat" accept=".jpg,.jpeg" class="form-control @error('surat') is-invalid @enderror">
+            
+            <!-- Tampilkan keterangan surat lama jika ada -->
+            @if($ajuan->surat)
+                <p>Telah diunggah : {{ $ajuan->surat }}</p>
+            @endif
+            
+            @error('surat')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
           <a href="{{ route('user.dashboard') }}" class="btn btn-danger">Back</a>
           <button type="submit" class="btn btn-primary">Update</button>
-      </form>
-        <br><br>
+    </form>
+    <br><br>
     </div>
 </div>
+@endsection
+
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $("#tanggal").datepicker({
+            dateFormat: "dd/mm/yy"
+        });
+    });
+</script>
 @endsection
