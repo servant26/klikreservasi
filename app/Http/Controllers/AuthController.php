@@ -66,7 +66,7 @@ class AuthController extends Controller
             $normalizedWhatsapp = $rawWhatsapp;
         }
     
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'whatsapp' => $normalizedWhatsapp,
@@ -74,8 +74,10 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'user',
         ]);
+
+        Auth::login($user);
     
-        return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login!');
+        return redirect()->route('user.dashboard');
     }    
 
     // Logout

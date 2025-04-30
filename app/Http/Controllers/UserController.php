@@ -45,8 +45,8 @@ class UserController extends Controller
             'tanggal' => 'required|string',
             'jam' => 'required|string',
             'jenis' => 'required|in:1,2',
-            'surat' => 'nullable|file|mimes:jpg|max:2048',
-            'deskripsi' => 'nullable|string',
+            'surat' => 'required|file|mimes:jpg|max:2048', // Wajib sekarang
+            'deskripsi' => 'required|string',              // Wajib sekarang
         ]);
     
         if ($validator->fails()) {
@@ -104,7 +104,7 @@ class UserController extends Controller
             'tanggal' => $tanggal,
             'jam' => $jam,
             'surat' => $fileName,
-            'deskripsi' => $jenis === 1 ? $request->input('deskripsi') : null,
+            'deskripsi' => $request->input('deskripsi'),
         ]);
     
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
@@ -132,7 +132,7 @@ class UserController extends Controller
             'jam' => 'required|date_format:H:i',
             'jenis' => 'required|in:1,2',
             'deskripsi' => 'required|string|max:500',
-            'surat' => 'nullable|file|mimes:jpg,jpeg|max:2048',
+            'surat' => 'nullable|file|mimes:jpg,jpeg|max:2048', // TIDAK wajib
         ]);
     
         $jumlahOrang = (int) $request->jumlah_orang;
@@ -191,26 +191,43 @@ class UserController extends Controller
             'updated_at' => now(),
         ];
     
-        if ($request->hasFile('surat')) {
-            $filename = time() . '_' . $request->file('surat')->getClientOriginalName();
-            $path = $request->file('surat')->storeAs('surat', $filename, 'public');
-            $dataToUpdate['surat'] = $path;
+    // Jika ada file surat baru, hapus file lama dan upload file baru
+    if ($request->hasFile('surat')) {
+        // Hapus surat lama jika ada
+        if ($ajuan->surat) {
+            $oldFilePath = public_path('uploads/surat/' . $ajuan->surat);
+            if (file_exists($oldFilePath)) {
+                unlink($oldFilePath); // Menghapus file surat lama
+            }
         }
+
+        // Unggah file surat baru
+        $filename = time() . '_' . $request->file('surat')->getClientOriginalName();
+        $path = $request->file('surat')->move(public_path('uploads/surat'), $filename);
+        $dataToUpdate['surat'] = $filename;
+    }
     
         $updated = DB::table('ajuan')->where('id', $id)->update($dataToUpdate);
     
         return redirect()->route('user.dashboard')->with($updated ? 'success' : 'error', $updated ? 'Data berhasil diperbarui.' : 'Gagal memperbarui data.');
     }
     
-    
     public function destroy($id)
     {
         $ajuan = \App\Models\Ajuan::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+        
+        // Cek jika ada surat yang terupload dan hapus file-nya
+        if ($ajuan->surat) {
+            $suratPath = public_path('uploads/surat/' . $ajuan->surat);
+            if (file_exists($suratPath)) {
+                unlink($suratPath); // Menghapus file surat
+            }
+        }
+    
         $ajuan->delete();
     
-        // Mengarahkan kembali ke dashboard dengan pesan sukses
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibatalkan.');
-    }
+    }    
     
     public function profile()
     {

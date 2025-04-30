@@ -120,14 +120,6 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/user/saran" class="nav-link {{ Request::is('user/saran') ? 'active' : '' }}">
-              <i class="nav-icon far fa-envelope"></i>
-              <p>
-                Masukkan Saran
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
               <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class="nav-icon fa fa-power-off"></i>
                   <p>Logout</p>

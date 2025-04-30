@@ -44,7 +44,9 @@
                          {{ $a->status == 1 ? '#f77267' : ($a->status == 2 ? '#d0e6ff' : '#ffe07d') }};
                          border: 1px solid black;">
                         <div class="inner text-left">
-                            <h4>Status Ajuan Reservasi/Kunjungan</h4>
+                        <h4>
+                            {{ $a->status == 1 ? 'Ajuan sedang diproses' : ($a->status == 2 ? 'Ajuan telah diterima' : 'Reschedule sedang diproses') }}
+                        </h4>
                             <p>
                                 Anda telah mengajukan 
                                 @if($a->jenis == 1)

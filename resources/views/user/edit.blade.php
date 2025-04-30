@@ -114,8 +114,14 @@
 </div>
 
 <div class="form-group">
-    <label>Upload Surat (JPG saja)</label>
+    <label>Upload Surat (JPG)</label>
     <input type="file" name="surat" accept=".jpg,.jpeg" class="form-control @error('surat') is-invalid @enderror">
+    
+    <!-- Tampilkan keterangan surat lama jika ada -->
+    @if($ajuan->surat)
+        <p>Telah diunggah : {{ $ajuan->surat }}</p>
+    @endif
+    
     @error('surat')
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror

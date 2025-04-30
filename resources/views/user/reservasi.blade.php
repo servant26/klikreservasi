@@ -55,7 +55,11 @@
                 <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
-
+                        <!-- Nama User -->
+                        <div class="form-group">
+                            <label>Atas Nama</label>
+                            <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
+                        </div>
                         <!-- Jumlah Orang -->
                         <div class="form-group">
                             <label>Jumlah Orang</label>
@@ -83,10 +87,10 @@
                             @enderror
                         </div>
 
-                        <!-- Deskripsi (khusus reservasi) -->
+                        <!-- Deskripsi -->
                         <div class="form-group">
                             <label>Deskripsi</label>
-                            <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror">{{ old('deskripsi') }}</textarea>
+                            <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi') }}</textarea>
                             @error('deskripsi')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -95,7 +99,7 @@
                         <!-- Upload Surat (JPG) -->
                         <div class="form-group">
                             <label>Upload Surat (JPG)</label>
-                            <input type="file" name="surat" accept=".jpg" class="form-control @error('surat') is-invalid @enderror">
+                            <input type="file" name="surat" accept=".jpg" class="form-control @error('surat') is-invalid @enderror" required>
                             @error('surat')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
