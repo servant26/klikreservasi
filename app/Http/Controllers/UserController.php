@@ -25,16 +25,32 @@ class UserController extends Controller
     public function reservasi()
     {
         $user = Auth::user(); 
-        $jenis = 1; // 1 = reservasi
-        return view('user.reservasi', compact('user', 'jenis'));
+        $jenis = 1;
+    
+        // Ambil semua ajuan orang lain, bukan milik user sendiri
+        $ajuan = Ajuan::where('user_id', '!=', $user->id)
+                    ->where('jenis', $jenis)
+                    ->whereDate('tanggal', '>=', Carbon::today())
+                    ->orderBy('tanggal', 'asc')
+                    ->get();
+    
+        return view('user.reservasi', compact('user', 'jenis', 'ajuan'));
     }
     
     public function kunjungan()
     {
         $user = Auth::user(); 
         $jenis = 2; // 2 = kunjungan
-        return view('user.kunjungan', compact('user', 'jenis'));
-    }    
+    
+        // Ambil ajuan milik user lain, jenis kunjungan, tanggal hari ini ke atas
+        $ajuan = Ajuan::where('user_id', '!=', $user->id)
+                    ->where('jenis', $jenis)
+                    ->whereDate('tanggal', '>=', Carbon::today())
+                    ->orderBy('tanggal', 'asc')
+                    ->get();
+    
+        return view('user.kunjungan', compact('user', 'jenis', 'ajuan'));
+    } 
 
     public function store(Request $request)
     {
@@ -114,7 +130,7 @@ class UserController extends Controller
     {
         $ajuan = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
-            ->select('ajuan.*', 'users.name', 'users.email', 'users.whatsapp')
+            ->select('ajuan.*', 'users.name', 'users.email', 'users.whatsapp', 'users.asal')
             ->where('ajuan.id', $id)
             ->first();
     
@@ -122,8 +138,17 @@ class UserController extends Controller
             return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
     
-        return view('user.edit', compact('ajuan'));
+        // Ambil ajuan lain yang jenisnya sama, bukan milik user sendiri, dan tanggal hari ini ke atas
+        $ajuanLain = Ajuan::where('user_id', '!=', $ajuan->user_id)
+            ->where('jenis', $ajuan->jenis)
+            ->whereDate('tanggal', '>=', Carbon::today())
+            ->orderBy('tanggal', 'asc')
+            ->with('user')
+            ->get();
+    
+        return view('user.edit', compact('ajuan', 'ajuanLain'));
     }
+    
     public function update(Request $request, $id)
     {
         $request->validate([

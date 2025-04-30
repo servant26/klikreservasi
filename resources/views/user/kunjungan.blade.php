@@ -35,8 +35,30 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                The body of the card
-              </div>
+                @if($ajuan->isEmpty())
+                    <p>Tidak ada jadwal yang akan datang.</p>
+                @else
+                    <ul>
+                        @foreach($ajuan as $a)
+                            @php
+                                $tanggal = \Carbon\Carbon::parse($a->tanggal);
+                                $jam = \Carbon\Carbon::parse($a->jam);
+                                $waktu = $jam->format('H:i');
+                                $periode = match (true) {
+                                    $jam->hour < 12 => 'pagi',
+                                    $jam->hour < 15 => 'siang',
+                                    $jam->hour < 18 => 'sore',
+                                    default => 'malam',
+                                };
+                            @endphp
+                            <li>
+                                {{ $a->user->asal ?? 'Asal tidak diketahui' }} :
+                                {{ $tanggal->translatedFormat('l, d F Y') }} jam {{ $waktu }} {{ $periode }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->

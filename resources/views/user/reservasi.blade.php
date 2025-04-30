@@ -23,10 +23,9 @@
       <div class="container-fluid">
       <div class="row">
           <div class="col-md-12">
-            <div class="card card-primary collapsed-card">
+            <div class="card card collapsed-card">
               <div class="card-header">
-                <h3 class="card-title">Lihat Jadwal</h3>
-
+                <h3 class="card-title">List Jadwal</h3>
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                   </button>
@@ -35,8 +34,30 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                The body of the card
-              </div>
+                @if($ajuan->isEmpty())
+                    <p>Tidak ada jadwal yang akan datang.</p>
+                @else
+                    <ul>
+                        @foreach($ajuan as $a)
+                            @php
+                                $tanggal = \Carbon\Carbon::parse($a->tanggal);
+                                $jam = \Carbon\Carbon::parse($a->jam);
+                                $waktu = $jam->format('H:i');
+                                $periode = match (true) {
+                                    $jam->hour < 12 => 'pagi',
+                                    $jam->hour < 15 => 'siang',
+                                    $jam->hour < 18 => 'sore',
+                                    default => 'malam',
+                                };
+                            @endphp
+                            <li>
+                                {{ $a->user->asal ?? 'Asal tidak diketahui' }} :
+                                {{ $tanggal->translatedFormat('l, d F Y') }} jam {{ $waktu }} {{ $periode }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
