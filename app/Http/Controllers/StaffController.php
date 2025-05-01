@@ -32,7 +32,6 @@ class StaffController extends Controller
         return view('staff.dashboard', compact('ajuan', 'reschedule', 'history', 'kunjungan', 'reservasi'));
     }
     
-
     public function updateStatus($id)
     {
         $currentStatus = DB::table('ajuan')->where('id', $id)->value('status');
@@ -55,55 +54,39 @@ class StaffController extends Controller
     
         return redirect()->back()->with('error', 'Gagal mengubah status!');
     }
-    
-    // public function history()
-    // {
-    //     $history = DB::table('ajuan')->where('status', 3)->get();
-    //     return view('staff.history', compact('history'));
-    // }
-    public function history()
-    {
-        $history = DB::table('ajuan')
-                        ->join('users', 'ajuan.user_id', '=', 'users.id')
-                        ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
-                        ->where('ajuan.status', 2)
-                        ->orderBy('ajuan.tanggal', 'asc')
-                        ->get();
-    
-        return view('staff.history', compact('history'));
-    }
 
     public function reschedule()
     {
         $reschedule = DB::table('ajuan')
                         ->join('users', 'ajuan.user_id', '=', 'users.id')
                         ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
+                        ->where('ajuan.status', 3) // hanya status reschedule
                         ->orderBy('ajuan.tanggal', 'asc')
                         ->get();
     
         return view('staff.reschedule', compact('reschedule'));
     }
     
-
     public function kunjungan()
     {
         $kunjungan = DB::table('ajuan')
                         ->join('users', 'ajuan.user_id', '=', 'users.id')
                         ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
                         ->where('ajuan.jenis', 2) // harusnya jenis 2 untuk kunjungan
+                        ->whereIn('ajuan.status', [1, 2]) // hanya status 1 dan 2
                         ->orderBy('ajuan.tanggal', 'asc')
                         ->get();
     
         return view('staff.kunjungan', compact('kunjungan'));
     }
     
-
     public function reservasi()
     {
         $reservasi = DB::table('ajuan')
                         ->join('users', 'ajuan.user_id', '=', 'users.id')
                         ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
                         ->where('ajuan.jenis', 1) // harusnya jenis 1 untuk reservasi
+                        ->whereIn('ajuan.status', [1, 2]) // hanya status 1 dan 2
                         ->orderBy('ajuan.tanggal', 'asc')
                         ->get();
     
@@ -117,4 +100,17 @@ class StaffController extends Controller
     {
         return view('staff.saran'); // Assuming you have this view
     }
+
+    public function history()
+    {
+        $history = DB::table('ajuan')
+                        ->join('users', 'ajuan.user_id', '=', 'users.id')
+                        ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
+                        ->where('ajuan.status', 2)
+                        ->orderBy('ajuan.tanggal', 'asc')
+                        ->get();
+    
+        return view('staff.history', compact('history'));
+    }
+
 }

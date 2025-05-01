@@ -69,14 +69,14 @@
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th style="width: 2%;">No.</th>
-                    <th style="width: 5%;">Nama</th>
-                    <th style="width: 20%;">Jadwal</th>
-                    <th style="width: 10%;">Kontak</th>
-                    <th style="width: 10%;">Jumlah Orang</th>
-                    <th style="width: 15%;">Asal Instansi</th>
-                    <th style="width: 10%;">Jenis</th>
-                    <th style="width: 18%;">Status</th>
+                  <th style="width: 2%;">No.</th>
+                  <th style="width: 10%;">Identitas</th>
+                  <th style="width: 15%;">Jadwal</th>
+                  <th style="width: 10%;">Jumlah Orang</th>
+                  <th style="width: 10%;">Asal Instansi</th>
+                  <th style="width: 10%;">Jenis</th>
+                  <th style="width: 20%;">Status</th>
+                  <th style="width: 10%;">Surat</th>
                     <!-- <th style="width: 8%;">Edit</th> -->
                 </tr>
             </thead>
@@ -84,9 +84,11 @@
             @foreach($ajuan as $a)
               <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $a->nama }}</td>
+                <td>
+                  {{ $a->nama }}<br>
+                  <a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a>
+                </td>
                 <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                <td><a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a></td>
                 <td>{{ $a->jumlah_orang }} Orang</td>
                 <td>{{ $a->asal }}</td>
                 <td>
@@ -97,6 +99,7 @@
                   @endif
                 </td>
                 <td class="text-center">
+                <div class="d-grid gap-2">
                     @if($a->status == 1 || $a->status == 3)
                         <a class="btn 
                             @if($a->status == 1) btn-danger @elseif($a->status == 3) btn-warning @endif 
@@ -113,6 +116,30 @@
                             role="button">
                             Sudah ditanggapi
                         </a>
+                    @endif
+                </div>
+                </td>
+                <td class="text-center">
+                    @if($a->surat)
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Detail
+                            </button>
+                            <ul class="dropdown-menu w-100">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" target="_blank">
+                                        Lihat Surat
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" download>
+                                        Download Surat
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    @else
+                        <span class="text-muted">Tidak ada surat</span>
                     @endif
                 </td>
             @endforeach  

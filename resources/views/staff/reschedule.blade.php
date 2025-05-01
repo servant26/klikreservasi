@@ -28,13 +28,13 @@
             <thead>
             <tr>
               <th style="width: 2%;">No.</th>
-              <th style="width: 5%;">Nama</th>
-              <th style="width: 20%;">Jadwal</th>
-              <th style="width: 10%;">Kontak</th>
+              <th style="width: 10%;">Identitas</th>
+              <th style="width: 15%;">Jadwal</th>
               <th style="width: 10%;">Jumlah Orang</th>
-              <th style="width: 15%;">Asal Instansi</th>
+              <th style="width: 10%;">Asal Instansi</th>
               <th style="width: 10%;">Jenis</th>
-              <th style="width: 18%;">Status</th>
+              <th style="width: 20%;">Status</th>
+              <th style="width: 10%;">Surat</th>
               <!-- <th style="width: 8%;">Edit</th> -->
             </tr>
             </thead>
@@ -42,9 +42,11 @@
             @foreach($reschedule as $a)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $a->nama }}</td>
+                    <td>
+                      {{ $a->nama }}<br>
+                      <a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a>
+                    </td>
                     <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                    <td><a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a></td>
                     <td>{{ $a->jumlah_orang }} Orang</td>
                     <td>{{ $a->asal }}</td>
                     <td>
@@ -73,6 +75,29 @@
                             </a>
                         @endif
                     </td>
+                    <td class="text-center">
+                    @if($a->surat)
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Detail
+                            </button>
+                            <ul class="dropdown-menu w-100">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" target="_blank">
+                                        Lihat Surat
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" download>
+                                        Download Surat
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        @else
+                            <span class="text-muted">Tidak ada surat</span>
+                        @endif
+                    </td>
                     <!-- <td><a class="btn btn-success btn-block" href="{{ route('staff.edit', $a->id) }}" role="button">Edit</a></td> -->
                 </tr>
             @endforeach  
@@ -80,41 +105,6 @@
         </table>
     </div>
     <!-- /.card-body -->
-</div>
-<div class="card bg-gradient-primary" style="display: none;">
-  <div class="card-header border-0">
-    <h3 class="card-title">
-      <i class="fas fa-map-marker-alt mr-1"></i>
-      Visitors
-    </h3>
-    <div class="card-tools">
-      <button type="button" class="btn btn-primary btn-sm daterange" title="Date range">
-        <i class="far fa-calendar-alt"></i>
-      </button>
-      <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
-        <i class="fas fa-minus"></i>
-      </button>
-    </div>
-  </div>
-  <div class="card-body">
-    <div id="world-map" style="height: 250px; width: 100%;"></div>
-  </div>
-  <div class="card-footer bg-transparent">
-    <div class="row">
-      <div class="col-4 text-center">
-        <div id="sparkline-1"></div>
-        <div class="text-white">Visitors</div>
-      </div>
-      <div class="col-4 text-center">
-        <div id="sparkline-2"></div>
-        <div class="text-white">Online</div>
-      </div>
-      <div class="col-4 text-center">
-        <div id="sparkline-3"></div>
-        <div class="text-white">Sales</div>
-      </div>
-    </div>
-  </div>
 </div>
 <!-- /.row -->
 @endsection

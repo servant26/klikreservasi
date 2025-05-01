@@ -110,9 +110,9 @@
           </li>
           <li class="nav-item">
             <a href="/staff/saran" class="nav-link {{ Request::is('staff/saran') ? 'active' : '' }}">
-              <i class="nav-icon fa fa-list"></i>
+              <i class="nav-icon fas fa-arrow-circle-right"></i>
               <p>
-                Kotak Saran
+                My Activity
                 <span class="badge badge-info right">2</span>
               </p>
             </a>
@@ -213,6 +213,8 @@
 <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Tambahkan sebelum </body> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 function confirmStatusChange(url) {
