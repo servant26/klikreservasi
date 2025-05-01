@@ -153,7 +153,7 @@ class UserController extends Controller
     {
         $request->validate([
             'jumlah_orang' => 'required|integer|min:1',
-            'tanggal' => 'required|date',
+            'tanggal' => 'required|string',
             'jam' => 'required|date_format:H:i',
             'jenis' => 'required|in:1,2',
             'deskripsi' => 'required|string|max:500',
@@ -174,7 +174,12 @@ class UserController extends Controller
             return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
     
-        $tanggalInput = Carbon::parse($request->tanggal);
+        try {
+            $tanggalInput = Carbon::createFromFormat('d/m/Y', $request->tanggal);
+        } catch (\Exception $e) {
+            return back()->withErrors(['tanggal' => 'Format tanggal tidak valid (dd/mm/yyyy).'])->withInput();
+        }
+        
         $jamInput = $request->jam;
     
         if ($tanggalInput->isPast() && !$tanggalInput->isToday()) {
