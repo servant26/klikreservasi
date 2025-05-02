@@ -90,20 +90,35 @@
         <div class="row justify-content-center">
 <div class="col-lg-11">
   <div class="row">
-      <div class="col-md-8">
-        <canvas id="barChart"></canvas>
+    <!-- Bar Chart Section -->
+    <div class="col-md-8">
+      <canvas id="barChart"></canvas>
+      <!-- Tombol download untuk bar chart berada di bawah canvas -->
+      <div class="d-flex justify-content-center mt-2">
+        <button onclick="downloadChart('barChart', 'barchart.png')" class="btn btn-sm btn-primary">Download Bar Chart</button>
       </div>
-      <div class="col-md-4 d-flex justify-content-center align-items-center">
-        <canvas id="pieChart"></canvas>
+    </div>
+    
+    <!-- Pie Chart Section -->
+    <div class="col-md-4 d-flex justify-content-center align-items-center flex-column">
+      <canvas id="pieChart"></canvas>
+      <!-- Tombol download untuk pie chart berada di bawah canvas -->
+      <div class="d-flex justify-content-center mt-2">
+        <button onclick="downloadChart('pieChart', 'piechart.png')" class="btn btn-sm btn-primary">Download Pie Chart</button>
       </div>
     </div>
   </div>
 </div>
 
+</div>
+
+<br><br>
 <div class="row justify-content-center mt-4">
     <div class="col-lg-11">
         <h5 class="text-center">Line Chart</h5>
-        <canvas id="lineChart"></canvas>
+        <canvas id="lineChart"></canvas><br>
+        <!-- Untuk line chart -->
+        <button onclick="downloadChart('lineChart', 'linechart.jpg')" class="btn btn-sm btn-primary mt-2 mb-5">Download Line Chart</button>
     </div>
 </div>
 
@@ -223,5 +238,14 @@ const barChart = new Chart(barCtx, {
             }
         }
     });
+
+  function downloadChart(chartId, filename) {
+    const canvas = document.getElementById(chartId);
+    const link = document.createElement('a');
+    // Mengubah format ke PNG
+    link.href = canvas.toDataURL('image/png', 1.0); // Menggunakan format PNG
+    link.download = filename;
+    link.click();
+  }
 </script>
 @endsection
