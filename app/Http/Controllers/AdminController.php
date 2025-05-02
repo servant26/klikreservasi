@@ -10,37 +10,37 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        $period = $request->input('period', 'bulan'); // default period is 'bulan'
+        $period = $request->input('period', 'bulan'); // default: bulan
     
-        $query = Ajuan::query();
+        $baseQuery = Ajuan::query();
     
         // Filter berdasarkan periode waktu
         switch ($period) {
             case 'hari':
-                $query->whereDate('tanggal', Carbon::today());
+                $baseQuery->whereDate('tanggal', Carbon::today());
                 break;
             case 'minggu':
-                $query->whereBetween('tanggal', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                $baseQuery->whereBetween('tanggal', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
                 break;
             case 'bulan':
-                $query->whereMonth('tanggal', Carbon::now()->month)
-                      ->whereYear('tanggal', Carbon::now()->year);
+                $baseQuery->whereMonth('tanggal', Carbon::now()->month)
+                          ->whereYear('tanggal', Carbon::now()->year);
                 break;
             case 'semester':
-                $query->whereMonth('tanggal', '>=', Carbon::now()->subMonths(6)->month)
-                      ->whereYear('tanggal', Carbon::now()->year);
+                $baseQuery->where('tanggal', '>=', Carbon::now()->subMonths(6)->startOfDay());
                 break;
             case 'tahun':
-                $query->whereYear('tanggal', Carbon::now()->year);
+                $baseQuery->whereYear('tanggal', Carbon::now()->year);
                 break;
-            default:
+            case 'semuanya':
+                // no filter
                 break;
         }
     
-        // Menghitung jumlah ajuan berdasarkan jenis
-        $totalAjuan = $query->count();
-        $reservasi = $query->where('jenis', 1)->count();
-        $kunjungan = $query->where('jenis', 2)->count();
+        // Gunakan clone agar tidak saling menimpa
+        $totalAjuan = (clone $baseQuery)->count();
+        $reservasi = (clone $baseQuery)->where('jenis', 1)->count();
+        $kunjungan = (clone $baseQuery)->where('jenis', 2)->count();
     
         return view('admin.dashboard', compact('totalAjuan', 'reservasi', 'kunjungan', 'period'));
     }

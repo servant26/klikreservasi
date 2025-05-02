@@ -4,63 +4,55 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class AjuanSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create('id_ID');
-        $userIds = DB::table('users')->pluck('id'); // Get all user IDs from `users` table
+        $userIds = DB::table('users')->pluck('id')->toArray();
 
-        $statuses = [1, 2];  // Hanya status 1 dan 2
-        $statusCounts = [1 => 0, 2 => 0]; // Inisialisasi jumlah status 1 dan 2
+        $count = 0;
+        while ($count < 100) {
+            $tanggal = $this->getRandomWeekday();
+            $dayName = Carbon::parse($tanggal)->format('l');
 
-        // Generate 15 entries for the `ajuan` table
-        for ($i = 1; $i <= 15; $i++) {
-            // Pastikan ada 7 entri dengan status 1 dan 8 entri dengan status 2
-            $status = $statusCounts[1] < 7 ? 1 : 2;
-            $statusCounts[$status]++;
+            // Tentukan jam berdasarkan hari
+            if (in_array($dayName, ['Monday', 'Tuesday', 'Wednesday', 'Thursday'])) {
+                $jam = Carbon::createFromTime(rand(8, 15), rand(0, 59))->format('H:i:s');
+            } elseif ($dayName == 'Friday') {
+                $jam = Carbon::createFromTime(rand(8, 14), rand(0, 59))->format('H:i:s');
+            } else {
+                continue; // skip Sabtu-Minggu
+            }
 
-            // Generate random WhatsApp number starting with 08
-            $whatsapp = '08' . $faker->unique()->numerify('##########');
-
-            // Generate "Universitas" followed by a city name
-            $asal = 'Universitas ' . $faker->city;
-
-            // Generate date that is not on Saturday or Sunday
-            $tanggal = $this->generateWeekdayDate('2025-03-25', '2025-5-31');
-
-            // Generate time between 08:00 and 16:00 with random minutes
-            $jam = $faker->dateTimeBetween('08:00:00', '16:00:00')->format('H') . ':' . $faker->randomElement(['00', '15', '30', '45']);
+            $jenis = rand(1, 2);
 
             DB::table('ajuan')->insert([
-                'user_id' => $faker->randomElement($userIds),
-                'nama' => $faker->name,
-                'asal' => $asal, // Universitas City
-                'whatsapp' => $whatsapp,
-                'jumlah_orang' => $faker->numberBetween(10, 50),
-                'jenis' => $faker->randomElement([1, 2]),
+                'user_id' => $userIds[array_rand($userIds)],
+                'jumlah_orang' => rand(1, 10),
+                'jenis' => $jenis,
                 'tanggal' => $tanggal,
                 'jam' => $jam,
-                'status' => $status,
+                'status' => rand(1, 3),
+                'surat' => 'surat_' . Str::random(5) . '.pdf',
+                'deskripsi' => $jenis == 1 
+                    ? 'Ini deskripsi untuk reservasi pada tanggal ' . $tanggal 
+                    : 'Ini deskripsi kunjungan biasa pada tanggal ' . $tanggal,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            $count++;
         }
     }
 
-    // Function to generate a date between two dates that is not on a weekend
-    private function generateWeekdayDate($startDate, $endDate)
+    private function getRandomWeekday()
     {
-        $faker = Faker::create();
-        $date = $faker->dateTimeBetween($startDate, $endDate)->format('Y-m-d');
-
-        // Loop until a weekday is found (not Saturday or Sunday)
-        while (in_array(date('N', strtotime($date)), [6, 7])) {
-            $date = $faker->dateTimeBetween($startDate, $endDate)->format('Y-m-d');
-        }
-
-        return $date;
+        do {
+            $date = Carbon::create(2025, 1, 1)->addDays(rand(0, 364));
+        } while (in_array($date->format('l'), ['Saturday', 'Sunday']));
+        return $date->format('Y-m-d');
     }
 }
