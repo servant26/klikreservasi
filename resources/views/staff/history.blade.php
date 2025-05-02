@@ -1,120 +1,70 @@
 @extends('staff.staffmaster')
 @section('menu')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">History Penerimaan Ajuan</h1>
-          </div><!-- /.col -->
+            <h1>History</h1>
+          </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('staff.dashboard') }}">Back to Dashboard</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('staff.dashboard') }}">Dashboard</a></li>
               <li class="breadcrumb-item active">History</li>
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+          </div>
+        </div>
+      </div>
+    </section>
 @endsection
 
 @section('content')
-<!-- Small boxes (Stat box) -->
 <div class="card">
-    <!-- /.card-header -->
     <div class="card-body">
-    <p>History Penerimaan Ajuan :</p>
-        <table id="example1" class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr>
-                    <th style="width: 2%;">No.</th>
-                    <th style="width: 5%;">Nama</th>
-                    <th style="width: 20%;">Jadwal</th>
-                    <th style="width: 10%;">Kontak</th>
-                    <th style="width: 10%;">Jumlah Orang</th>
-                    <th style="width: 15%;">Asal Instansi</th>
-                    <th style="width: 10%;">Jenis</th>
-                    <th style="width: 18%;">Status</th>
-                    <!-- <th style="width: 8%;">Edit</th> -->
-                </tr>
-            </thead>
-            <tbody>
-            @foreach($history as $a)
-              <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $a->nama }}</td>
-                <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                <td><a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a></td>
-                <td>{{ $a->jumlah_orang }} Orang</td>
-                <td>{{ $a->asal }}</td>
-                <td>
-                  @if($a->jenis == 1)
-                    Reservasi Aula
-                  @elseif($a->jenis == 2)
-                    Kunjungan Perpustakaan
-                  @endif
-                </td>
-                <td class="text-center">
-                    @if($a->status == 1 || $a->status == 3)
-                        <a class="btn 
-                            @if($a->status == 1) btn-danger @elseif($a->status == 3) btn-warning @endif 
-                            btn-block" 
-                            href="javascript:void(0);" 
-                            onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
-                            role="button">
-                            @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
-                        </a>
-                    @elseif($a->status == 2)
-                        <a class="btn btn-primary btn-block" 
-                            href="javascript:void(0);" 
-                            onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
-                            role="button">
-                            Sudah ditanggapi
-                        </a>
-                    @endif
-                </td>
-            @endforeach  
-            </tbody>
-        </table>
-    </div>
-    <!-- /.card-body -->
-</div>
+        @if($aktivitas->isEmpty())
+            <p>Belum ada aktivitas untuk saat ini.</p>
+        @else
+            <ul class="list-group">
+                @foreach($aktivitas as $item)
+                    @php
+                        $statusLama = $item->status_lama;
+                        $statusBaru = $item->status_baru;
+                        $timeAgo = \Carbon\Carbon::parse($item->created_at)->diffForHumans();
 
-<div class="card bg-gradient-primary" style="display: none;">
-  <div class="card-header border-0">
-    <h3 class="card-title">
-      <i class="fas fa-map-marker-alt mr-1"></i>
-      Visitors
-    </h3>
-    <div class="card-tools">
-      <button type="button" class="btn btn-primary btn-sm daterange" title="Date range">
-        <i class="far fa-calendar-alt"></i>
-      </button>
-      <button type="button" class="btn btn-primary btn-sm" data-card-widget="collapse" title="Collapse">
-        <i class="fas fa-minus"></i>
-      </button>
+                        $user = $item->ajuan->user->name ?? 'User';
+                        $instansi = $item->ajuan->user->asal ?? 'Instansi';
+                        $jenis = $item->ajuan->jenis == 1 ? 'reservasi aula' : 'kunjungan perpustakaan';
+                        $tanggal = \Carbon\Carbon::parse($item->ajuan->tanggal)->translatedFormat('l, d F Y');
+                        $jam = \Carbon\Carbon::parse($item->ajuan->jam)->format('H:i');
+
+                        $keterangan = '';
+                        $borderClass = ''; // Default border class
+
+                        if (in_array($statusLama, [1, 3]) && $statusBaru == 2) {
+                            $keterangan = "Anda menerima ajuan dari {$instansi} untuk {$jenis} pada hari {$tanggal} pukul {$jam}";
+                            $borderClass = 'status-accepted'; // Border warna biru untuk diterima
+                        } elseif ($statusLama == 2 && $statusBaru == 1) {
+                            $keterangan = "Anda membatalkan ajuan dari {$instansi} untuk {$jenis} pada hari {$tanggal} pukul {$jam}";
+                            $borderClass = 'status-cancelled'; // Border warna merah untuk dibatalkan
+                        } else {
+                            $keterangan = "Anda mengubah status ajuan dari {$instansi} untuk {$jenis} pada hari {$tanggal} pukul {$jam}";
+                            // Tidak perlu border khusus jika status berubah, hanya default border
+                        }
+                    @endphp
+
+                    <li class="list-group-item {{ $borderClass }}">
+                        {{ $keterangan }}<br>
+                        <small class="text-muted">{{ $timeAgo }}</small>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+        
+        <!-- Tombol Back to Dashboard -->
+        <a href="{{ route('staff.dashboard') }}" class="btn btn-danger mt-4">Back to Dashboard</a>
     </div>
-  </div>
-  <div class="card-body">
-    <div id="world-map" style="height: 250px; width: 100%;"></div>
-  </div>
-  <div class="card-footer bg-transparent">
-    <div class="row">
-      <div class="col-4 text-center">
-        <div id="sparkline-1"></div>
-        <div class="text-white">Visitors</div>
-      </div>
-      <div class="col-4 text-center">
-        <div id="sparkline-2"></div>
-        <div class="text-white">Online</div>
-      </div>
-      <div class="col-4 text-center">
-        <div id="sparkline-3"></div>
-        <div class="text-white">Sales</div>
-      </div>
-    </div>
-  </div>
 </div>
-<!-- /.row -->
 @endsection
+
+
+
+

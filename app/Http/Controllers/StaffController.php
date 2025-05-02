@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Models\AktivitasStaff;
+
 class StaffController extends Controller
 {
     // Display the staff dashboard
@@ -34,27 +37,28 @@ class StaffController extends Controller
     
     public function updateStatus($id)
     {
-        $currentStatus = DB::table('ajuan')->where('id', $id)->value('status');
+        $ajuan = DB::table('ajuan')->where('id', $id)->first();
     
-        // Toggle status logic
-        if ($currentStatus == 2) {
-            // Kembali ke status 'Belum ditanggapi' (default status 1)
-            $newStatus = 1;
-        } else {
-            // Ubah status menjadi 'Sudah ditanggapi' (status 2)
-            $newStatus = 2;
-        }
+        if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
     
-        // Update status
+        $currentStatus = $ajuan->status;
+        $newStatus = ($currentStatus == 2) ? 1 : 2;
+    
         $updated = DB::table('ajuan')->where('id', $id)->update(['status' => $newStatus]);
     
         if ($updated) {
+            // Catat aktivitasnya
+            AktivitasStaff::create([
+                'ajuan_id' => $id,
+                'status_lama' => $currentStatus,
+                'status_baru' => $newStatus,
+            ]);
+    
             return redirect()->back()->with('success', 'Status berhasil diubah!');
         }
     
         return redirect()->back()->with('error', 'Gagal mengubah status!');
     }
-
     public function reschedule()
     {
         $reschedule = DB::table('ajuan')
@@ -66,7 +70,6 @@ class StaffController extends Controller
     
         return view('staff.reschedule', compact('reschedule'));
     }
-    
     public function kunjungan()
     {
         $kunjungan = DB::table('ajuan')
@@ -79,7 +82,7 @@ class StaffController extends Controller
     
         return view('staff.kunjungan', compact('kunjungan'));
     }
-    
+
     public function reservasi()
     {
         $reservasi = DB::table('ajuan')
@@ -93,24 +96,15 @@ class StaffController extends Controller
         return view('staff.reservasi', compact('reservasi'));
     }
     
-    
-    
-
-    public function saran()
-    {
-        return view('staff.saran'); // Assuming you have this view
-    }
-
     public function history()
     {
-        $history = DB::table('ajuan')
-                        ->join('users', 'ajuan.user_id', '=', 'users.id')
-                        ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
-                        ->where('ajuan.status', 2)
-                        ->orderBy('ajuan.tanggal', 'asc')
-                        ->get();
+        $aktivitas = AktivitasStaff::with('ajuan.user')
+                    ->latest()
+                    ->get();
     
-        return view('staff.history', compact('history'));
+        return view('staff.history', compact('aktivitas'));
     }
+    
+    
 
 }

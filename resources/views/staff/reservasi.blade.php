@@ -104,6 +104,7 @@
             @endforeach  
             </tbody>
         </table>
+        <a href="{{ route('staff.dashboard') }}" class="btn btn-danger btn-sm mt-4">Back to Dashboard</a>
     </div>
     <!-- /.card-body -->
 </div>

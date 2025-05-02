@@ -29,6 +29,17 @@
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+  <style>
+    .status-accepted {
+        border-left: 5px solid #17a2b8; /* Info (teal) */
+        padding-left: 25px;
+    }
+
+    .status-cancelled {
+        border-left: 5px solid #dc3545; /* Danger (red) */
+        padding-left: 25px;
+    }
+  </style>
 </head>
 <body class="hold-transition light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -109,11 +120,10 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/staff/saran" class="nav-link {{ Request::is('staff/saran') ? 'active' : '' }}">
+            <a href="/staff/history" class="nav-link {{ Request::is('staff/history') ? 'active' : '' }}">
               <i class="nav-icon fas fa-arrow-circle-right"></i>
               <p>
-                My Activity
-                <span class="badge badge-info right">2</span>
+                History
               </p>
             </a>
           </li>

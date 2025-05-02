@@ -22,6 +22,19 @@
 @section('content')
 <!-- Small boxes (Stat box) -->
 <div class="row">
+  <div class="col-lg-4 col-6">
+    <!-- Bounce Rate -->
+    <div class="small-box bg-danger">
+      <div class="inner">
+        <h3>{{ $reservasi }}</h3>
+        <p>Ajuan Reservasi Aula</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-building"></i>
+      </div>
+      <a href="{{ route('staff.reservasi') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
   <!-- Column 1: New Orders and Bounce Rate -->
   <div class="col-lg-4 col-6">
     <!-- Bounce Rate -->
@@ -34,19 +47,6 @@
         <i class="fas fa-book"></i>
       </div>
       <a href="{{ route('staff.kunjungan') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-    </div>
-  </div>
-  <div class="col-lg-4 col-6">
-    <!-- Bounce Rate -->
-    <div class="small-box bg-danger">
-      <div class="inner">
-        <h3>{{ $reservasi }}</h3>
-        <p>Ajuan Reservasi Aula</p>
-      </div>
-      <div class="icon">
-        <i class="fas fa-building"></i>
-      </div>
-      <a href="{{ route('staff.reservasi') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
   <div class="col-lg-4 col-6">
