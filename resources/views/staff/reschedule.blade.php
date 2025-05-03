@@ -23,7 +23,6 @@
 <div class="card">
     <!-- /.card-header -->
     <div class="card-body">
-    <p>Menampilkan data user yang melakukan perubahan jadwal :</p>
 <form method="GET" class="mb-3">
   <div class="form-group">
     <label for="filter">Filter Waktu:</label>

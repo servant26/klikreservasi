@@ -13,11 +13,11 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        $period = $request->input('period', 'bulan'); // default: bulan
-
+        $period = $request->input('period', 'bulan');
+    
         $query = Ajuan::query();
-
-        // Filter waktu berdasarkan periode
+    
+        // Filter waktu utama
         switch ($period) {
             case 'hari':
                 $query->whereDate('tanggal', Carbon::today());
@@ -43,47 +43,89 @@ class AdminController extends Controller
                 // no filter
                 break;
         }
-
-        // Hitung total dan berdasarkan jenis (1: reservasi, 2: kunjungan)
+    
         $totalAjuan = $query->count();
         $reservasi = $query->clone()->where('jenis', 1)->count();
         $kunjungan = $query->clone()->where('jenis', 2)->count();
-
-        // Pie & Bar Chart data (terpengaruh filter)
+    
         $chartData = [
             'total' => $totalAjuan,
             'reservasi' => $reservasi,
             'kunjungan' => $kunjungan,
         ];
-
-        // Line Chart data (tidak terpengaruh filter, tetap 1 tahun penuh)
-        $lineData = Ajuan::select(
-                DB::raw('MONTH(tanggal) as month'),
-                DB::raw('SUM(CASE WHEN jenis = 1 THEN 1 ELSE 0 END) as reservasi'),
-                DB::raw('SUM(CASE WHEN jenis = 2 THEN 1 ELSE 0 END) as kunjungan')
-            )
-            ->whereYear('tanggal', Carbon::now()->year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        $months = range(1, 12);
-        $monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-        $monthlyReservasi = [];
-        $monthlyKunjungan = [];
-
-        foreach ($months as $m) {
-            $monthData = $lineData->firstWhere('month', $m);
-            $monthlyReservasi[] = $monthData ? $monthData->reservasi : 0;
-            $monthlyKunjungan[] = $monthData ? $monthData->kunjungan : 0;
+    
+        // ======== Dynamic Line Chart Based on Period =========
+        $labels = [];
+        $reservasiData = [];
+        $kunjunganData = [];
+    
+        switch ($period) {
+            case 'hari':
+                // Per jam (24 jam)
+                for ($i = 0; $i < 24; $i++) {
+                    $labels[] = sprintf('%02d:00', $i);
+                    $reservasiData[] = Ajuan::where('jenis', 1)
+                        ->whereDate('tanggal', Carbon::today())
+                        ->whereHour('jam', $i)
+                        ->count();
+                    $kunjunganData[] = Ajuan::where('jenis', 2)
+                        ->whereDate('tanggal', Carbon::today())
+                        ->whereHour('jam', $i)
+                        ->count();
+                }
+                break;
+    
+            case 'minggu':
+                // Per hari dalam seminggu
+                $weekDays = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+                $start = Carbon::now()->startOfWeek();
+                foreach ($weekDays as $i => $dayName) {
+                    $date = $start->copy()->addDays($i);
+                    $labels[] = $dayName;
+                    $reservasiData[] = Ajuan::where('jenis', 1)->whereDate('tanggal', $date)->count();
+                    $kunjunganData[] = Ajuan::where('jenis', 2)->whereDate('tanggal', $date)->count();
+                }
+                break;
+    
+            case 'bulan':
+                // Per minggu dalam bulan ini
+                $start = Carbon::now()->startOfMonth();
+                for ($i = 0; $i < 5; $i++) {
+                    $weekStart = $start->copy()->addWeeks($i);
+                    $weekEnd = $weekStart->copy()->endOfWeek();
+                    if ($weekStart->month != Carbon::now()->month) break;
+    
+                    $labels[] = 'Minggu ' . ($i + 1);
+                    $reservasiData[] = Ajuan::where('jenis', 1)->whereBetween('tanggal', [$weekStart, $weekEnd])->count();
+                    $kunjunganData[] = Ajuan::where('jenis', 2)->whereBetween('tanggal', [$weekStart, $weekEnd])->count();
+                }
+                break;
+    
+            case 'semester':
+            case 'tahun':
+            case 'semua':
+            default:
+                // Per bulan
+                $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                for ($m = 1; $m <= 12; $m++) {
+                    $reservasiData[] = Ajuan::where('jenis', 1)
+                        ->whereMonth('tanggal', $m)
+                        ->whereYear('tanggal', Carbon::now()->year)
+                        ->count();
+                    $kunjunganData[] = Ajuan::where('jenis', 2)
+                        ->whereMonth('tanggal', $m)
+                        ->whereYear('tanggal', Carbon::now()->year)
+                        ->count();
+                }
+                break;
         }
-
+    
         $lineChart = [
-            'labels' => $monthLabels,
-            'reservasi' => $monthlyReservasi,
-            'kunjungan' => $monthlyKunjungan,
+            'labels' => $labels,
+            'reservasi' => $reservasiData,
+            'kunjungan' => $kunjunganData,
         ];
-
+    
         return view('admin.dashboard', compact(
             'totalAjuan', 'reservasi', 'kunjungan',
             'chartData', 'lineChart', 'period'

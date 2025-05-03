@@ -24,7 +24,6 @@
 <div class="card">
     <!-- /.card-header -->
     <div class="card-body">
-    <p>Menampilkan data reservasi aula :</p>
 <form method="GET" class="mb-3">
   <div class="form-group">
     <label for="filter">Filter Waktu:</label>
