@@ -16,6 +16,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 //admin
 Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 Route::middleware(['auth', 'role:admin'])->get('/admin/datatable', [AdminController::class, 'datatable'])->name('admin.datatable');
+// Profil admin
+Route::middleware(['auth', 'role:admin'])->get('/admin/profile', [AdminController::class, 'editProfile'])->name('admin.profile');
+Route::middleware(['auth', 'role:admin'])->post('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+
 
 
 //staff

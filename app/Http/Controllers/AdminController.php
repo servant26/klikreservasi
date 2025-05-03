@@ -6,6 +6,8 @@ use App\Models\Ajuan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -111,5 +113,53 @@ class AdminController extends Controller
             ->where('status', 1)
             ->count();
         return view('admin.datatable', compact('ajuan', 'reschedule', 'history', 'kunjungan', 'reservasi'));
+    }
+    
+    public function editProfile()
+    {
+        $admin = Auth::user();
+        return view('admin.edit-profile', compact('admin'));
+    }
+    
+    public function updateProfile(Request $request)
+    {
+        $admin = Auth::user();
+    
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $admin->id,
+            'whatsapp' => 'nullable|string|max:20',
+            'asal' => 'nullable|string|max:100',
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+    
+        // Normalisasi nomor WhatsApp
+        $normalizedWhatsapp = null;
+        if ($request->filled('whatsapp')) {
+            $rawWhatsapp = preg_replace('/[^0-9]/', '', $request->whatsapp);
+    
+            if (str_starts_with($rawWhatsapp, '62')) {
+                $normalizedWhatsapp = '0' . substr($rawWhatsapp, 2);
+            } elseif (str_starts_with($rawWhatsapp, '8')) {
+                $normalizedWhatsapp = '0' . $rawWhatsapp;
+            } elseif (str_starts_with($rawWhatsapp, '0')) {
+                $normalizedWhatsapp = $rawWhatsapp;
+            } else {
+                $normalizedWhatsapp = $rawWhatsapp;
+            }
+        }
+    
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+        $admin->whatsapp = $normalizedWhatsapp;
+        $admin->asal = $request->asal;
+    
+        if ($request->filled('password')) {
+            $admin->password = Hash::make($request->password);
+        }
+    
+        $admin->save();
+    
+        return redirect()->route('admin.dashboard')->with('success', 'Profil berhasil diperbarui.');
     }
 }
