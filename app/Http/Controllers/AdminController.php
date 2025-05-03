@@ -90,30 +90,58 @@ class AdminController extends Controller
         ));
     }
 
-    public function datatable()
+    public function datatable(Request $request)
     {
-        $ajuan = DB::table('ajuan')
+        $filter = $request->input('filter', 'bulan');
+        $query = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
             ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
-            ->where('ajuan.status', 2)
-            ->orderBy('ajuan.tanggal', 'asc')
-            ->get();
+            ->where('ajuan.status', 2); // hanya status 2 (yang sudah ditanggapi)
+    
+        $now = now();
+    
+        switch ($filter) {
+            case 'hari':
+                $query->whereDate('ajuan.tanggal', $now->toDateString());
+                break;
+            case 'minggu':
+                $query->whereBetween('ajuan.tanggal', [$now->startOfWeek(), $now->endOfWeek()]);
+                break;
+            case 'bulan':
+                $query->whereMonth('ajuan.tanggal', $now->month)
+                    ->whereYear('ajuan.tanggal', $now->year);
+                break;
+            case 'semester':
+                $semesterStart = $now->month <= 6 ? $now->startOfYear() : $now->copy()->month(7)->startOfMonth();
+                $semesterEnd   = $now->month <= 6 ? $now->copy()->month(6)->endOfMonth() : $now->endOfYear();
+                $query->whereBetween('ajuan.tanggal', [$semesterStart, $semesterEnd]);
+                break;
+            case 'tahun':
+                $query->whereYear('ajuan.tanggal', $now->year);
+                break;
+            case 'semua':
+                // Tidak difilter
+                break;
+        }
+    
+        $ajuan = $query->orderBy('ajuan.tanggal', 'asc')->get();
     
         $reschedule = DB::table('ajuan')->where('status', 3)->count();
-
         $history = DB::table('ajuan')->where('status', 2)->count();
     
         $reservasi = DB::table('ajuan')
-            ->where('jenis', 1)  // 1 untuk reservasi
-            ->where('status', 1)
-            ->count();    
-    
-        $kunjungan = DB::table('ajuan')
-            ->where('jenis', 2)  // 2 untuk kunjungan
+            ->where('jenis', 1)
             ->where('status', 1)
             ->count();
+    
+        $kunjungan = DB::table('ajuan')
+            ->where('jenis', 2)
+            ->where('status', 1)
+            ->count();
+    
         return view('admin.datatable', compact('ajuan', 'reschedule', 'history', 'kunjungan', 'reservasi'));
     }
+    
     
     public function editProfile()
     {

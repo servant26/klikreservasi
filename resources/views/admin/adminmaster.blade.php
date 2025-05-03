@@ -98,82 +98,66 @@
       </div>
 
       <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="/admin/dashboard" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
-              <i class="nav-icon fa fa-home"></i>
-              <p>
-                Home
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/admin/profile" class="nav-link {{ Request::is('admin/profile') ? 'active' : '' }}">
-              <i class="nav-icon fa fa-user"></i>
-              <p>
-                Profile
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Charts
-                <i class="right fas fa-angle-left"></i>
-              </p>
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Menu Dashboard dengan dropdown -->
+        <li class="nav-item">
+            <a href="#" class="nav-link {{ Request::is('admin/dashboard') || Request::is('admin/datatable') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-tachometer-alt"></i>
+                <p>
+                    Dashboard
+                    <i class="right fas fa-angle-left"></i>
+                </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Bar Chart</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pie Chart</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/inline.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Line Chart</p>
-                </a>
-              </li>
+                <li class="nav-item">
+                    <a href="/admin/dashboard" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Chart</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/datatable" class="nav-link {{ Request::is('admin/datatable') ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Datatable</p>
+                    </a>
+                </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a href="/admin/datatable" class="nav-link {{ Request::is('admin/datatable') ? 'active' : '' }}">
-              <i class="nav-icon fa fa-table"></i>
-              <p>
-                Datatable
-              </p>
+        </li>
+
+        <!-- Menu Profile -->
+        <li class="nav-item">
+            <a href="/admin/profile" class="nav-link {{ Request::is('admin/profile') ? 'active' : '' }}">
+                <i class="nav-icon fa fa-user"></i>
+                <p>
+                    Profile
+                </p>
             </a>
-          </li>
-          <li class="nav-item">
+        </li>
+
+        <!-- Menu Management Employee -->
+        <li class="nav-item">
             <a href="/admin/management" class="nav-link {{ Request::is('admin/management') ? 'active' : '' }}">
-              <i class="nav-icon fa fa-user"></i>
-              <p>
-                Management Employee
-              </p>
+                <i class="nav-icon fa fa-users"></i>
+                <p>
+                    Management Employee
+                </p>
             </a>
-          </li>
-          <li class="nav-item">
-              <a href="#" class="nav-link" onclick="confirmLogout(event)">
-                  <i class="nav-icon fa fa-power-off"></i>
-                  <p>Logout</p>
-              </a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                  @csrf
-              </form>
-          </li>
-        </ul>
-      </nav>
+        </li>
+
+        <!-- Menu Logout -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" onclick="confirmLogout(event)">
+                <i class="nav-icon fa fa-power-off"></i>
+                <p>Logout</p>
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </li>
+    </ul>
+</nav>
+
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

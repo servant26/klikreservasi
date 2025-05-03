@@ -23,6 +23,21 @@
 <div class="card">
     <!-- /.card-header -->
     <div class="card-body">
+<form method="GET" class="mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="filter">Filter Waktu:</label>
+            <select name="filter" id="filter" class="form-control" onchange="this.form.submit()">
+                <option value="hari" {{ request('filter', 'bulan') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
+                <option value="minggu" {{ request('filter', 'bulan') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
+                <option value="bulan" {{ request('filter', 'bulan') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
+                <option value="semester" {{ request('filter', 'bulan') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
+                <option value="tahun" {{ request('filter', 'bulan') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
+                <option value="semua" {{ request('filter', 'bulan') == 'semua' ? 'selected' : '' }}>Semua</option>
+            </select>
+        </div>
+    </div>
+</form>
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
@@ -84,3 +99,4 @@
     <!-- /.card-body -->
 </div>
 @endsection
+
