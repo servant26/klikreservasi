@@ -21,6 +21,12 @@
 
 @section('content')
 <div class="container mt-3">
+    @if (session('success'))
+        <div class="alert alert-primary" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <form action="{{ route('admin.profile.update') }}" method="POST">
         @csrf
 
@@ -45,7 +51,8 @@
         </div>
 
         <a href="{{ route('admin.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
-        <button type="submit" class="btn btn-info">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 @endsection
+

@@ -160,6 +160,6 @@ class AdminController extends Controller
     
         $admin->save();
     
-        return redirect()->route('admin.dashboard')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('admin.profile')->with('success', 'Profil berhasil diperbarui.');
     }
 }
