@@ -1,4 +1,4 @@
-@extends('admin.adminmaster')
+@extends('staff.staffmaster')
 @section('menu')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -21,17 +21,17 @@
 
 @section('content')
 <div class="container mt-3">
-    <form action="{{ route('admin.profile.update') }}" method="POST">
+    <form action="{{ route('staff.profile.update') }}" method="POST">
         @csrf
 
         <div class="form-group mb-2">
             <label>Nama</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}" required>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $staff->name) }}" required>
         </div>
 
         <div class="form-group mb-2">
             <label>Email</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email', $admin->email) }}" required>
+            <input type="email" name="email" class="form-control" value="{{ old('email', $staff->email) }}" required>
         </div>
 
         <div class="form-group mb-2">
@@ -44,7 +44,7 @@
             <input type="password" name="password_confirmation" class="form-control">
         </div>
 
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
+        <a href="{{ route('staff.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
         <button type="submit" class="btn btn-info">Submit</button>
     </form>
 </div>

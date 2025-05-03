@@ -111,11 +111,25 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+<li class="nav-item">
+    <a href="/staff/dashboard" class="nav-link 
+        {{ 
+            request()->routeIs('staff.dashboard') || 
+            request()->routeIs('staff.reservasi') || 
+            request()->routeIs('staff.kunjungan') || 
+            request()->routeIs('staff.reschedule') 
+            ? 'active' : '' 
+        }}">
+        <i class="nav-icon fa fa-home"></i>
+        <p>Home</p>
+    </a>
+</li>
+
           <li class="nav-item">
-            <a href="/staff/dashboard" class="nav-link {{ Request::is('staff/dashboard') ? 'active' : '' }}">
-              <i class="nav-icon fa fa-home"></i>
+            <a href="/staff/profile" class="nav-link {{ Request::is('staff/profile') ? 'active' : '' }}">
+              <i class="nav-icon fa fa-user"></i>
               <p>
-                Home
+                Profile
               </p>
             </a>
           </li>
@@ -242,23 +256,26 @@ function confirmStatusChange(url) {
     });
 }
 
-//datatable
 $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
+  $("#example1").DataTable({
+    "responsive": true,
+    "lengthChange": false,
+    "autoWidth": false,
+    "pageLength": 5, // Tambahkan ini
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+  $('#example2').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+    "pageLength": 5 // Tambahkan ini juga jika ingin batasi example2
+  });
+});
   function confirmLogout(event) {
     event.preventDefault();
 

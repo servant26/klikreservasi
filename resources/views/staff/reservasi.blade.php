@@ -25,6 +25,16 @@
     <!-- /.card-header -->
     <div class="card-body">
     <p>Menampilkan data reservasi aula :</p>
+    <form method="GET" action="{{ route('staff.reservasi') }}" class="mb-3">
+        <select name="filter" onchange="this.form.submit()" class="form-select" style="width: 250px;">
+            <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>Semua Data</option>
+            <option value="today" {{ request('filter') == 'today' ? 'selected' : '' }}>Hari Ini</option>
+            <option value="this_week" {{ request('filter') == 'this_week' ? 'selected' : '' }}>Minggu Ini</option>
+            <option value="this_month" {{ request('filter') == 'this_month' ? 'selected' : '' }}>Bulan Ini</option>
+            <option value="this_semester" {{ request('filter') == 'this_semester' ? 'selected' : '' }}>Semester Ini</option>
+            <option value="this_year" {{ request('filter') == 'this_year' ? 'selected' : '' }}>Tahun Ini</option>
+        </select>
+    </form>
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
             <tr>
