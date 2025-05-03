@@ -24,16 +24,20 @@
     <!-- /.card-header -->
     <div class="card-body">
     <p>Menampilkan data user yang melakukan perubahan jadwal :</p>
-<form method="GET" action="{{ route('staff.kunjungan') }}" class="mb-3">
-    <select name="filter" onchange="this.form.submit()" class="form-select" style="width: 250px;">
-        <option value="all" {{ request('filter') == 'all' ? 'selected' : '' }}>Semua Data</option>
-        <option value="today" {{ request('filter') == 'today' ? 'selected' : '' }}>Hari Ini</option>
-        <option value="this_week" {{ request('filter') == 'this_week' ? 'selected' : '' }}>Minggu Ini</option>
-        <option value="this_month" {{ request('filter') == 'this_month' ? 'selected' : '' }}>Bulan Ini</option>
-        <option value="this_semester" {{ request('filter') == 'this_semester' ? 'selected' : '' }}>Semester Ini</option>
-        <option value="this_year" {{ request('filter') == 'this_year' ? 'selected' : '' }}>Tahun Ini</option>
+<form method="GET" class="mb-3">
+  <div class="form-group">
+    <label for="filter">Filter Waktu:</label>
+    <select name="filter" id="filter" class="form-control" onchange="this.form.submit()">
+      <option value="hari" {{ request('filter', 'bulan') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
+      <option value="minggu" {{ request('filter', 'bulan') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
+      <option value="bulan" {{ request('filter', 'bulan') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
+      <option value="semester" {{ request('filter', 'bulan') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
+      <option value="tahun" {{ request('filter', 'bulan') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
+      <option value="semua" {{ request('filter', 'bulan') == 'semua' ? 'selected' : '' }}>Semua</option>
     </select>
+  </div>
 </form>
+
 
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>

@@ -63,141 +63,126 @@ class StaffController extends Controller
     }
     public function kunjungan(Request $request)
     {
+        $filter = $request->input('filter', 'bulan'); // default ke bulan ini
         $query = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
             ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
-            ->where('ajuan.jenis', 2) // hanya kunjungan
-            ->whereIn('ajuan.status', [1, 2]); // status pending & disetujui
+            ->where('ajuan.jenis', 2)
+            ->whereIn('ajuan.status', [1, 2]);
     
-        // Filter berdasarkan waktu
-        switch ($request->filter) {
-            case 'today':
-                $query->whereDate('ajuan.tanggal', now()->toDateString());
+        $now = now();
+    
+        switch ($filter) {
+            case 'hari':
+                $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
-    
-            case 'this_week':
-                $query->whereBetween('ajuan.tanggal', [
-                    now()->startOfWeek(), now()->endOfWeek()
-                ]);
+            case 'minggu':
+                $query->whereBetween('ajuan.tanggal', [$now->startOfWeek(), $now->endOfWeek()]);
                 break;
-    
-            case 'this_month':
-                $query->whereMonth('ajuan.tanggal', now()->month)
-                      ->whereYear('ajuan.tanggal', now()->year);
+            case 'bulan':
+                $query->whereMonth('ajuan.tanggal', $now->month)->whereYear('ajuan.tanggal', $now->year);
                 break;
-    
-            case 'this_semester':
-                $start = now()->month <= 6 ? now()->startOfYear() : now()->copy()->startOfYear()->addMonths(6);
-                $end = now()->month <= 6 ? now()->startOfYear()->addMonths(5)->endOfMonth() : now()->endOfYear();
-                $query->whereBetween('ajuan.tanggal', [$start, $end]);
+            case 'semester':
+                $semesterStart = $now->month <= 6 ? $now->startOfYear() : $now->copy()->month(7)->startOfMonth();
+                $semesterEnd   = $now->month <= 6 ? $now->copy()->month(6)->endOfMonth() : $now->endOfYear();
+                $query->whereBetween('ajuan.tanggal', [$semesterStart, $semesterEnd]);
                 break;
-    
-            case 'this_year':
-                $query->whereYear('ajuan.tanggal', now()->year);
+            case 'tahun':
+                $query->whereYear('ajuan.tanggal', $now->year);
                 break;
-    
-            case 'all':
-            default:
-                // no filter
+            case 'semua':
+                // Tidak difilter
                 break;
         }
     
-        $kunjungan = $query->get();
+        $kunjungan = $query->orderBy('ajuan.tanggal', 'asc')->orderBy('ajuan.jam', 'asc')->get();
     
         return view('staff.kunjungan', compact('kunjungan'));
     }
     
+    
     public function reschedule(Request $request)
     {
+        $filter = $request->input('filter', 'bulan'); // default ke bulan ini
         $query = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
             ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
-            ->where('ajuan.status', 3); // hanya status reschedule
+            ->where('ajuan.status', 3);
     
-        // Filter berdasarkan waktu
-        switch ($request->filter) {
-            case 'today':
-                $query->whereDate('ajuan.tanggal', now()->toDateString());
+        $now = now();
+    
+        switch ($filter) {
+            case 'hari':
+                $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
-    
-            case 'this_week':
-                $query->whereBetween('ajuan.tanggal', [
-                    now()->startOfWeek(), now()->endOfWeek()
-                ]);
+            case 'minggu':
+                $query->whereBetween('ajuan.tanggal', [$now->startOfWeek(), $now->endOfWeek()]);
                 break;
-    
-            case 'this_month':
-                $query->whereMonth('ajuan.tanggal', now()->month)
-                      ->whereYear('ajuan.tanggal', now()->year);
+            case 'bulan':
+                $query->whereMonth('ajuan.tanggal', $now->month)->whereYear('ajuan.tanggal', $now->year);
                 break;
-    
-            case 'this_semester':
-                $start = now()->month <= 6 ? now()->startOfYear() : now()->copy()->startOfYear()->addMonths(6);
-                $end = now()->month <= 6 ? now()->startOfYear()->addMonths(5)->endOfMonth() : now()->endOfYear();
-                $query->whereBetween('ajuan.tanggal', [$start, $end]);
+            case 'semester':
+                $semesterStart = $now->month <= 6 ? $now->startOfYear() : $now->copy()->month(7)->startOfMonth();
+                $semesterEnd   = $now->month <= 6 ? $now->copy()->month(6)->endOfMonth() : $now->endOfYear();
+                $query->whereBetween('ajuan.tanggal', [$semesterStart, $semesterEnd]);
                 break;
-    
-            case 'this_year':
-                $query->whereYear('ajuan.tanggal', now()->year);
+            case 'tahun':
+                $query->whereYear('ajuan.tanggal', $now->year);
                 break;
-    
-            case 'all':
-            default:
-                // no filter
+            case 'semua':
+                // Tidak difilter
                 break;
         }
     
-        $reschedule = $query->get();
+        $reschedule = $query->orderBy('ajuan.tanggal', 'asc')->orderBy('ajuan.jam', 'asc')->get();
     
         return view('staff.reschedule', compact('reschedule'));
     }
     
+    
 
     public function reservasi(Request $request)
     {
+        $filter = $request->input('filter', 'bulan'); // default ke 'bulan'
         $query = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
             ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
-            ->where('ajuan.jenis', 1) // hanya reservasi
-            ->whereIn('ajuan.status', [1, 2]); // status pending & disetujui
+            ->where('ajuan.jenis', 1)
+            ->whereIn('ajuan.status', [1, 2]);
     
-        // Filter berdasarkan waktu
-        switch ($request->filter) {
-            case 'today':
-                $query->whereDate('ajuan.tanggal', now()->toDateString());
+        $now = now();
+    
+        switch ($filter) {
+            case 'hari':
+                $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
-    
-            case 'this_week':
+            case 'minggu':
                 $query->whereBetween('ajuan.tanggal', [
-                    now()->startOfWeek(), now()->endOfWeek()
+                    $now->startOfWeek(), $now->endOfWeek()
                 ]);
                 break;
-    
-            case 'this_month':
-                $query->whereMonth('ajuan.tanggal', now()->month)
-                      ->whereYear('ajuan.tanggal', now()->year);
+            case 'bulan':
+                $query->whereMonth('ajuan.tanggal', $now->month)
+                      ->whereYear('ajuan.tanggal', $now->year);
                 break;
-    
-            case 'this_semester':
-                $start = now()->month <= 6 ? now()->startOfYear() : now()->copy()->startOfYear()->addMonths(6);
-                $end = now()->month <= 6 ? now()->startOfYear()->addMonths(5)->endOfMonth() : now()->endOfYear();
-                $query->whereBetween('ajuan.tanggal', [$start, $end]);
+            case 'semester':
+                $semesterStart = $now->month <= 6 ? $now->startOfYear() : $now->copy()->month(7)->startOfMonth();
+                $semesterEnd   = $now->month <= 6 ? $now->copy()->month(6)->endOfMonth() : $now->endOfYear();
+                $query->whereBetween('ajuan.tanggal', [$semesterStart, $semesterEnd]);
                 break;
-    
-            case 'this_year':
-                $query->whereYear('ajuan.tanggal', now()->year);
+            case 'tahun':
+                $query->whereYear('ajuan.tanggal', $now->year);
                 break;
-    
-            case 'all':
-            default:
-                // no filter
+            case 'semua':
+                // No date filter
                 break;
         }
     
-        $reservasi = $query->get();
+        $reservasi = $query->orderBy('ajuan.tanggal', 'asc')->orderBy('ajuan.jam', 'asc')->get();
     
         return view('staff.reservasi', compact('reservasi'));
     }
+    
     
     
     public function history()
