@@ -87,4 +87,29 @@ class AdminController extends Controller
             'chartData', 'lineChart', 'period'
         ));
     }
+
+    public function datatable()
+    {
+        $ajuan = DB::table('ajuan')
+            ->join('users', 'ajuan.user_id', '=', 'users.id')
+            ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
+            ->where('ajuan.status', 2)
+            ->orderBy('ajuan.tanggal', 'asc')
+            ->get();
+    
+        $reschedule = DB::table('ajuan')->where('status', 3)->count();
+
+        $history = DB::table('ajuan')->where('status', 2)->count();
+    
+        $reservasi = DB::table('ajuan')
+            ->where('jenis', 1)  // 1 untuk reservasi
+            ->where('status', 1)
+            ->count();    
+    
+        $kunjungan = DB::table('ajuan')
+            ->where('jenis', 2)  // 2 untuk kunjungan
+            ->where('status', 1)
+            ->count();
+        return view('admin.datatable', compact('ajuan', 'reschedule', 'history', 'kunjungan', 'reservasi'));
+    }
 }

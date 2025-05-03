@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dispursip Samarinda</title>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
   <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -107,6 +111,59 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="/admin/profile" class="nav-link {{ Request::is('admin/profile') ? 'active' : '' }}">
+              <i class="nav-icon fa fa-user"></i>
+              <p>
+                Profile
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                Charts
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="pages/charts/chartjs.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Bar Chart</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="pages/charts/flot.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Pie Chart</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="pages/charts/inline.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Line Chart</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/datatable" class="nav-link {{ Request::is('admin/datatable') ? 'active' : '' }}">
+              <i class="nav-icon fa fa-table"></i>
+              <p>
+                Datatable
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/management" class="nav-link {{ Request::is('admin/management') ? 'active' : '' }}">
+              <i class="nav-icon fa fa-user"></i>
+              <p>
+                Management Employee
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
               <a href="#" class="nav-link" onclick="confirmLogout(event)">
                   <i class="nav-icon fa fa-power-off"></i>
                   <p>Logout</p>
@@ -163,6 +220,20 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables & Plugins -->
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <!-- ChartJS -->
 <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
 <!-- Sparkline -->
@@ -389,6 +460,28 @@
         }
     });
 }
+
+$(function () {
+  $("#example1").DataTable({
+    "responsive": true,
+    "lengthChange": false,
+    "autoWidth": false,
+    "pageLength": 5, // Tambahkan ini
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+  $('#example2').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+    "pageLength": 5 // Tambahkan ini juga jika ingin batasi example2
+  });
+});
+
 </script>
 @yield('js')
 </body>

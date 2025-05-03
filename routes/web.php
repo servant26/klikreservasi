@@ -15,6 +15,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Controller berdasarkan role
 //admin
 Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->get('/admin/datatable', [AdminController::class, 'datatable'])->name('admin.datatable');
+
 
 //staff
 Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', [StaffController::class, 'index'])->name('staff.dashboard');
