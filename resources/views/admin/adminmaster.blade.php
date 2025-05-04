@@ -140,7 +140,7 @@
             <a href="/admin/management" class="nav-link {{ Request::is('admin/management') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-users"></i>
                 <p>
-                    Management Employee
+                    Management Staff
                 </p>
             </a>
         </li>

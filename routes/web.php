@@ -19,7 +19,9 @@ Route::middleware(['auth', 'role:admin'])->get('/admin/datatable', [AdminControl
 // Profil admin
 Route::middleware(['auth', 'role:admin'])->get('/admin/profile', [AdminController::class, 'editProfile'])->name('admin.profile');
 Route::middleware(['auth', 'role:admin'])->post('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
-
+Route::middleware(['auth', 'role:admin'])->get('/admin/management', [AdminController::class, 'manageEmployee'])->name('admin.management');
+Route::middleware(['auth', 'role:admin'])->post('/admin/management/store', [AdminController::class, 'storeStaff'])->name('admin.management.store');
+Route::middleware(['auth', 'role:admin'])->delete('/admin/management/{id}', [AdminController::class, 'deleteStaff'])->name('admin.management.delete');
 
 
 //staff

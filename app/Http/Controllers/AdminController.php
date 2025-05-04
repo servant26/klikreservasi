@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ajuan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -232,4 +233,37 @@ class AdminController extends Controller
     
         return redirect()->route('admin.profile')->with('success', 'Profil berhasil diperbarui.');
     }
+
+    public function manageEmployee()
+    {
+        $staffs = User::where('role', 'staff')->get();
+        return view('admin.management', compact('staffs'));
+    }
+    
+    public function storeStaff(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+        ]);
+    
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => 'staff',
+        ]);
+    
+        return redirect()->route('admin.management')->with('success', 'Staff berhasil ditambahkan.');
+    }
+    
+    public function deleteStaff($id)
+    {
+        $staff = User::where('role', 'staff')->findOrFail($id);
+        $staff->delete();
+    
+        return redirect()->route('admin.management')->with('success', 'Staff berhasil dihapus.');
+    }
 }
+
