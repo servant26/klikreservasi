@@ -164,8 +164,6 @@ class StaffController extends Controller
         return view('staff.reschedule', compact('reschedule'));
     }
     
-    
-
     public function reservasi(Request $request)
     {
         $filter = $request->input('filter', 'bulan'); // default ke 'bulan'
@@ -208,18 +206,16 @@ class StaffController extends Controller
         return view('staff.reservasi', compact('reservasi'));
     }
     
+public function history()
+{
+    $aktivitas = AktivitasStaff::with('ajuan.user')
+                ->latest()
+                ->paginate(25); // Menampilkan 5 data per halaman
+
+    return view('staff.history', compact('aktivitas'));
+}
+
     
-    
-    public function history()
-    {
-        $aktivitas = AktivitasStaff::with('ajuan.user')
-                    ->latest()
-                    ->get();
-    
-        return view('staff.history', compact('aktivitas'));
-    }
-    
-  
     public function editProfile()
     {
         $staff = Auth::user();
