@@ -209,7 +209,7 @@
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
+        cancelButtonColor: '#6c757d',
         confirmButtonText: 'Batalkan ajuan!',
         cancelButtonText: 'Kembali',
         reverseButtons: true // Membalikkan posisi tombol

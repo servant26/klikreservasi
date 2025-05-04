@@ -255,8 +255,8 @@ $(function () {
         text: "Anda akan keluar dari sesi saat ini.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
         confirmButtonText: 'Ya, logout',
         cancelButtonText: 'Batal',
         reverseButtons: true // Tukar posisi tombol

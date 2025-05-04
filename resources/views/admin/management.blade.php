@@ -24,7 +24,7 @@
 <div class="container mt-4">
 
     @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-primary">{{ session('success') }}</div>
     @endif
 
     <form action="{{ route('admin.management.store') }}" method="POST" class="mb-4">
@@ -63,10 +63,10 @@
                 <td>{{ $staff->email }}</td>
                 <td>{{ $staff->created_at->format('d-m-Y') }}</td>
                 <td>
-                    <form action="{{ route('admin.management.delete', $staff->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus staff ini?')">
+                <button type="button" class="btn btn-danger btn-sm w-100" onclick="confirmDelete({{ $staff->id }})">Hapus</button>
+                    <form id="delete-form-{{ $staff->id }}" action="{{ route('admin.management.delete', $staff->id) }}" method="POST" style="display: none;">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Hapus</button>
                     </form>
                 </td>
             </tr>
@@ -74,4 +74,26 @@
         </tbody>
     </table>
 </div>
+@endsection
+
+@section('js')
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: "Data staff akan dihapus permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33', // Warna tombol konfirmasi
+            cancelButtonColor: '#6c757d', // Warna tombol batal
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
+            reverseButtons: true // Ini akan menukar posisi tombol
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
 @endsection

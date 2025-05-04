@@ -436,8 +436,8 @@
         text: "Anda akan keluar dari sesi saat ini.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
         confirmButtonText: 'Ya, logout',
         cancelButtonText: 'Batal',
         reverseButtons: true // Tukar posisi tombol
@@ -453,10 +453,43 @@ $(function () {
     "responsive": true,
     "lengthChange": false,
     "autoWidth": false,
-    "pageLength": 5, // Tambahkan ini
-    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+    "pageLength": 5,
+    "buttons": [
+      {
+        extend: "copy",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
+        }
+      },
+      {
+        extend: "csv",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
+        }
+      },
+      {
+        extend: "excel",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
+        }
+      },
+      {
+        extend: "pdf",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
+        }
+      },
+      {
+        extend: "print",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5]
+        }
+      },
+      "colvis"
+    ]
   }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
+  // bagian example2 tetap seperti biasa
   $('#example2').DataTable({
     "paging": true,
     "lengthChange": false,
@@ -465,7 +498,7 @@ $(function () {
     "info": true,
     "autoWidth": false,
     "responsive": true,
-    "pageLength": 5 // Tambahkan ini juga jika ingin batasi example2
+    "pageLength": 5
   });
 });
 

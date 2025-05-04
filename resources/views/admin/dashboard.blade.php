@@ -102,7 +102,7 @@
         <h5 class="text-center">Line Chart</h5>
         <canvas id="lineChart"></canvas>
         <div class="d-flex justify-content-center mt-2 mb-5">
-          <button onclick="downloadChart('lineChart', 'linechart.jpg')" class="btn btn-sm btn-primary">
+          <button onclick="downloadChart('lineChart', 'linechart.png')" class="btn btn-sm btn-primary">
             Download Line Chart
           </button>
         </div>
@@ -114,7 +114,14 @@
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script>
+  // Hitung total untuk pie chart
+  const reservasi = {{ $chartData['reservasi'] }};
+  const kunjungan = {{ $chartData['kunjungan'] }};
+  const totalPie = reservasi + kunjungan;
+
   // Pie Chart
   const pieCtx = document.getElementById('pieChart').getContext('2d');
   new Chart(pieCtx, {
@@ -122,42 +129,69 @@
     data: {
       labels: ['Reservasi', 'Kunjungan'],
       datasets: [{
-        data: [{{ $chartData['reservasi'] }}, {{ $chartData['kunjungan'] }}],
+        data: [reservasi, kunjungan],
         backgroundColor: ['#c82333', '#28a745']
       }]
     },
     options: {
       responsive: true,
       plugins: {
-        title: { display: true, text: 'Statistik berdasarkan Pie Chart' }
+        title: { display: true, text: 'Statistik berdasarkan Pie Chart' },
+        datalabels: {
+          color: '#fff',
+          formatter: (value) => {
+            const percentage = ((value / totalPie) * 100).toFixed(0);
+            return `${percentage}% (${value} Reservasi)`;
+          }
+        }
       }
-    }
+    },
+    plugins: [ChartDataLabels]
   });
 
-  // Bar Chart
-  const barCtx = document.getElementById('barChart').getContext('2d');
-  new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels: ['Reservasi', 'Kunjungan'],
-      datasets: [{
-        label: 'Jumlah',
-        data: [{{ $reservasi }}, {{ $kunjungan }}],
-        backgroundColor: ['#c82333', '#28a745']
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        title: { display: true, text: 'Statistik berdasarkan Bar Chart' }
+// Bar Chart
+const barCtx = document.getElementById('barChart').getContext('2d');
+new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Reservasi', 'Kunjungan'],
+    datasets: [{
+      label: 'Jumlah',
+      data: [reservasi, kunjungan],
+      backgroundColor: ['#c82333', '#28a745'],
+      minBarLength: 30
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Statistik berdasarkan Bar Chart'
       },
-      scales: {
-        x: { beginAtZero: true }
+      datalabels: {
+        anchor: 'center',
+        align: 'center',
+        color: '#fff',
+        font: {
+          weight: 'bold'
+        },
+        formatter: (value, context) => {
+          const label = context.chart.data.labels[context.dataIndex];
+          return `${value} ${label}`;
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true
       }
     }
-  });
+  },
+  plugins: [ChartDataLabels]
+});
 
   // Line Chart
   const lineCtx = document.getElementById('lineChart').getContext('2d');
