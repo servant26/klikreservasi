@@ -64,7 +64,7 @@
                             @csrf
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" id="name" name="name" class="form-control form-control-lg bg-light fs-6" placeholder="Masukkan Nama" required>
+                                <input type="text" id="name" name="name" class="form-control form-control-lg bg-light fs-6" placeholder="Masukkan Nama" required autofocus>
                             </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>

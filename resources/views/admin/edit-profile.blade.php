@@ -32,7 +32,7 @@
 
         <div class="form-group mb-2">
             <label>Nama</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}" required>
+            <input type="text" name="name" class="form-control" value="{{ old('name', $admin->name) }}" required autofocus>
         </div>
 
         <div class="form-group mb-2">
