@@ -4,14 +4,14 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class AjuanSeeder extends Seeder
 {
     public function run()
     {
-        $userIds = DB::table('users')->pluck('id')->toArray();
+        $userIds = DB::table('users')->pluck('id')->toArray(); // Ambil seluruh user_id
 
         $count = 0;
         while ($count < 100) {
@@ -19,24 +19,25 @@ class AjuanSeeder extends Seeder
             $dayName = Carbon::parse($tanggal)->format('l');
 
             // Tentukan jam berdasarkan hari
+            $jamOptions = ['08:00:00', '08:15:00', '08:30:00', '08:45:00']; // Jam fix yang tersedia
             if (in_array($dayName, ['Monday', 'Tuesday', 'Wednesday', 'Thursday'])) {
-                $jam = Carbon::createFromTime(rand(8, 15), rand(0, 59))->format('H:i:s');
+                $jam = $jamOptions[array_rand($jamOptions)]; // Pilih jam secara acak dari opsi yang ada
             } elseif ($dayName == 'Friday') {
-                $jam = Carbon::createFromTime(rand(8, 14), rand(0, 59))->format('H:i:s');
+                $jam = $jamOptions[array_rand($jamOptions)]; // Pilih jam secara acak dari opsi yang ada
             } else {
-                continue; // skip Sabtu-Minggu
+                continue; // Skip Sabtu-Minggu
             }
 
-            $jenis = rand(1, 2);
+            $jenis = rand(1, 2); // Jenis 1 atau 2
 
             DB::table('ajuan')->insert([
-                'user_id' => $userIds[array_rand($userIds)],
-                'jumlah_orang' => rand(1, 10),
+                'user_id' => $userIds[array_rand($userIds)], // Pilih user secara acak
+                'jumlah_orang' => rand(1, 10), // Jumlah orang antara 1 hingga 10
                 'jenis' => $jenis,
                 'tanggal' => $tanggal,
                 'jam' => $jam,
-                'status' => rand(1, 3),
-                'surat' => 'surat_' . Str::random(5) . '.pdf',
+                'status' => 2, // Set status selalu menjadi 2 (Sudah ditanggapi)
+                'surat' => 'surat_' . Str::random(5) . '.pdf', // Surat acak
                 'deskripsi' => $jenis == 1 
                     ? 'Ini deskripsi untuk reservasi pada tanggal ' . $tanggal 
                     : 'Ini deskripsi kunjungan biasa pada tanggal ' . $tanggal,
