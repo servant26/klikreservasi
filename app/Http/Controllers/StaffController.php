@@ -61,31 +61,48 @@ class StaffController extends Controller
         return view('staff.dashboard', compact('ajuan', 'reschedule', 'history', 'kunjungan', 'reservasi'));
     }
     
-    
+
     public function updateStatus($id)
     {
         $ajuan = DB::table('ajuan')->where('id', $id)->first();
-    
+
         if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
-    
-        $currentStatus = $ajuan->status;
-        $newStatus = ($currentStatus == 2) ? 1 : 2;
-    
-        $updated = DB::table('ajuan')->where('id', $id)->update(['status' => $newStatus]);
-    
+
+        if ($ajuan->status != 2) {
+            return redirect()->back()->with('error', 'Hanya ajuan yang sudah ditanggapi yang bisa dibatalkan!');
+        }
+
+        $updated = DB::table('ajuan')->where('id', $id)->update(['status' => 1]);
+
         if ($updated) {
-            // Catat aktivitasnya
             AktivitasStaff::create([
                 'ajuan_id' => $id,
-                'status_lama' => $currentStatus,
-                'status_baru' => $newStatus,
+                'status_lama' => 2,
+                'status_baru' => 1,
             ]);
-    
-            return redirect()->back()->with('success', 'Status berhasil diubah!');
+
+            return redirect()->back()->with('success', 'Status berhasil dibatalkan!');
         }
-    
+
         return redirect()->back()->with('error', 'Gagal mengubah status!');
     }
+
+
+    public function balasAjuan($id)
+    {
+        $ajuan = DB::table('ajuan')
+            ->join('users', 'ajuan.user_id', '=', 'users.id')
+            ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
+            ->where('ajuan.id', $id)
+            ->first();
+
+        if (!$ajuan) {
+            return redirect()->route('staff.dashboard')->with('error', 'Ajuan tidak ditemukan!');
+        }
+
+        return view('staff.balas', compact('ajuan'));
+    }
+
     public function kunjungan(Request $request)
     {
         $filter = $request->input('filter', 'bulan'); // default ke bulan ini

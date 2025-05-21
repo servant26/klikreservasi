@@ -26,6 +26,7 @@ Route::middleware(['auth', 'role:admin'])->delete('/admin/management/{id}', [Adm
 
 //staff
 Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', [StaffController::class, 'index'])->name('staff.dashboard');
+Route::middleware(['auth', 'role:staff'])->get('/staff/ajuan/{id}/balas', [StaffController::class, 'balasAjuan'])->name('staff.balasAjuan');
 Route::middleware(['auth', 'role:staff'])->get('/staff/tambah', [StaffController::class, 'tambah'])->name('staff.tambah');
 Route::middleware(['auth', 'role:staff'])->post('/staff/tambah', [StaffController::class, 'store'])->name('staff.store');
 Route::middleware(['auth', 'role:staff'])->get('/staff/edit/{id}', [StaffController::class, 'edit'])->name('staff.edit');
