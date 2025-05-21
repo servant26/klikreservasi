@@ -259,60 +259,30 @@ function confirmStatusChange(url) {
     });
 }
 
-$(function () {
-  $("#example1").DataTable({
-    "responsive": true,
-    "lengthChange": false,
-    "autoWidth": false,
-    "pageLength": 5,
-    "buttons": [
-      {
-        extend: "copy",
-        exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5]
-        }
-      },
-      {
-        extend: "csv",
-        exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5]
-        }
-      },
-      {
-        extend: "excel",
-        exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5]
-        }
-      },
-      {
-        extend: "pdf",
-        exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5]
-        }
-      },
-      {
-        extend: "print",
-        exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5]
-        }
-      },
-      "colvis"
-    ]
-  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "lengthChange": false,
+      "autoWidth": false,
+      "pageLength": 5
+    });
 
-  // bagian example2 tetap seperti biasa
-  $('#example2').DataTable({
-    "paging": true,
-    "lengthChange": false,
-    "searching": false,
-    "ordering": true,
-    "info": true,
-    "autoWidth": false,
-    "responsive": true,
-    "pageLength": 5
+    // Autofocus ke search input
+    setTimeout(function () {
+      $('#example1_filter input').focus();
+    }, 500);
+
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+      "pageLength": 5
+    });
   });
-});
-
 
   function confirmLogout(event) {
     event.preventDefault();
