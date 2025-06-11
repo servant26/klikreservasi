@@ -18,6 +18,12 @@ class AuthController extends Controller
     // Proses login
     public function login(Request $request)
     {
+        // Validasi input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -32,8 +38,10 @@ class AuthController extends Controller
             }
         }
 
-        return back()->withErrors(['loginError' => 'Email atau Password salah']);
+        // Jika gagal login
+        return back()->withErrors(['loginError' => 'Email atau Password salah'])->withInput();
     }
+
 
     // Menampilkan halaman register
     public function showRegister()
