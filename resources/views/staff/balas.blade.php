@@ -19,7 +19,7 @@
     <!-- /.content-header -->
 @endsection
 @section('content')
-<form action="#" method="POST" enctype="multipart/form-data">
+<form action="{{ route('staff.balasSubmit', $ajuan->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="card-body">
 
@@ -76,7 +76,7 @@
         {{-- Upload Surat Balasan --}}
         <div class="form-group">
             <label>Upload Surat Balasan :</label>
-            <input type="file" name="surat" class="form-control-file">
+            <input type="file" name="surat_balasan" class="form-control-file">
         </div>
 
         {{-- Tombol Aksi --}}

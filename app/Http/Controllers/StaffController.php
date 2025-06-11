@@ -88,7 +88,7 @@ class StaffController extends Controller
     }
 
 
-    public function balasAjuan($id)
+    public function showBalasForm($id)
     {
         $ajuan = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
@@ -102,6 +102,42 @@ class StaffController extends Controller
 
         return view('staff.balas', compact('ajuan'));
     }
+
+    public function submitBalasan(Request $request, $id)
+    {
+        $ajuan = DB::table('ajuan')->where('id', $id)->first();
+
+        if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
+
+        // Validasi file jika diupload
+        $validated = $request->validate([
+            'surat_balasan' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $updateData = [
+            'status' => 2, // ubah status jadi 2
+            'updated_at' => now(),
+        ];
+
+        if ($request->hasFile('surat_balasan')) {
+            $path = $request->file('surat_balasan')->store('surat_balasan', 'public');
+            $updateData['surat_balasan'] = $path;
+        }
+
+        DB::table('ajuan')->where('id', $id)->update($updateData);
+
+        // Simpan aktivitas (optional)
+        \App\Models\AktivitasStaff::create([
+            'ajuan_id' => $id,
+            'status_lama' => $ajuan->status,
+            'status_baru' => 2,
+        ]);
+
+        return redirect()->route('staff.dashboard')->with('success', 'Balasan berhasil dikirim dan status diubah.');
+    }
+
+
+
 
     public function kunjungan(Request $request)
     {

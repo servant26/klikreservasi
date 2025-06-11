@@ -22,6 +22,7 @@ return new class extends Migration
             $table->time('jam');
             $table->enum('status', [1, 2, 3])->default(1);
             $table->string('surat')->nullable(); 
+            $table->string('surat_balasan')->nullable();
             $table->text('deskripsi')->nullable(); 
             $table->timestamps();
     
@@ -39,3 +40,6 @@ return new class extends Migration
         Schema::dropIfExists('ajuan');
     }
 };
+
+
+

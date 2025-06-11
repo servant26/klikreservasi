@@ -85,8 +85,7 @@
                 <tr>
                   <th style="width: 2%;">No.</th>
                   <th style="width: 10%;">Identitas</th>
-                  <th style="width: 15%;">Jadwal</th>
-                  <th style="width: 10%;">Jumlah Orang</th>
+                  <th style="width: 20%;">Jadwal</th>
                   <th style="width: 10%;">Asal Instansi</th>
                   <th style="width: 10%;">Jenis</th>
                   <th style="width: 20%;">Status</th>
@@ -103,7 +102,6 @@
                   <a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a>
                 </td>
                 <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                <td>{{ $a->jumlah_orang }} Orang</td>
                 <td>{{ $a->asal }}</td>
                 <td>
                   @if($a->jenis == 1)
@@ -128,7 +126,7 @@
                               @if($a->status == 1) btn-danger 
                               @elseif($a->status == 3) btn-warning 
                               @endif btn-block" 
-                              href="{{ route('staff.balasAjuan', $a->id) }}" 
+                              href="{{ route('staff.balasForm', $a->id) }}" 
                               role="button">
                               @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
                           </a>

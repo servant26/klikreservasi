@@ -86,7 +86,7 @@
                               @if($a->status == 1) btn-danger 
                               @elseif($a->status == 3) btn-warning 
                               @endif btn-block" 
-                              href="{{ route('staff.balasAjuan', $a->id) }}" 
+                              href="{{ route('staff.balasForm', $a->id) }}" 
                               role="button">
                               @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
                           </a>
