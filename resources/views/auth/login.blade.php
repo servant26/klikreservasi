@@ -64,38 +64,41 @@
                     @if ($errors->any())
                         <div class="mb-2">
                             @foreach ($errors->all() as $error)
-                                <div class="bg-danger text-white px-3 py-2 rounded mb-2">
+                                <div class="bg-danger text-white px-3 py-3 rounded mb-2">
                                     {{ $error }}
                                 </div>
                             @endforeach
                         </div>
                     @endif
-                        <form action="{{ route('login.post') }}" method="POST" autocomplete="off">
-                            @csrf
+                    <form action="{{ route('login.post') }}" method="POST" autocomplete="off">
+                        @csrf
 
-                            <!-- Email -->
-                            <div class="input-group mb-3">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                <input type="email" id="email" name="email" class="form-control form-control-lg bg-light fs-6"
-                                    placeholder="Masukkan Email" autofocus required
-                                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
-                                    oninput="this.setCustomValidity('')" autocomplete="off">
-                            </div>
+                        <!-- Email -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" id="email" name="email"
+                                class="form-control form-control-lg bg-light fs-6"
+                                placeholder="Masukkan Email" autofocus required
+                                value="{{ old('email') }}"
+                                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                                oninput="this.setCustomValidity('')" autocomplete="off">
+                        </div>
 
-                            <!-- Password -->
-                            <div class="input-group mb-3">
-                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" id="password" name="password" class="form-control form-control-lg bg-light fs-6"
-                                    placeholder="Masukkan Password" required minlength="6" autocomplete="new-password"
-                                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 6 karakter!')"
-                                    oninput="this.setCustomValidity('')">
-                            </div>
+                        <!-- Password -->
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="password" name="password"
+                                class="form-control form-control-lg bg-light fs-6"
+                                placeholder="Masukkan Password" required minlength="8" autocomplete="new-password"
+                                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
+                                oninput="this.setCustomValidity('')">
+                        </div>
 
-                            <!-- Tombol -->
-                            <div class="input-group mb-3">
-                                <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Login</button>
-                            </div>
-                        </form>
+                        <!-- Tombol -->
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Login</button>
+                        </div>
+                    </form>
                     <div class="row">
                         <small>Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></small>
                     </div>

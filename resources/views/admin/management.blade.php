@@ -27,29 +27,43 @@
         <div class="alert alert-primary">{{ session('success') }}</div>
     @endif
 
+    @if ($errors->any())
+        <div class="mb-2">
+            @foreach ($errors->all() as $error)
+                <div class="bg-danger text-white px-3 py-2 rounded mb-3">
+                    {{ $error }}
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+{{-- Form Tambah Staff --}}
 <form action="{{ route('admin.management.store') }}" method="POST" class="mb-4" autocomplete="off">
     @csrf
     <div class="row">
         <!-- Nama -->
         <div class="col-md-3">
-            <input type="text" name="name" class="form-control" placeholder="Nama" required autofocus
-                   pattern="[A-Za-z\s]+"
-                   oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
-                   oninput="this.setCustomValidity('')" autocomplete="off">
+            <input type="text" name="name" class="form-control" placeholder="Nama"
+                value="{{ old('name') }}" required autofocus
+                pattern="[A-Za-z\s]+"
+                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
+                oninput="this.setCustomValidity('')" autocomplete="off">
         </div>
 
         <!-- Email -->
         <div class="col-md-3">
-            <input type="email" name="email" class="form-control" placeholder="Email" required
-                   oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
-                   oninput="this.setCustomValidity('')" autocomplete="off">
+            <input type="email" name="email" class="form-control" placeholder="Email"
+                value="{{ old('email') }}" required
+                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                oninput="this.setCustomValidity('')" autocomplete="off">
         </div>
 
         <!-- Password -->
         <div class="col-md-3">
-            <input type="password" name="password" class="form-control" placeholder="Password" required minlength="6"
-                   oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 6 karakter!')"
-                   oninput="this.setCustomValidity('')" autocomplete="new-password">
+            <input type="password" name="password" class="form-control" placeholder="Password"
+                required minlength="8"
+                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
+                oninput="this.setCustomValidity('')" autocomplete="new-password">
         </div>
 
         <!-- Tombol -->

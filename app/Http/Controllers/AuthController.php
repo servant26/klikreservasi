@@ -21,7 +21,7 @@ class AuthController extends Controller
         // Validasi input
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -58,7 +58,10 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
             'whatsapp' => 'required|string|max:20',
             'asal' => 'required|string|max:255',
+        ], [
+            'email.unique' => 'Email telah terdaftar',
         ]);
+
     
         // Normalisasi nomor WhatsApp ke format 0815xxxx
         $rawWhatsapp = preg_replace('/[^0-9]/', '', $request->whatsapp); // hapus karakter non-angka

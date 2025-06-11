@@ -245,7 +245,14 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:8',
+        ], [
+            'email.unique' => 'Email telah terdaftar',
+            'name.required' => 'Nama wajib diisi',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Masukkan email yang valid',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 8 karakter',
         ]);
     
         User::create([
@@ -255,7 +262,7 @@ class AdminController extends Controller
             'role' => 'staff',
         ]);
     
-        return redirect()->route('admin.management')->with('success', 'Staff berhasil ditambahkan.');
+        return redirect()->route('admin.management')->with('success', 'Staff berhasil ditambahkan');
     }
     
     public function deleteStaff($id)
@@ -263,7 +270,7 @@ class AdminController extends Controller
         $staff = User::where('role', 'staff')->findOrFail($id);
         $staff->delete();
     
-        return redirect()->route('admin.management')->with('success', 'Staff berhasil dihapus.');
+        return redirect()->route('admin.management')->with('success', 'Staff telah dihapus');
     }
 }
 

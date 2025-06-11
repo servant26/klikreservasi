@@ -59,14 +59,25 @@
                         <h2>Buat Akun</h2>
                         <p>Silakan isi formulir di bawah ini</p>
                     </div>
+                        @if ($errors->any())
+                            <div class="mb-2">
+                                @foreach ($errors->all() as $error)
+                                    <div class="bg-danger text-white px-3 py-3 rounded mb-2">
+                                        {{ $error }}
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                         <form action="{{ route('register.post') }}" method="POST" autocomplete="off">
                             @csrf
 
                             <!-- Nama -->
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" id="name" name="name" class="form-control form-control-lg bg-light fs-6"
+                                <input type="text" id="name" name="name"
+                                    class="form-control form-control-lg bg-light fs-6"
                                     placeholder="Masukkan Nama" required autofocus pattern="[A-Za-z\s]+"
+                                    value="{{ old('name') }}"
                                     oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
                                     oninput="this.setCustomValidity('')" autocomplete="off">
                             </div>
@@ -74,8 +85,10 @@
                             <!-- Email -->
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                <input type="email" id="email" name="email" class="form-control form-control-lg bg-light fs-6"
+                                <input type="email" id="email" name="email"
+                                    class="form-control form-control-lg bg-light fs-6"
                                     placeholder="Masukkan Email" required
+                                    value="{{ old('email') }}"
                                     oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
                                     oninput="this.setCustomValidity('')" autocomplete="off">
                             </div>
@@ -83,8 +96,10 @@
                             <!-- WhatsApp -->
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                <input type="number" id="whatsapp" name="whatsapp" class="form-control form-control-lg bg-light fs-6"
+                                <input type="number" id="whatsapp" name="whatsapp"
+                                    class="form-control form-control-lg bg-light fs-6"
                                     placeholder="Masukkan Nomor WhatsApp" required
+                                    value="{{ old('whatsapp') }}"
                                     oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan hanya angka!')"
                                     oninput="this.setCustomValidity('')" autocomplete="off">
                             </div>
@@ -92,8 +107,10 @@
                             <!-- Asal -->
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-building"></i></span>
-                                <input type="text" id="asal" name="asal" class="form-control form-control-lg bg-light fs-6"
+                                <input type="text" id="asal" name="asal"
+                                    class="form-control form-control-lg bg-light fs-6"
                                     placeholder="Masukkan Asal Instansi" required
+                                    value="{{ old('asal') }}"
                                     oninvalid="this.setCustomValidity('Form ini wajib diisi!')"
                                     oninput="this.setCustomValidity('')" autocomplete="off">
                             </div>
@@ -101,9 +118,10 @@
                             <!-- Password -->
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                <input type="password" id="password" name="password" class="form-control form-control-lg bg-light fs-6"
-                                    placeholder="Masukkan Password" required minlength="6" autocomplete="new-password"
-                                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 6 karakter!')"
+                                <input type="password" id="password" name="password"
+                                    class="form-control form-control-lg bg-light fs-6"
+                                    placeholder="Masukkan Password" required minlength="8" autocomplete="new-password"
+                                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
                                     oninput="this.setCustomValidity('')">
                             </div>
 
@@ -112,6 +130,7 @@
                                 <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Daftar</button>
                             </div>
                         </form>
+
                     <div class="row">
                         <small>Sudah punya akun? <a href="{{ route('login') }}">Login di sini</a></small>
                     </div>
