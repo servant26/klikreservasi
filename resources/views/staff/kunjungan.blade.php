@@ -41,14 +41,13 @@
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                  <th style="width: 2%;">No.</th>
-                  <th style="width: 10%;">Identitas</th>
-                  <th style="width: 15%;">Jadwal</th>
-                  <th style="width: 10%;">Jumlah Orang</th>
-                  <th style="width: 10%;">Asal Instansi</th>
-                  <th style="width: 10%;">Jenis</th>
-                  <th style="width: 20%;">Status</th>
-                  <th style="width: 10%;">Surat</th>
+                    <th style="width: 2%;">No.</th>
+                    <th style="width: 10%;">Identitas</th>
+                    <th style="width: 20%;">Jadwal</th>
+                    <th style="width: 10%;">Jumlah Orang</th>
+                    <th style="width: 20%;">Asal Instansi</th>
+                    <th style="width: 20%;">Status</th>
+                    <th style="width: 10%;">Surat</th>
                     <!-- <th style="width: 8%;">Edit</th> -->
                 </tr>
             </thead>
@@ -63,13 +62,6 @@
                 <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
                 <td>{{ $a->jumlah_orang }} Orang</td>
                 <td>{{ $a->asal }}</td>
-                <td>
-                  @if($a->jenis == 1)
-                    Reservasi Aula
-                  @elseif($a->jenis == 2)
-                    Kunjungan Perpustakaan
-                  @endif
-                </td>
                 <td class="text-center">
                   <div class="d-grid gap-2">
                       @if($a->status == 2)

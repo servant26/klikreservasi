@@ -47,7 +47,7 @@
         @endphp
 
         <div class="form-group">
-            <label>Jenis :</label>
+            <label>Jenis Ajuan :</label>
             <input type="text" class="form-control" value="{{ $jenisText }} {{ $jumlah }} Orang" readonly>
         </div>
 

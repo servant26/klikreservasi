@@ -32,12 +32,20 @@
 
         <div class="form-group mb-2">
             <label>Nama</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name', $staff->name) }}" required autofocus>
+            <input type="text" name="name" class="form-control"
+                  value="{{ old('name', $staff->name) }}"
+                  required pattern="[A-Za-z\s]+"
+                  oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
+                  oninput="this.setCustomValidity('')" autofocus>
         </div>
 
         <div class="form-group mb-2">
             <label>Email</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email', $staff->email) }}" required>
+            <input type="email" name="email" class="form-control"
+                  value="{{ old('email', $staff->email) }}"
+                  required
+                  oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                  oninput="this.setCustomValidity('')">
         </div>
 
         <div class="form-group mb-2">

@@ -27,24 +27,37 @@
         <div class="alert alert-primary">{{ session('success') }}</div>
     @endif
 
-    <form action="{{ route('admin.management.store') }}" method="POST" class="mb-4">
+<form action="{{ route('admin.management.store') }}" method="POST" class="mb-4" autocomplete="off">
     @csrf
     <div class="row">
+        <!-- Nama -->
         <div class="col-md-3">
-            <input type="text" name="name" class="form-control" placeholder="Nama" required autofocus>
+            <input type="text" name="name" class="form-control" placeholder="Nama" required autofocus
+                   pattern="[A-Za-z\s]+"
+                   oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
+                   oninput="this.setCustomValidity('')" autocomplete="off">
         </div>
+
+        <!-- Email -->
         <div class="col-md-3">
-            <input type="email" name="email" class="form-control" placeholder="Email" required>
+            <input type="email" name="email" class="form-control" placeholder="Email" required
+                   oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                   oninput="this.setCustomValidity('')" autocomplete="off">
         </div>
+
+        <!-- Password -->
         <div class="col-md-3">
-            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <input type="password" name="password" class="form-control" placeholder="Password" required minlength="6"
+                   oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 6 karakter!')"
+                   oninput="this.setCustomValidity('')" autocomplete="new-password">
         </div>
+
+        <!-- Tombol -->
         <div class="col-md-3">
             <button type="submit" class="btn btn-primary w-100">Tambah Staff</button>
         </div>
     </div>
 </form>
-
 
     <!-- Tabel Staff -->
     <table class="table table-bordered">

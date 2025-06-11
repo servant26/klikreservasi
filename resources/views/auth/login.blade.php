@@ -78,7 +78,7 @@
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 <input type="email" id="email" name="email" class="form-control form-control-lg bg-light fs-6"
                                     placeholder="Masukkan Email" autofocus required
-                                    oninvalid="this.setCustomValidity(this.value === '' ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
                                     oninput="this.setCustomValidity('')" autocomplete="off">
                             </div>
 
@@ -87,7 +87,7 @@
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                 <input type="password" id="password" name="password" class="form-control form-control-lg bg-light fs-6"
                                     placeholder="Masukkan Password" required minlength="6" autocomplete="new-password"
-                                    oninvalid="this.setCustomValidity(this.value === '' ? 'Form ini wajib diisi!' : 'Password minimal 6 karakter!')"
+                                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 6 karakter!')"
                                     oninput="this.setCustomValidity('')">
                             </div>
 
