@@ -59,7 +59,7 @@ class AdminController extends Controller
         $labels = [];
         $reservasiData = [];
         $kunjunganData = [];
-    
+
         switch ($period) {
             case 'hari':
                 // Per jam (24 jam)
@@ -75,7 +75,7 @@ class AdminController extends Controller
                         ->count();
                 }
                 break;
-    
+
             case 'minggu':
                 // Per hari dalam seminggu
                 $weekDays = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
@@ -87,26 +87,59 @@ class AdminController extends Controller
                     $kunjunganData[] = Ajuan::where('jenis', 2)->whereDate('tanggal', $date)->count();
                 }
                 break;
-    
+
             case 'bulan':
                 // Per minggu dalam bulan ini
                 $start = Carbon::now()->startOfMonth();
-                for ($i = 0; $i < 5; $i++) {
-                    $weekStart = $start->copy()->addWeeks($i);
+                $endOfMonth = Carbon::now()->endOfMonth();
+
+                for ($i = 0; $i < 6; $i++) {
+                    $weekStart = $start->copy()->addWeeks($i)->startOfWeek();
                     $weekEnd = $weekStart->copy()->endOfWeek();
-                    if ($weekStart->month != Carbon::now()->month) break;
-    
+
+                    if ($weekStart->gt($endOfMonth)) break;
+
+                    $actualStart = $weekStart->lessThan($start) ? $start : $weekStart;
+                    $actualEnd = $weekEnd->greaterThan($endOfMonth) ? $endOfMonth : $weekEnd;
+
                     $labels[] = 'Minggu ' . ($i + 1);
-                    $reservasiData[] = Ajuan::where('jenis', 1)->whereBetween('tanggal', [$weekStart, $weekEnd])->count();
-                    $kunjunganData[] = Ajuan::where('jenis', 2)->whereBetween('tanggal', [$weekStart, $weekEnd])->count();
+                    $reservasiData[] = Ajuan::where('jenis', 1)
+                        ->whereBetween('tanggal', [$actualStart, $actualEnd])
+                        ->count();
+                    $kunjunganData[] = Ajuan::where('jenis', 2)
+                        ->whereBetween('tanggal', [$actualStart, $actualEnd])
+                        ->count();
                 }
                 break;
-    
+
             case 'semester':
+                // Per bulan dalam semester aktif
+                $now = Carbon::now();
+                $start = $now->month <= 6
+                    ? $now->copy()->startOfYear()
+                    : $now->copy()->month(7)->startOfMonth();
+
+                $end = $now->month <= 6
+                    ? $now->copy()->month(6)->endOfMonth()
+                    : $now->copy()->endOfYear();
+
+                for ($m = $start->month; $m <= $end->month; $m++) {
+                    $labels[] = $start->copy()->month($m)->format('M');
+                    $reservasiData[] = Ajuan::where('jenis', 1)
+                        ->whereMonth('tanggal', $m)
+                        ->whereYear('tanggal', $now->year)
+                        ->count();
+                    $kunjunganData[] = Ajuan::where('jenis', 2)
+                        ->whereMonth('tanggal', $m)
+                        ->whereYear('tanggal', $now->year)
+                        ->count();
+                }
+                break;
+
             case 'tahun':
             case 'semua':
             default:
-                // Per bulan
+                // Per bulan selama setahun
                 $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
                 for ($m = 1; $m <= 12; $m++) {
                     $reservasiData[] = Ajuan::where('jenis', 1)
@@ -120,7 +153,7 @@ class AdminController extends Controller
                 }
                 break;
         }
-    
+
         $lineChart = [
             'labels' => $labels,
             'reservasi' => $reservasiData,
@@ -148,7 +181,9 @@ class AdminController extends Controller
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
             case 'minggu':
-                $query->whereBetween('ajuan.tanggal', [$now->startOfWeek(), $now->endOfWeek()]);
+                $startOfWeek = now()->copy()->startOfWeek();
+                $endOfWeek = now()->copy()->endOfWeek();
+                $query->whereBetween('ajuan.tanggal', [$startOfWeek->toDateString(), $endOfWeek->toDateString()]);
                 break;
             case 'bulan':
                 $query->whereMonth('ajuan.tanggal', $now->month)

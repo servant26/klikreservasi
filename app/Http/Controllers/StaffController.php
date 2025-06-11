@@ -24,7 +24,9 @@ class StaffController extends Controller
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
             case 'minggu':
-                $query->whereBetween('ajuan.tanggal', [$now->startOfWeek(), $now->endOfWeek()]);
+                $startOfWeek = now()->copy()->startOfWeek();
+                $endOfWeek = now()->copy()->endOfWeek();
+                $query->whereBetween('ajuan.tanggal', [$startOfWeek->toDateString(), $endOfWeek->toDateString()]);
                 break;
             case 'bulan':
                 $query->whereMonth('ajuan.tanggal', $now->month)
@@ -155,7 +157,9 @@ class StaffController extends Controller
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
             case 'minggu':
-                $query->whereBetween('ajuan.tanggal', [$now->startOfWeek(), $now->endOfWeek()]);
+                $startOfWeek = now()->copy()->startOfWeek();
+                $endOfWeek = now()->copy()->endOfWeek();
+                $query->whereBetween('ajuan.tanggal', [$startOfWeek->toDateString(), $endOfWeek->toDateString()]);
                 break;
             case 'bulan':
                 $query->whereMonth('ajuan.tanggal', $now->month)->whereYear('ajuan.tanggal', $now->year);
@@ -194,7 +198,9 @@ class StaffController extends Controller
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
             case 'minggu':
-                $query->whereBetween('ajuan.tanggal', [$now->startOfWeek(), $now->endOfWeek()]);
+                $startOfWeek = now()->copy()->startOfWeek();
+                $endOfWeek = now()->copy()->endOfWeek();
+                $query->whereBetween('ajuan.tanggal', [$startOfWeek->toDateString(), $endOfWeek->toDateString()]);
                 break;
             case 'bulan':
                 $query->whereMonth('ajuan.tanggal', $now->month)->whereYear('ajuan.tanggal', $now->year);
@@ -233,9 +239,9 @@ class StaffController extends Controller
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
             case 'minggu':
-                $query->whereBetween('ajuan.tanggal', [
-                    $now->startOfWeek(), $now->endOfWeek()
-                ]);
+                $startOfWeek = now()->copy()->startOfWeek();
+                $endOfWeek = now()->copy()->endOfWeek();
+                $query->whereBetween('ajuan.tanggal', [$startOfWeek->toDateString(), $endOfWeek->toDateString()]);
                 break;
             case 'bulan':
                 $query->whereMonth('ajuan.tanggal', $now->month)

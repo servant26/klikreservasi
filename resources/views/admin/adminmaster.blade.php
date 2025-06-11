@@ -101,7 +101,7 @@
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Menu Dashboard dengan dropdown -->
-        <li class="nav-item">
+        <li class="nav-item menu-open">
             <a href="#" class="nav-link {{ Request::is('admin/dashboard') || Request::is('admin/datatable') ? 'active' : '' }}">
                 <i class="nav-icon fa fa-tachometer-alt"></i>
                 <p>
