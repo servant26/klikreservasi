@@ -25,8 +25,8 @@
         <div class="col-lg-12 col-12">
             <div class="small-box p-3" style="background-color: #f0f0f0; border: 1px solid black;">
                 <div class="inner text-left">
-                    <h4>Selamat datang di Web Reservasi Aula dan Kunjungan Perpustakaan</h4>
-                    <p>Silahkan pilih layanan yang anda inginkan</p>
+                    <h4 style="font-size: clamp(1.2rem, 2.5vw, 1.6rem);">Selamat datang di Web Reservasi Aula dan Kunjungan Perpustakaan</h4>
+                    <p style="font-size: clamp(0.8rem, 2vw, 1rem);">Silahkan pilih layanan yang anda inginkan</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-info-circle"></i>
@@ -91,15 +91,13 @@
     @endforeach
 @endif
 
-
-
 <div class="row">
   <!-- Reservasi Aula -->
-  <div class="col-lg-6 col-6">
+  <div class="col-lg-6 col-md-12 mb-4">
     <a href="{{ route('user.reservasi') }}" style="text-decoration: none;">
-      <div class="small-box" 
-        style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;" 
-        onmouseover="this.querySelector('.desc').style.opacity='1'" 
+      <div class="small-box"
+        style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;"
+        onmouseover="this.querySelector('.desc').style.opacity='1'"
         onmouseout="this.querySelector('.desc').style.opacity='0'">
         
         <div class="bg-image" style="background: url('{{ asset('dist/img/reservasi.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
@@ -107,9 +105,9 @@
         <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1;"></div>
         
         <div class="inner text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; color: #fff; width: 90%;">
-          <h4 style="margin-bottom: 10px;">Reservasi Aula</h4>
+          <h4 style="margin-bottom: 10px; font-size: clamp(1.6rem, 2.0vw, 2.0rem);">Reservasi Aula</h4>
           <p class="desc" style="font-size: 14px; margin: 0; opacity: 0; transition: opacity 0.5s ease;">
-            Ajukan pemesanan aula untuk kegiatanmu di sini!
+            Ajukan pemesanan aula untuk kegiatan anda di sini!
           </p>
         </div>
       </div>
@@ -117,11 +115,11 @@
   </div>
 
   <!-- Kunjungan Perpustakaan -->
-  <div class="col-lg-6 col-6">
+  <div class="col-lg-6 col-md-12 mb-4">
     <a href="{{ route('user.kunjungan') }}" style="text-decoration: none;">
-      <div class="small-box" 
-        style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;" 
-        onmouseover="this.querySelector('.desc').style.opacity='1'" 
+      <div class="small-box"
+        style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;"
+        onmouseover="this.querySelector('.desc').style.opacity='1'"
         onmouseout="this.querySelector('.desc').style.opacity='0'">
         
         <div class="bg-image" style="background: url('{{ asset('dist/img/kunjungan.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
@@ -129,38 +127,15 @@
         <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1;"></div>
         
         <div class="inner text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; color: #fff; width: 90%;">
-          <h4 style="margin-bottom: 10px;">Kunjungan Perpustakaan</h4>
+          <h4 style="margin-bottom: 10px; font-size: clamp(1.6rem, 2.0vw, 2.0rem);">Kunjungan Perpustakaan</h4>
           <p class="desc" style="font-size: 14px; margin: 0; opacity: 0; transition: opacity 0.5s ease;">
-            Laporkan kunjunganmu ke perpustakaan dengan mudah!
+            Buat jadwal kunjungan perpustakaan lebih mudah!
           </p>
         </div>
       </div>
     </a>
   </div>
 </div>
-
-
-<!-- <div class="row">
-  <div class="colmd-12">
-    <div class="card card-danger">
-      <div class="card-header">
-        <h3 class="card-title">Petunjuk Penggunaan</h3>
-      </div>
-      <div class="card-body">
-        Berikut merupakan tata cara pembuatan ajuan layanan pada perpustakaan :<br><br>
-        <ol>
-          <li>Pengunjung melakukan registrasi terlebih dahulu pada halaman register.</li>
-          <li>Setelah melakukan registrasi dan berhasil masuk ke halaman web, akan tampil 2 layanan pilihan seperti yang tertera di atas, yaitu reservasi aula, dan kunjungan perpustakaan.</li>
-          <li>Ketika masuk ke salah satu halaman layanan, sistem web akan menunjukkan sebuah form yang harus diisi oleh user, salah satunya seperti tanggal ajuan, form tersebut tentunya berkaitan dengan data yang ingin diajukan.</li>
-          <li>User juga dapat melihat jadwal yang tersedia pada halaman form tersebut.</li>
-          <li>User tidak dapat membuat ajuan pada waktu yang sama dengan user lainnya, jika hal tersebut terjadi, maka sistem web akan memberikan notifikasi untuk memberitahukan hal tersebut.</li>
-          <li>Setelah membuat ajuan, akan muncul status bar pada halaman atas yang menampilkan status ajuan yang telah dibuat oleh user, merah berarti sedang diproses, kuning berarti reschedule, dan biru berarti ajuan tersebut telah diterima.</li>
-          <li>User dapat mengubah data yang telah diajukan, tidak ada batasan tertentu terkait hal tersebut.</li>
-        </ol>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <div class="card bg-gradient-primary" style="display: none;">
   <div class="card-header border-0">

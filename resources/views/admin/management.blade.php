@@ -21,7 +21,7 @@
 
 
 @section('content')
-<div class="container mt-4">
+<div class="container mt-3">
 
     @if (session('success'))
         <div class="alert alert-primary">{{ session('success') }}</div>
@@ -37,71 +37,74 @@
         </div>
     @endif
 
-{{-- Form Tambah Staff --}}
-<form action="{{ route('admin.management.store') }}" method="POST" class="mb-4" autocomplete="off">
-    @csrf
-    <div class="row">
-        <!-- Nama -->
-        <div class="col-md-3">
-            <input type="text" name="name" class="form-control" placeholder="Nama"
-                value="{{ old('name') }}" required autofocus
-                pattern="[A-Za-z\s]+"
-                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
-                oninput="this.setCustomValidity('')" autocomplete="off">
-        </div>
+    {{-- Form Tambah Staff --}}
+    <form action="{{ route('admin.management.store') }}" method="POST" class="mb-4" autocomplete="off">
+        @csrf
+        <div class="row g-3">
+            <!-- Nama -->
+            <div class="col-12 col-sm-6 col-md-3 mb-1 mb-md-0">
+                <input type="text" name="name" class="form-control" placeholder="Nama"
+                    value="{{ old('name') }}" required autofocus
+                    pattern="[A-Za-z\s]+"
+                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
+                    oninput="this.setCustomValidity('')" autocomplete="off">
+            </div>
 
-        <!-- Email -->
-        <div class="col-md-3">
-            <input type="email" name="email" class="form-control" placeholder="Email"
-                value="{{ old('email') }}" required
-                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
-                oninput="this.setCustomValidity('')" autocomplete="off">
-        </div>
+            <!-- Email -->
+            <div class="col-12 col-sm-6 col-md-3 mb-1 mb-md-0">
+                <input type="email" name="email" class="form-control" placeholder="Email"
+                    value="{{ old('email') }}" required
+                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                    oninput="this.setCustomValidity('')" autocomplete="off">
+            </div>
 
-        <!-- Password -->
-        <div class="col-md-3">
-            <input type="password" name="password" class="form-control" placeholder="Password"
-                required minlength="8"
-                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
-                oninput="this.setCustomValidity('')" autocomplete="new-password">
+            <!-- Password -->
+            <div class="col-12 col-sm-6 col-md-3 mb-1 mb-md-0">
+                <input type="password" name="password" class="form-control" placeholder="Password"
+                    required minlength="8"
+                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
+                    oninput="this.setCustomValidity('')" autocomplete="new-password">
+            </div>
+            <br><br>
+            <!-- Tombol -->
+            <div class="col-12 col-sm-6 col-md-3 d-grid">
+                <button type="submit" class="btn btn-primary w-100">Tambah Staff</button>
+            </div>
         </div>
+    </form>
 
-        <!-- Tombol -->
-        <div class="col-md-3">
-            <button type="submit" class="btn btn-primary w-100">Tambah Staff</button>
-        </div>
+    <!-- Tabel Staff (scrollable di mobile) -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Dibuat Pada</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($staffs as $staff)
+                <tr>
+                    <td>{{ $staff->name }}</td>
+                    <td>{{ $staff->email }}</td>
+                    <td>{{ $staff->created_at->format('d-m-Y') }}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm w-100" onclick="confirmDelete({{ $staff->id }})">Hapus</button>
+                        <form id="delete-form-{{ $staff->id }}" action="{{ route('admin.management.delete', $staff->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
-</form>
-
-    <!-- Tabel Staff -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Dibuat Pada</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($staffs as $staff)
-            <tr>
-                <td>{{ $staff->name }}</td>
-                <td>{{ $staff->email }}</td>
-                <td>{{ $staff->created_at->format('d-m-Y') }}</td>
-                <td>
-                <button type="button" class="btn btn-danger btn-sm w-100" onclick="confirmDelete({{ $staff->id }})">Hapus</button>
-                    <form id="delete-form-{{ $staff->id }}" action="{{ route('admin.management.delete', $staff->id) }}" method="POST" style="display: none;">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
 </div>
 @endsection
+
 
 @section('js')
 <script>

@@ -37,7 +37,6 @@
     </select>
   </div>
 </form>
-
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
             <tr>

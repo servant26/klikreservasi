@@ -22,7 +22,7 @@
 @section('content')
 <!-- Small boxes (Stat box) -->
 <div class="row">
-  <div class="col-lg-4 col-6">
+  <div class="col-lg-4 col-md-4 col-12">
     <!-- Bounce Rate -->
     <div class="small-box bg-danger">
       <div class="inner">
@@ -36,7 +36,7 @@
     </div>
   </div>
   <!-- Column 1: New Orders and Bounce Rate -->
-  <div class="col-lg-4 col-6">
+  <div class="col-lg-4 col-md-4 col-12">
     <!-- Bounce Rate -->
     <div class="small-box bg-danger">
       <div class="inner">
@@ -49,7 +49,7 @@
       <a href="{{ route('staff.kunjungan') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
   </div>
-  <div class="col-lg-4 col-6">
+  <div class="col-lg-4 col-md-4 col-12">
     <div class="small-box bg-warning mb-3">
       <div class="inner">
         <h3>{{ $reschedule }}</h3>

@@ -39,6 +39,15 @@
         border-left: 5px solid #dc3545; /* Danger (red) */
         padding-left: 25px;
     }
+    @media (max-width: 767px) {
+      .small-box .inner h3 {
+        font-size: 2.5rem; /* atau ukuran yang kamu mau, default biasanya sekitar 2rem */
+      }
+
+      .small-box .inner p {
+        font-size: 1.1rem; /* sesuaikan juga paragrafnya */
+      }
+    }
   </style>
 </head>
 <body class="hold-transition light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -261,7 +270,8 @@ function confirmStatusChange(url) {
 
   $(function () {
     $("#example1").DataTable({
-      "responsive": true,
+      "responsive": false,    // Nonaktifkan responsive bawaannya
+      "scrollX": true,        // Aktifkan scroll horizontal
       "lengthChange": false,
       "autoWidth": false,
       "pageLength": 5
