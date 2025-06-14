@@ -41,8 +41,8 @@
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
             <tr>
-              <th style="width: 2%;">No.</th>
-              <th style="width: 10%;">Identitas</th>
+              <th style="width: 5%;">No.</th>
+              <th style="width: 15%;">Identitas</th>
               <th style="width: 20%;">Jadwal</th>
               <th style="width: 10%;">Jumlah Orang</th>
               <th style="width: 20%;">Asal Instansi</th>
@@ -70,7 +70,7 @@
                               href="javascript:void(0);" 
                               onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
                               role="button">
-                              Sudah ditanggapi
+                              Telah ditanggapi
                           </a>
                       @elseif($a->status == 1 || $a->status == 3)
                           {{-- Belum ditanggapi atau Reschedule → Tautkan ke halaman balas --}}
@@ -80,7 +80,7 @@
                               @endif btn-block" 
                               href="{{ route('staff.balasForm', $a->id) }}" 
                               role="button">
-                              @if($a->status == 1) Belum ditanggapi @elseif($a->status == 3) Reschedule @endif
+                              @if($a->status == 1) Menunggu balasan @elseif($a->status == 3) Reschedule @endif
                           </a>
                       @endif
                   </div>
