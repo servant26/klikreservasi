@@ -15,10 +15,11 @@ class UserController extends Controller
     public function index()
     {
         $ajuan = Ajuan::with('user') // relasi ke tabel users
+                    ->where('user_id', Auth::id()) // hanya ajuan milik user yang login
                     ->whereDate('tanggal', '>=', Carbon::today()) // filter tanggal hari ini dan seterusnya
                     ->orderBy('tanggal', 'asc') // urutkan berdasarkan tanggal
                     ->get();
-        
+
         return view('user.dashboard', compact('ajuan'));
     }   
       

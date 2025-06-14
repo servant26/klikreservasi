@@ -8,6 +8,14 @@
   .small-box:hover .bg-image {
     transform: scale(1.1);
     }
+  @media (max-width: 576px) {
+    .btn-container > .btn,
+    .btn-container .btn-group > .btn {
+      padding: 0.25rem 0.4rem !important;
+      font-size: 0.7rem !important;
+      line-height: 1 !important;
+    }
+  }
   </style>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
@@ -170,6 +178,7 @@
 <!-- jQuery -->
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Section untuk JS khusus tiap halaman -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

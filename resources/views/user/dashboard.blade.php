@@ -65,7 +65,8 @@
                                     Mohon tunggu, perubahan jadwal anda sedang diproses.
                                 @endif
                             </p>
-                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm" style="margin-right: 6px;">
+                          <div class="btn-container" style="display: flex; gap: 6px;">
+                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm">
                                 Ubah Data Ajuan
                             </a>
                           <!-- Form Cancel (hidden) -->
@@ -78,6 +79,28 @@
                           <button type="button" class="btn btn-dark btn-sm" onclick="confirmDelete({{ $a->id }})">
                               Batalkan Ajuan
                           </button>
+                          @if($a->surat_balasan)
+                              <div class="btn-group">
+                                  <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Surat Balasan
+                                  </button>
+                                  <ul class="dropdown-menu">
+                                      <li>
+                                          <a class="dropdown-item" href="{{ url($a->surat_balasan) }}" target="_blank">
+                                              Lihat Surat Balasan
+                                          </a>
+                                      </li>
+                                      <li>
+                                          <a class="dropdown-item" href="{{ url($a->surat_balasan) }}" download>
+                                              Download Surat Balasan
+                                          </a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          @else
+                              <span class="text-muted">Belum ada balasan</span>
+                          @endif
+                          </div>
                         </div>
                         <div class="icon">
                             <i class="fas 
