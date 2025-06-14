@@ -127,7 +127,7 @@
                       request()->routeIs('staff.reservasi') || 
                       request()->routeIs('staff.kunjungan') || 
                       request()->routeIs('staff.reschedule') ||
-                      request()->routeIs('staff.balasAjuan')
+                      request()->routeIs('staff.balasForm')
                       ? 'active' : '' 
                   }}">
                   <i class="nav-icon fa fa-home"></i>

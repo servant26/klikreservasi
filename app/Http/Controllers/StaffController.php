@@ -127,7 +127,12 @@ public function submitBalasan(Request $request, $id)
 
     // Validasi file jika diupload
     $validated = $request->validate([
-        'surat_balasan' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        'surat_balasan' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ], [
+        'surat_balasan.required' => 'Surat balasan wajib diupload.',
+        'surat_balasan.image' => 'File harus berupa gambar.',
+        'surat_balasan.mimes' => 'File harus berupa format jpg, jpeg, atau png.',
+        'surat_balasan.max' => 'File maksimal berukuran 2048KB.',
     ]);
 
     $updateData = [

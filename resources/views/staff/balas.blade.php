@@ -77,6 +77,11 @@
         <div class="form-group">
             <label>Upload Surat Balasan :</label>
             <input type="file" name="surat_balasan" class="form-control-file" accept="image/*">
+            @if ($errors->has('surat_balasan'))
+                <div class="text-danger mt-1">
+                    {{ $errors->first('surat_balasan') }}
+                </div>
+            @endif
         </div>
 
         {{-- Tombol Aksi --}}

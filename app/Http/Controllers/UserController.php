@@ -62,8 +62,13 @@ class UserController extends Controller
             'tanggal' => 'required|string',
             'jam' => 'required|string',
             'jenis' => 'required|in:1,2',
-            'surat' => 'required|file|mimes:jpg|max:2048', // Wajib sekarang
-            'deskripsi' => 'required|string',              // Wajib sekarang
+            'surat' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
+            'deskripsi' => 'required|string',
+        ], [
+            'surat.required' => 'File surat wajib diupload.',
+            'surat.file' => 'File surat harus berupa file yang valid.',
+            'surat.mimes' => 'File surat harus berupa gambar berformat JPG,JPEG,PNG.',
+            'surat.max' => 'Ukuran file surat maksimal 2048 KB.',
         ]);
     
         if ($validator->fails()) {
@@ -158,8 +163,15 @@ class UserController extends Controller
             'jam' => 'required|date_format:H:i',
             'jenis' => 'required|in:1,2',
             'deskripsi' => 'required|string|max:500',
-            'surat' => 'nullable|file|mimes:jpg,jpeg|max:2048', // TIDAK wajib
-        ]);
+            'surat' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048', // TIDAK wajib
+        ],
+[
+            'surat.file' => 'File surat harus berupa file yang valid.',
+            'surat.image' => 'File surat harus berupa gambar.',
+            'surat.mimes' => 'File surat harus berupa gambar berformat JPG, JPEG, atau PNG.',
+            'surat.max' => 'Ukuran file surat maksimal 2048 KB.',
+        ]
+    );
     
         $jumlahOrang = (int) $request->jumlah_orang;
         $jenis = (int) $request->jenis;

@@ -79,7 +79,7 @@
                           <button type="button" class="btn btn-dark btn-sm" onclick="confirmDelete({{ $a->id }})">
                               Batalkan Ajuan
                           </button>
-                          @if($a->surat_balasan)
+                          @if($a->status == 2)
                               <div class="btn-group">
                                   <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                       Surat Balasan
@@ -97,8 +97,6 @@
                                       </li>
                                   </ul>
                               </div>
-                          @else
-                              <span class="text-muted">Belum ada balasan</span>
                           @endif
                           </div>
                         </div>
