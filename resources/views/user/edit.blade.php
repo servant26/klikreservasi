@@ -92,19 +92,6 @@
         </div>
 
         <div class="form-group">
-            <label>Jenis Ajuan</label>
-            <select name="jenis" class="form-control @error('jenis') is-invalid @enderror" required>
-                <option value="1" {{ old('jenis', $ajuan->jenis) == 1 ? 'selected' : '' }}>Reservasi Aula</option>
-                <option value="2" {{ old('jenis', $ajuan->jenis) == 2 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
-            </select>
-            @error('jenis')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-
-        <div class="form-group">
             <label>Deskripsi</label>
             <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
             @error('deskripsi')

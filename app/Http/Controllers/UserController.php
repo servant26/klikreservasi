@@ -107,9 +107,29 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Jumat hanya antara 08:00 - 15:00'])->withInput();
         }
     
-        $exists = Ajuan::where('tanggal', $tanggal)->where('jam', $jam)->exists();
-        if ($exists) {
-            return redirect()->back()->withErrors(['jam' => 'Sudah ada ajuan di tanggal dan jam tersebut'])->withInput();
+        if ($jenis === 1) {
+            $existsDate = Ajuan::where('tanggal', $tanggal)
+                            ->where('jenis', 1)
+                            ->exists();
+
+            if ($existsDate) {
+                return redirect()->back()->withErrors([
+                    'tanggal' => 'Sudah ada reservasi di tanggal tersebut (lihat jadwal di atas).'
+                ])->withInput();
+            }
+        }
+
+        if ($jenis === 2) {
+            $kunjunganCount = Ajuan::where('tanggal', $tanggal)
+                                ->where('jam', $jam)
+                                ->where('jenis', 2)
+                                ->count();
+
+            if ($kunjunganCount >= 5) {
+                return redirect()->back()->withErrors([
+                    'jam' => 'Kuota kunjungan perpustakaan pada jam tersebut sudah penuh, silahkan ajukan pada jam lain.'
+                ])->withInput();
+            }
         }
     
         $fileName = null;
@@ -214,15 +234,35 @@ class UserController extends Controller
             }
         }
     
-        $existing = DB::table('ajuan')
-            ->where('tanggal', $tanggalInput->format('Y-m-d'))
-            ->where('jam', $jamInput)
-            ->where('id', '!=', $id)
-            ->first();
-    
-        if ($existing) {
-            return back()->withErrors(['tanggal' => 'Sudah ada reservasi pada tanggal dan jam itu.'])->withInput();
+        if ($jenis === 1) {
+            $existingDate = DB::table('ajuan')
+                ->where('tanggal', $tanggalInput->format('Y-m-d'))
+                ->where('jenis', 1)
+                ->where('id', '!=', $id)
+                ->first();
+
+            if ($existingDate) {
+                return back()->withErrors([
+                    'tanggal' => 'Sudah ada reservasi di tanggal tersebut (lihat jadwal di atas).'
+                ])->withInput();
+            }
         }
+
+        if ($jenis === 2) {
+            $kunjunganCount = DB::table('ajuan')
+                ->where('tanggal', $tanggalInput->format('Y-m-d'))
+                ->where('jam', $jamInput)
+                ->where('jenis', 2)
+                ->where('id', '!=', $id)
+                ->count();
+
+            if ($kunjunganCount >= 5) {
+                return back()->withErrors([
+                    'jam' => 'Kuota kunjungan perpustakaan pada jam tersebut sudah penuh, silahkan ajukan pada jam lain.'
+                ])->withInput();
+            }
+        }
+
     
         $dataToUpdate = [
             'jumlah_orang' => $jumlahOrang,
