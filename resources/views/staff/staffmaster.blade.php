@@ -258,7 +258,7 @@ function confirmStatusChange(url) {
         showCancelButton: true,
         confirmButtonText: 'Ya, ubah status!',
         cancelButtonText: 'Batal',
-        confirmButtonColor: '#007bff',
+        confirmButtonColor: '#d33',
         cancelButtonColor: '#6c757d',
         reverseButtons: true
     }).then((result) => {

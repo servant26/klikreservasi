@@ -76,7 +76,7 @@
         {{-- Upload Surat Balasan --}}
         <div class="form-group">
             <label>Upload Surat Balasan :</label>
-            <input type="file" name="surat_balasan" class="form-control-file">
+            <input type="file" name="surat_balasan" class="form-control-file" accept="image/*">
         </div>
 
         {{-- Tombol Aksi --}}

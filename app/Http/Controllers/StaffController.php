@@ -64,30 +64,44 @@ class StaffController extends Controller
     }
     
 
-    public function updateStatus($id)
-    {
-        $ajuan = DB::table('ajuan')->where('id', $id)->first();
+public function updateStatus($id)
+{
+    $ajuan = DB::table('ajuan')->where('id', $id)->first();
 
-        if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
+    if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
 
-        if ($ajuan->status != 2) {
-            return redirect()->back()->with('error', 'Hanya ajuan yang sudah ditanggapi yang bisa dibatalkan!');
-        }
-
-        $updated = DB::table('ajuan')->where('id', $id)->update(['status' => 1]);
-
-        if ($updated) {
-            AktivitasStaff::create([
-                'ajuan_id' => $id,
-                'status_lama' => 2,
-                'status_baru' => 1,
-            ]);
-
-            return redirect()->back()->with('success', 'Status berhasil dibatalkan!');
-        }
-
-        return redirect()->back()->with('error', 'Gagal mengubah status!');
+    if ($ajuan->status != 2) {
+        return redirect()->back()->with('error', 'Hanya ajuan yang sudah ditanggapi yang bisa dibatalkan!');
     }
+
+    // Hapus file surat_balasan jika ada
+    if ($ajuan->surat_balasan) {
+        $filePath = public_path($ajuan->surat_balasan);
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+    }
+
+    // Update status dan kosongkan kolom surat_balasan
+    $updated = DB::table('ajuan')->where('id', $id)->update([
+        'status' => 1,
+        'surat_balasan' => null,
+        'updated_at' => now(),
+    ]);
+
+    if ($updated) {
+        AktivitasStaff::create([
+            'ajuan_id' => $id,
+            'status_lama' => 2,
+            'status_baru' => 1,
+        ]);
+
+        return redirect()->back()->with('success', 'Status berhasil dibatalkan dan surat balasan dihapus!');
+    }
+
+    return redirect()->back()->with('error', 'Gagal mengubah status!');
+}
+
 
 
     public function showBalasForm($id)
@@ -105,38 +119,40 @@ class StaffController extends Controller
         return view('staff.balas', compact('ajuan'));
     }
 
-    public function submitBalasan(Request $request, $id)
-    {
-        $ajuan = DB::table('ajuan')->where('id', $id)->first();
+public function submitBalasan(Request $request, $id)
+{
+    $ajuan = DB::table('ajuan')->where('id', $id)->first();
 
-        if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
+    if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
 
-        // Validasi file jika diupload
-        $validated = $request->validate([
-            'surat_balasan' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        ]);
+    // Validasi file jika diupload
+    $validated = $request->validate([
+        'surat_balasan' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    ]);
 
-        $updateData = [
-            'status' => 2, // ubah status jadi 2
-            'updated_at' => now(),
-        ];
+    $updateData = [
+        'status' => 2, // ubah status jadi 2
+        'updated_at' => now(),
+    ];
 
-        if ($request->hasFile('surat_balasan')) {
-            $path = $request->file('surat_balasan')->store('surat_balasan', 'public');
-            $updateData['surat_balasan'] = $path;
-        }
-
-        DB::table('ajuan')->where('id', $id)->update($updateData);
-
-        // Simpan aktivitas (optional)
-        \App\Models\AktivitasStaff::create([
-            'ajuan_id' => $id,
-            'status_lama' => $ajuan->status,
-            'status_baru' => 2,
-        ]);
-
-        return redirect()->route('staff.dashboard')->with('success', 'Balasan berhasil dikirim dan status diubah.');
+    if ($request->hasFile('surat_balasan')) {
+        $filename = time() . '_' . $request->file('surat_balasan')->getClientOriginalName();
+        $request->file('surat_balasan')->move(public_path('uploads/surat'), $filename);
+        $updateData['surat_balasan'] = 'uploads/surat/' . $filename;
     }
+
+    DB::table('ajuan')->where('id', $id)->update($updateData);
+
+    // Simpan aktivitas (optional)
+    \App\Models\AktivitasStaff::create([
+        'ajuan_id' => $id,
+        'status_lama' => $ajuan->status,
+        'status_baru' => 2,
+    ]);
+
+    return redirect()->route('staff.dashboard')->with('success', 'Balasan berhasil dikirim dan status diubah.');
+}
+
 
 
 

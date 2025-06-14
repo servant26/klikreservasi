@@ -79,16 +79,17 @@
         </select>
     </div>
 </form>
+<div class="table-responsive-wrapper" style="overflow-x: auto;">
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                  <th style="width: 5%;">No.</th>
-                  <th style="width: 10%;">Identitas</th>
-                  <th style="width: 15%;">Jadwal</th>
-                  <th style="width: 10%;">Asal Instansi</th>
-                  <th style="width: 10%;">Jenis</th>
-                  <th style="width: 15%;">Status</th>
-                  <th style="width: 10%;">Surat</th>
+                  <th style="min-width: 1px;">No.</th>
+                  <th style="min-width: 10px;">Identitas</th>
+                  <th style="min-width: 120px;">Jadwal</th>
+                  <th style="min-width: 80px;">Asal Instansi</th>
+                  <th style="min-width: 30px;">Jenis</th>
+                  <th style="min-width: 150px;">Status</th>
+                  <th style="min-width: 50px;">Surat</th>
                     <!-- <th style="width: 8%;">Edit</th> -->
                 </tr>
             </thead>
@@ -158,6 +159,7 @@
             @endforeach  
             </tbody>
         </table>
+</div>
     </div>
     <!-- /.card-body -->
 </div>
