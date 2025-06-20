@@ -313,6 +313,37 @@ function confirmStatusChange(url) {
         }
     });
 }
+
+function showSuratModal(suratUrl) {
+    Swal.fire({
+        title: '📄 Detail Surat',
+        text: 'Pilih tindakan:',
+        icon: 'info',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonText: 'Download Surat', // kanan
+        denyButtonText: 'Lihat Surat',       // tengah
+        cancelButtonText: 'Kembali',         // kiri
+        reverseButtons: true, // biar urutannya sesuai visual: kiri-tengah-kanan
+        confirmButtonColor: '#0d6efd', // biru
+        denyButtonColor: '#0d6efd',    // biru
+        cancelButtonColor: '#dc3545'   // merah
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Download Surat
+            const link = document.createElement('a');
+            link.href = suratUrl;
+            link.setAttribute('download', '');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else if (result.isDenied) {
+            // Lihat Surat
+            window.open(suratUrl, '_blank');
+        }
+        // Cancel (Kembali) tidak perlu dihandle karena cuma nutup modal
+    });
+}
 </script>
 
 </body>

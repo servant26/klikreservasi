@@ -12,7 +12,7 @@ class StaffController extends Controller
     // Display the staff dashboard
     public function index(Request $request)
     {
-        $filter = $request->input('filter', 'bulan');
+        $filter = $request->input('filter', 'menunggu');
         $query = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
             ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal');
@@ -20,6 +20,12 @@ class StaffController extends Controller
         $now = now();
     
         switch ($filter) {
+            case 'menunggu':
+                $query->whereIn('ajuan.status', [1, 3]);
+                break;
+            case 'ditanggapi':
+                $query->where('ajuan.status', 2);
+                break;
             case 'hari':
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;

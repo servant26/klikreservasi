@@ -32,7 +32,7 @@
       <div class="icon">
         <i class="fas fa-building"></i>
       </div>
-      <a href="{{ route('staff.reservasi') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="#" class="small-box-footer"><p></p></a>
     </div>
   </div>
   <!-- Column 1: New Orders and Bounce Rate -->
@@ -46,7 +46,7 @@
       <div class="icon">
         <i class="fas fa-book"></i>
       </div>
-      <a href="{{ route('staff.kunjungan') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="#" class="small-box-footer"><p></p></a>
     </div>
   </div>
   <div class="col-lg-4 col-md-4 col-12">
@@ -58,7 +58,7 @@
       <div class="icon">
         <i class="fas fa-sync"></i>
       </div>
-      <a href="{{ route('staff.reschedule') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      <a href="#" class="small-box-footer"><p></p></a>
     </div>
   </div>
 </div>
@@ -68,14 +68,16 @@
     <div class="card-body">
     <form method="GET" class="mb-3">
     <div class="form-group">
-    <label for="filter">Filter Waktu:</label>
+    <label for="filter">Filter Ajuan:</label>
         <select name="filter" id="filter" class="form-control w-100" onchange="this.form.submit()">
-            <option value="hari" {{ request('filter', 'bulan') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
-            <option value="minggu" {{ request('filter', 'bulan') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
-            <option value="bulan" {{ request('filter', 'bulan') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
-            <option value="semester" {{ request('filter', 'bulan') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
-            <option value="tahun" {{ request('filter', 'bulan') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
-            <option value="semua" {{ request('filter', 'bulan') == 'semua' ? 'selected' : '' }}>Semua</option>
+            <option value="menunggu" {{ request('filter', 'menunggu') == 'menunggu' ? 'selected' : '' }}>Menunggu Respon</option>
+            <option value="ditanggapi" {{ request('filter', 'menunggu') == 'ditanggapi' ? 'selected' : '' }}>Telah Ditanggapi</option>
+            <option value="hari" {{ request('filter', 'menunggu') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
+            <option value="minggu" {{ request('filter', 'menunggu') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
+            <option value="bulan" {{ request('filter', 'menunggu') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
+            <option value="semester" {{ request('filter', 'menunggu') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
+            <option value="tahun" {{ request('filter', 'menunggu') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
+            <option value="semua" {{ request('filter', 'menunggu') == 'semua' ? 'selected' : '' }}>Semua</option>
         </select>
     </div>
 </form>
@@ -128,33 +130,19 @@
                               @endif btn-block" 
                               href="{{ route('staff.balasForm', $a->id) }}" 
                               role="button">
-                              @if($a->status == 1) Menunggu balasan @elseif($a->status == 3) Reschedule @endif
+                              @if($a->status == 1) Menunggu Respon @elseif($a->status == 3) Reschedule @endif
                           </a>
                       @endif
                   </div>
                 </td>
                 <td class="text-center">
-                    @if($a->surat)
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Detail
-                            </button>
-                            <ul class="dropdown-menu w-100">
-                                <li>
-                                    <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" target="_blank">
-                                        Lihat Surat
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" download>
-                                        Download Surat
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    @else
-                        <span class="text-muted">Tidak ada surat</span>
-                    @endif
+                  @if($a->surat)
+                      <button onclick="showSuratModal('{{ url('uploads/surat/' . $a->surat) }}')" class="btn btn-secondary w-100">
+                          Detail
+                      </button>
+                  @else
+                      <span class="text-muted">Tidak ada surat</span>
+                  @endif
                 </td>
             @endforeach  
             </tbody>

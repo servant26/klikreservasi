@@ -66,66 +66,88 @@
         </div>
 <div class="container">
     <div class="mx-1">
-    <form action="{{ route('user.update', $ajuan->id) }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="form-group">
-            <label>Atas Nama</label>
-            <input type="text" class="form-control" value="{{ $ajuan->name }}" readonly>
-        </div>
+<form action="{{ route('user.update', $ajuan->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    
+    <div class="form-group">
+        <label>Atas Nama</label>
+        <input type="text" class="form-control" value="{{ $ajuan->name }}" readonly>
+    </div>
 
-        <div class="form-group">
-            <label>Tanggal</label>
-            <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" required value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
-            @error('tanggal')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+    <!-- Hidden atau Select untuk jenis -->
+    <input type="hidden" name="jenis" value="{{ old('jenis', $ajuan->jenis) }}">
+    {{-- Jika ingin user bisa ubah jenis, gunakan select: --}}
+    {{-- 
+    <div class="form-group">
+        <label>Jenis</label>
+        <select name="jenis" class="form-control @error('jenis') is-invalid @enderror" required>
+            <option value="1" {{ old('jenis', $ajuan->jenis) == 1 ? 'selected' : '' }}>Reservasi Aula</option>
+            <option value="2" {{ old('jenis', $ajuan->jenis) == 2 ? 'selected' : '' }}>Kunjungan Perpustakaan</option>
+        </select>
+        @error('jenis')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    --}}
 
-        <div class="form-group">
-            <label>Jam</label>
-            <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" required value="{{ old('jam', \Carbon\Carbon::parse($ajuan->jam)->format('H:i')) }}">
-            @error('jam')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
+    <div class="form-group">
+        <label>Tanggal</label>
+        <input type="text" id="tanggal" name="tanggal"
+            class="form-control @error('tanggal') is-invalid @enderror"
+            required
+            value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
+        @error('tanggal')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
 
-        <div class="form-group">
-            <label>Deskripsi</label>
-            <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
-            @error('deskripsi')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+    <div class="form-group">
+        <label>Jam</label>
+        <input type="time" name="jam"
+            class="form-control @error('jam') is-invalid @enderror"
+            required
+            value="{{ old('jam', \Carbon\Carbon::parse($ajuan->jam)->format('H:i')) }}">
+        @error('jam')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
 
-        <div class="form-group">
-            <label>Jumlah Orang</label>
-            <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" required value="{{ old('jumlah_orang', $ajuan->jumlah_orang) }}">
-            @error('jumlah_orang')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
+    <div class="form-group">
+        <label>Deskripsi</label>
+        <textarea name="deskripsi"
+            class="form-control @error('deskripsi') is-invalid @enderror"
+            required>{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
+        @error('deskripsi')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
 
-        <div class="form-group">
-            <label>Upload Surat (JPG)</label>
-            <input type="file" name="surat" accept=".jpg,.jpeg" class="form-control @error('surat') is-invalid @enderror">
-            
-            <!-- Tampilkan keterangan surat lama jika ada -->
-            @if($ajuan->surat)
-                <p>Telah diunggah : {{ $ajuan->surat }}</p>
-            @endif
-            
-            @error('surat')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+    <div class="form-group">
+        <label>Jumlah Orang</label>
+        <input type="number" name="jumlah_orang"
+            class="form-control @error('jumlah_orang') is-invalid @enderror"
+            required
+            value="{{ old('jumlah_orang', $ajuan->jumlah_orang) }}">
+        @error('jumlah_orang')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
 
-          <a href="{{ route('user.dashboard') }}" class="btn btn-danger">Back</a>
-          <button type="submit" class="btn btn-primary">Update</button>
-    </form>
+    <div class="form-group">
+        <label>Upload Surat (JPG/JPEG/PNG)</label>
+        <input type="file" name="surat" accept=".jpg,.jpeg,.png"
+            class="form-control @error('surat') is-invalid @enderror">
+        @if($ajuan->surat)
+            <p>Telah diunggah: <strong>{{ $ajuan->surat }}</strong></p>
+        @endif
+        @error('surat')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <a href="{{ route('user.dashboard') }}" class="btn btn-danger">Back</a>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
     <br><br>
     </div>
 </div>
