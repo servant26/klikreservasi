@@ -115,20 +115,19 @@
                 <td class="text-center">
                   <div class="d-grid gap-2">
                       @if($a->status == 2)
-                          {{-- Sudah ditanggapi → Bisa dibatalkan --}}
-                          <a class="btn btn-primary btn-block" 
-                              href="javascript:void(0);" 
-                              onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
+                          <a class="btn btn-primary btn-block"
+                              href="javascript:void(0);"
+                              onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}', '{{ route('staff.updateStatus', $a->id) }}')"
                               role="button">
                               Telah ditanggapi
                           </a>
                       @elseif($a->status == 1 || $a->status == 3)
-                          {{-- Belum ditanggapi atau Reschedule → Tautkan ke halaman balas --}}
-                          <a class="btn 
-                              @if($a->status == 1) btn-danger 
-                              @elseif($a->status == 3) btn-warning 
-                              @endif btn-block" 
-                              href="{{ route('staff.balasForm', $a->id) }}" 
+                          <a class="btn
+                              @if($a->status == 1) btn-danger
+                              @elseif($a->status == 3) btn-warning
+                              @endif btn-block"
+                              href="javascript:void(0);"
+                              onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}')"
                               role="button">
                               @if($a->status == 1) Menunggu Respon @elseif($a->status == 3) Reschedule @endif
                           </a>

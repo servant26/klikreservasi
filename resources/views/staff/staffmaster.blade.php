@@ -344,6 +344,78 @@ function showSuratModal(suratUrl) {
         // Cancel (Kembali) tidak perlu dihandle karena cuma nutup modal
     });
 }
+
+function normalizeWhatsapp(raw) {
+    let wa = raw.replace(/\D/g, '');
+    if (wa.startsWith('0')) {
+        return '62' + wa.slice(1);
+    } else if (wa.startsWith('8')) {
+        return '62' + wa;
+    } else if (!wa.startsWith('62')) {
+        return '62' + wa;
+    }
+    return wa;
+}
+
+function normalizeWhatsapp(raw) {
+    let wa = raw.replace(/\D/g, '');
+    if (wa.startsWith('0')) {
+        return '62' + wa.slice(1);
+    } else if (wa.startsWith('8')) {
+        return '62' + wa;
+    } else if (!wa.startsWith('62')) {
+        return '62' + wa;
+    }
+    return wa;
+}
+
+function handleStatusAction(status, nama, whatsapp, urlUpdate = '') {
+    let wa = normalizeWhatsapp(whatsapp);
+    let linkWA = `https://wa.me/${wa}`;
+
+    if (status == 2) {
+        // Kalau status "Telah Ditanggapi"
+        Swal.fire({
+            title: 'Batalkan Penerimaan?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Batalkan',
+            cancelButtonText: 'Kembali',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.open(linkWA, '_blank'); // Buka WhatsApp dulu
+                setTimeout(() => {
+                    window.location.href = urlUpdate; // Arahkan ke route update setelah 500ms
+                }, 500);
+            }
+        });
+        return;
+    }
+
+    // Kalau status 1 atau 3
+    let btnText = status == 1 ? ['Terima Ajuan', 'Tolak Ajuan'] : ['Terima Reschedule', 'Tolak Reschedule'];
+
+    Swal.fire({
+        title: `Pilih opsi yang diinginkan :`,
+        icon: 'question',
+        showCancelButton: true,
+        showDenyButton: true,
+        confirmButtonText: btnText[0],
+        denyButtonText: btnText[1],
+        cancelButtonText: 'Kembali',
+        confirmButtonColor: '#198754',
+        denyButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed || result.isDenied) {
+            window.open(linkWA, '_blank');
+        }
+    });
+}
 </script>
 
 </body>
