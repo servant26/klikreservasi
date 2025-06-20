@@ -12,7 +12,7 @@ class StaffController extends Controller
     // Display the staff dashboard
     public function index(Request $request)
     {
-        $filter = $request->input('filter', 'menunggu');
+        $filter = $request->input('filter', 'bulan');
         $query = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
             ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal');
@@ -75,12 +75,10 @@ public function updateStatus($id)
     $ajuan = DB::table('ajuan')->where('id', $id)->first();
 
     if (!$ajuan) return redirect()->back()->with('error', 'Ajuan tidak ditemukan!');
-
     if ($ajuan->status != 2) {
         return redirect()->back()->with('error', 'Hanya ajuan yang sudah ditanggapi yang bisa dibatalkan!');
     }
 
-    // Hapus file surat_balasan jika ada
     if ($ajuan->surat_balasan) {
         $filePath = public_path($ajuan->surat_balasan);
         if (file_exists($filePath)) {
@@ -88,7 +86,6 @@ public function updateStatus($id)
         }
     }
 
-    // Update status dan kosongkan kolom surat_balasan
     $updated = DB::table('ajuan')->where('id', $id)->update([
         'status' => 1,
         'surat_balasan' => null,
@@ -108,6 +105,41 @@ public function updateStatus($id)
     return redirect()->back()->with('error', 'Gagal mengubah status!');
 }
 
+
+public function handleAction(Request $request)
+{
+    $id = $request->id;
+    $action = $request->action;
+
+    $ajuan = DB::table('ajuan')->where('id', $id)->first();
+
+    if (!$ajuan) {
+        return response()->json(['success' => false, 'message' => 'Ajuan tidak ditemukan!']);
+    }
+
+    $statusBaru = null;
+
+    if ($action === 'accept') {
+        $statusBaru = 2;
+    } elseif ($action === 'reject') {
+        $statusBaru = 4;
+    } else {
+        return response()->json(['success' => false, 'message' => 'Aksi tidak valid!']);
+    }
+
+    DB::table('ajuan')->where('id', $id)->update([
+        'status' => $statusBaru,
+        'updated_at' => now(),
+    ]);
+
+    AktivitasStaff::create([
+        'ajuan_id' => $id,
+        'status_lama' => $ajuan->status,
+        'status_baru' => $statusBaru,
+    ]);
+
+    return response()->json(['success' => true, 'new_status' => $statusBaru]);
+}
 
 
     public function showBalasForm($id)

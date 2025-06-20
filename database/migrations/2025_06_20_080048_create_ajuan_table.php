@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('jenis', [1, 2])->nullable();
             $table->date('tanggal');
             $table->time('jam');
-            $table->enum('status', [1, 2, 3])->default(1);
+            $table->enum('status', [1, 2, 3, 4])->default(1);
             $table->string('surat')->nullable(); 
             $table->string('surat_balasan')->nullable();
             $table->text('deskripsi')->nullable(); 
@@ -40,6 +40,3 @@ return new class extends Migration
         Schema::dropIfExists('ajuan');
     }
 };
-
-
-

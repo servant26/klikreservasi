@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Dispursip Samarinda</title>
   <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
   <!-- Google Font: Source Sans Pro -->
@@ -347,34 +348,17 @@ function showSuratModal(suratUrl) {
 
 function normalizeWhatsapp(raw) {
     let wa = raw.replace(/\D/g, '');
-    if (wa.startsWith('0')) {
-        return '62' + wa.slice(1);
-    } else if (wa.startsWith('8')) {
-        return '62' + wa;
-    } else if (!wa.startsWith('62')) {
-        return '62' + wa;
-    }
+    if (wa.startsWith('0')) return '62' + wa.slice(1);
+    if (wa.startsWith('8')) return '62' + wa;
+    if (!wa.startsWith('62')) return '62' + wa;
     return wa;
 }
 
-function normalizeWhatsapp(raw) {
-    let wa = raw.replace(/\D/g, '');
-    if (wa.startsWith('0')) {
-        return '62' + wa.slice(1);
-    } else if (wa.startsWith('8')) {
-        return '62' + wa;
-    } else if (!wa.startsWith('62')) {
-        return '62' + wa;
-    }
-    return wa;
-}
-
-function handleStatusAction(status, nama, whatsapp, urlUpdate = '') {
+function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanId = null) {
     let wa = normalizeWhatsapp(whatsapp);
     let linkWA = `https://wa.me/${wa}`;
 
     if (status == 2) {
-        // Kalau status "Telah Ditanggapi"
         Swal.fire({
             title: 'Batalkan Penerimaan?',
             icon: 'warning',
@@ -386,16 +370,15 @@ function handleStatusAction(status, nama, whatsapp, urlUpdate = '') {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                window.open(linkWA, '_blank'); // Buka WhatsApp dulu
+                window.open(linkWA, '_blank');
                 setTimeout(() => {
-                    window.location.href = urlUpdate; // Arahkan ke route update setelah 500ms
+                    window.location.href = urlUpdate;
                 }, 500);
             }
         });
         return;
     }
 
-    // Kalau status 1 atau 3
     let btnText = status == 1 ? ['Terima Ajuan', 'Tolak Ajuan'] : ['Terima Reschedule', 'Tolak Reschedule'];
 
     Swal.fire({
@@ -413,9 +396,50 @@ function handleStatusAction(status, nama, whatsapp, urlUpdate = '') {
     }).then((result) => {
         if (result.isConfirmed || result.isDenied) {
             window.open(linkWA, '_blank');
+
+            let action = result.isConfirmed ? 'accept' : 'reject';
+
+            fetch('/staff/update-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ id: ajuanId, action: action })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.new_status === 4) {
+                        document.getElementById('row-' + ajuanId)?.remove();
+                    } else {
+                        location.reload();
+                    }
+                } else {
+                    Swal.fire('Gagal', data.message, 'error');
+                }
+            })
+            .catch(() => {
+                Swal.fire('Error', 'Tidak bisa menghubungi server.', 'error');
+            });
         }
     });
 }
+
+// Pasang event listener tombol
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-handle-status').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const status = parseInt(btn.dataset.status);
+            const nama = btn.dataset.nama;
+            const wa = btn.dataset.wa;
+            const id = parseInt(btn.dataset.id);
+            const urlUpdate = btn.dataset.url || '';
+
+            handleStatusAction(status, nama, wa, urlUpdate, id);
+        });
+    });
+});
 </script>
 
 </body>

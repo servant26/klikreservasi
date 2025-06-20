@@ -70,17 +70,17 @@
     <div class="form-group">
     <label for="filter">Filter Ajuan:</label>
         <select name="filter" id="filter" class="form-control w-100" onchange="this.form.submit()">
-            <option value="menunggu" {{ request('filter', 'menunggu') == 'menunggu' ? 'selected' : '' }}>Menunggu Respon</option>
-            <option value="ditanggapi" {{ request('filter', 'menunggu') == 'ditanggapi' ? 'selected' : '' }}>Telah Ditanggapi</option>
-            <option value="hari" {{ request('filter', 'menunggu') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
-            <option value="minggu" {{ request('filter', 'menunggu') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
-            <option value="bulan" {{ request('filter', 'menunggu') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
-            <option value="semester" {{ request('filter', 'menunggu') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
-            <option value="tahun" {{ request('filter', 'menunggu') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
-            <option value="semua" {{ request('filter', 'menunggu') == 'semua' ? 'selected' : '' }}>Semua</option>
+          <option value="menunggu" {{ request('filter', 'bulan') == 'menunggu' ? 'selected' : '' }}>Menunggu Respon</option>
+          <option value="ditanggapi" {{ request('filter', 'bulan') == 'ditanggapi' ? 'selected' : '' }}>Telah Ditanggapi</option>
+          <option value="hari" {{ request('filter', 'bulan') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
+          <option value="minggu" {{ request('filter', 'bulan') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
+          <option value="bulan" {{ request('filter', 'bulan') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
+          <option value="semester" {{ request('filter', 'bulan') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
+          <option value="tahun" {{ request('filter', 'bulan') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
+          <option value="semua" {{ request('filter', 'bulan') == 'semua' ? 'selected' : '' }}>Semua</option>
         </select>
     </div>
-</form>
+    </form>
 <div class="table-responsive-wrapper" style="overflow-x: auto;">
         <table id="example1" class="table table-bordered table-striped table-hover">
             <thead>
@@ -97,7 +97,7 @@
             </thead>
             <tbody>
             @foreach($ajuan as $a)
-              <tr>
+              <tr id="row-{{ $a->id }}">
                 <td>{{ $loop->iteration }}</td>
                 <td>
                   {{ $a->nama }}<br>
@@ -112,28 +112,30 @@
                     Kunjungan Perpustakaan
                   @endif
                 </td>
-                <td class="text-center">
-                  <div class="d-grid gap-2">
-                      @if($a->status == 2)
-                          <a class="btn btn-primary btn-block"
-                              href="javascript:void(0);"
-                              onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}', '{{ route('staff.updateStatus', $a->id) }}')"
-                              role="button">
-                              Telah ditanggapi
-                          </a>
-                      @elseif($a->status == 1 || $a->status == 3)
-                          <a class="btn
-                              @if($a->status == 1) btn-danger
-                              @elseif($a->status == 3) btn-warning
-                              @endif btn-block"
-                              href="javascript:void(0);"
-                              onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}')"
-                              role="button">
-                              @if($a->status == 1) Menunggu Respon @elseif($a->status == 3) Reschedule @endif
-                          </a>
-                      @endif
-                  </div>
-                </td>
+    <!-- kolom lainnya -->
+    <td class="text-center">
+        <div class="d-grid gap-2">
+            @if($a->status == 2)
+                <a class="btn btn-primary btn-block"
+                   href="javascript:void(0);"
+                   onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}', '{{ route('staff.updateStatus', $a->id) }}')">
+                    Telah ditanggapi
+                </a>
+            @elseif($a->status == 1 || $a->status == 3)
+                <a class="btn
+                    @if($a->status == 1) btn-danger
+                    @elseif($a->status == 3) btn-warning
+                    @endif btn-block"
+                   href="javascript:void(0);"
+                   onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}', '', {{ $a->id }})">
+                    @if($a->status == 1) Menunggu Respon
+                    @elseif($a->status == 3) Reschedule
+                    @endif
+                </a>
+            @endif
+        </div>
+    </td>
+
                 <td class="text-center">
                   @if($a->surat)
                       <button onclick="showSuratModal('{{ url('uploads/surat/' . $a->surat) }}')" class="btn btn-secondary w-100">
