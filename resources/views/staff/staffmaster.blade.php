@@ -49,6 +49,7 @@
         font-size: 1.1rem; /* sesuaikan juga paragrafnya */
       }
     }
+    
   </style>
 </head>
 <body class="hold-transition light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -440,6 +441,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
 </script>
 
 </body>

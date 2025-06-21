@@ -15,7 +15,8 @@ class StaffController extends Controller
         $filter = $request->input('filter', 'bulan');
         $query = DB::table('ajuan')
             ->join('users', 'ajuan.user_id', '=', 'users.id')
-            ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal');
+            ->select('ajuan.*', 'users.name as nama', 'users.whatsapp', 'users.asal')
+            ->where('ajuan.status', '!=', 4); // << INI baris penting
     
         $now = now();
     
@@ -328,10 +329,27 @@ public function history()
 {
     $aktivitas = AktivitasStaff::with('ajuan.user')
                 ->latest()
-                ->paginate(25); // Menampilkan 5 data per halaman
+                ->get(); // Ambil semua data
 
     return view('staff.history', compact('aktivitas'));
 }
+
+
+public function restore($id)
+{
+    $aktivitas = AktivitasStaff::findOrFail($id);
+    $ajuan = $aktivitas->ajuan;
+
+    // Update status ajuan ke 1
+    $ajuan->status = 1;
+    $ajuan->save();
+
+    // Hapus aktivitas ini dari log
+    $aktivitas->delete();
+
+    return redirect()->route('staff.history')->with('success', 'Ajuan berhasil direstore.');
+}
+
 
     
     public function editProfile()
