@@ -20,7 +20,7 @@
 @endsection
 @section('content')
 <!-- Small boxes (Stat box) -->
-@if($ajuan->where('user_id', auth()->id())->isEmpty())
+@if($ajuan->isEmpty())
     <div class="row">
         <div class="col-lg-12 col-12">
             <div class="small-box p-3" style="background-color: #f0f0f0; border: 1px solid black;">
@@ -36,81 +36,120 @@
     </div>
 @else
     @foreach($ajuan as $a)
-        @if($a->user_id == auth()->id())
-            <div class="row">
-                <div class="col-lg-12 col-12">
-                    <div class="small-box p-3" 
-                         style="background-color: 
-                         {{ $a->status == 1 ? '#f77267' : ($a->status == 2 ? '#d0e6ff' : '#ffe07d') }};
-                         border: 1px solid black;">
-                        <div class="inner text-left">
+        <div class="row">
+            <div class="col-lg-12 col-12">
+                <div class="small-box p-3"
+                     style="background-color: 
+                     {{ $a->status == 1 ? '#d3d3d3' : ($a->status == 2 ? '#d0e6ff' : ($a->status == 3 ? '#ffe07d' : '#f77267')) }};
+                     border: 1px solid black;">
+                    <div class="inner text-left">
                         <h4>
-                            {{ $a->status == 1 ? 'Ajuan sedang diproses' : ($a->status == 2 ? 'Ajuan telah diterima' : 'Reschedule sedang diproses') }}
+                            @switch($a->status)
+                                @case(1)
+                                    Ajuan sedang diproses
+                                    @break
+                                @case(2)
+                                    Ajuan telah diterima
+                                    @break
+                                @case(3)
+                                    Reschedule sedang diproses
+                                    @break
+                                @case(4)
+                                    Ajuan ditolak
+                                    @break
+                            @endswitch
                         </h4>
-                            <p>
-                                Anda telah mengajukan 
-                                @if($a->jenis == 1)
-                                    Reservasi Aula
-                                @elseif($a->jenis == 2)
-                                    Kunjungan Perpustakaan
-                                @endif
-                                pada {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} pukul {{ substr($a->jam, 0, 5) }}
-                                dengan jumlah {{ $a->jumlah_orang }} orang.
-                                <br>
-                                @if($a->status == 1)
-                                    Mohon tunggu, data ajuan anda sedang diproses.
-                                @elseif($a->status == 2)
-                                    Ajuan anda selesai diproses. Silakan datang pada waktu yang telah ditentukan.
-                                @elseif($a->status == 3)
-                                    Mohon tunggu, perubahan jadwal anda sedang diproses.
-                                @endif
-                            </p>
-                          <div class="btn-container" style="display: flex; gap: 6px;">
-                            <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm">
-                                Ubah Data Ajuan
-                            </a>
-                          <!-- Form Cancel (hidden) -->
-                          <form id="delete-form-{{ $a->id }}" action="{{ route('user.destroy', $a->id) }}" method="POST" style="display: none;">
-                              @csrf
-                              @method('DELETE')
-                          </form>
 
-                          <!-- Tombol Cancel dengan SweetAlert konfirmasi -->
-                          <button type="button" class="btn btn-dark btn-sm" onclick="confirmDelete({{ $a->id }})">
-                              Batalkan Ajuan
-                          </button>
-                          @if($a->status == 2)
-                              <div class="btn-group">
-                                  <button type="button" class="btn btn-dark btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Surat Balasan
-                                  </button>
-                                  <ul class="dropdown-menu">
-                                      <li>
-                                          <a class="dropdown-item" href="{{ url($a->surat_balasan) }}" target="_blank">
-                                              Lihat Surat Balasan
-                                          </a>
-                                      </li>
-                                      <li>
-                                          <a class="dropdown-item" href="{{ url($a->surat_balasan) }}" download>
-                                              Download Surat Balasan
-                                          </a>
-                                      </li>
-                                  </ul>
-                              </div>
-                          @endif
-                          </div>
-                        </div>
-                        <div class="icon">
-                            <i class="fas 
-                                {{ $a->status == 1 ? 'fa-hourglass-half' : ($a->status == 2 ? 'fa-check-circle' : 'fa-sync-alt') }}">
-                            </i>
-                        </div>
+<p>
+    @switch($a->status)
+        @case(2)
+            Ajuan untuk 
+            @if($a->jenis == 1)
+                Reservasi Aula
+            @elseif($a->jenis == 2)
+                Kunjungan Perpustakaan
+            @endif 
+            pada hari {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} pukul {{ substr($a->jam, 0, 5) }} telah diterima. 
+            Silakan berkunjung pada waktu yang telah ditentukan atau hubungi PIC untuk konfirmasi lebih lanjut.
+            @break
+
+        @case(3)
+            Anda telah melakukan reschedule untuk 
+            @if($a->jenis == 1)
+                Reservasi Aula
+            @elseif($a->jenis == 2)
+                Kunjungan Perpustakaan
+            @endif 
+            pada hari {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} pukul {{ substr($a->jam, 0, 5) }}.
+            Mohon tunggu, perubahan jadwal sedang diproses.
+            @break
+
+        @case(4)
+            Mohon maaf, ajuan untuk 
+            @if($a->jenis == 1)
+                Reservasi Aula
+            @elseif($a->jenis == 2)
+                Kunjungan Perpustakaan
+            @endif 
+            pada hari {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} pukul {{ substr($a->jam, 0, 5) }} ditolak. 
+            Silahkan ajukan untuk tanggal lain atau hubungi PIC untuk konfirmasi lebih lanjut: 
+            @break
+
+        @default
+            Anda telah mengajukan 
+            @if($a->jenis == 1)
+                Reservasi Aula
+            @elseif($a->jenis == 2)
+                Kunjungan Perpustakaan
+            @endif 
+            untuk hari {{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }} pukul {{ substr($a->jam, 0, 5) }} dengan jumlah {{ $a->jumlah_orang }} orang.
+            <br>
+            Mohon tunggu, data ajuan anda sedang diproses.
+    @endswitch
+</p>
+
+
+<div class="btn-container" style="display: flex; gap: 6px;">
+    <a href="{{ route('user.edit', $a->id) }}" class="btn btn-dark btn-sm">
+        Ubah Data Ajuan
+    </a>
+
+    @if($a->status == 4)
+        <a href="https://wa.me/62812345678" target="_blank" class="btn btn-dark btn-sm" style="color: white;">
+            Hubungi PIC
+        </a>
+    @else
+        <!-- Form Cancel -->
+        <form id="delete-form-{{ $a->id }}" action="{{ route('user.destroy', $a->id) }}" method="POST" style="display: none;">
+            @csrf
+            @method('DELETE')
+        </form>
+        <button type="button" class="btn btn-dark btn-sm" onclick="confirmDelete({{ $a->id }})">
+            Batalkan Ajuan
+        </button>
+
+        @if($a->status == 2)
+            <a href="https://wa.me/62812345678" target="_blank" class="btn btn-dark btn-sm" style="color: white;">
+                Hubungi PIC
+            </a>
+        @endif
+    @endif
+</div>
+                    </div>
+
+                    <div class="icon">
+                        <i class="fas 
+                            {{ $a->status == 1 ? 'fa-hourglass-half' : 
+                               ($a->status == 2 ? 'fa-check-circle' : 
+                               ($a->status == 3 ? 'fa-sync-alt' : 'fa-times-circle')) }}">
+                        </i>
                     </div>
                 </div>
             </div>
-        @endif
+        </div>
     @endforeach
 @endif
+
 
 <div class="row">
   <!-- Reservasi Aula -->
