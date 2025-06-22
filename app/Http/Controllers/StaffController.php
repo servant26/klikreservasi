@@ -167,15 +167,21 @@ public function cekBentrok(Request $request)
         return response()->json(['bentrok' => false]);
     }
 
-    $bentrok = DB::table('ajuan')
-        ->where('tanggal', $ajuan->tanggal)
-        ->where('jenis', 1)
-        ->where('status', 2)
-        ->where('id', '!=', $ajuan->id)
-        ->exists();
+    // Hanya cek bentrok untuk jenis reservasi (1)
+    if ($ajuan->jenis == 1) {
+        $bentrok = DB::table('ajuan')
+            ->where('tanggal', $ajuan->tanggal)
+            ->where('jenis', 1) // Hanya untuk jenis reservasi
+            ->where('status', 2) // Hanya yang sudah diterima
+            ->where('id', '!=', $ajuan->id)
+            ->exists();
 
-    return response()->json(['bentrok' => $bentrok]);
+        return response()->json(['bentrok' => $bentrok]);
+    }
+
+    return response()->json(['bentrok' => false]);
 }
+
     public function showBalasForm($id)
     {
         $ajuan = DB::table('ajuan')

@@ -380,7 +380,7 @@ async function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanI
         return;
     }
 
-    // Cek bentrok terlebih dahulu
+    // Cek bentrok hanya untuk jenis reservasi (1)
     const cekBentrok = await fetch('/staff/cek-bentrok?ajuan_id=' + ajuanId, {
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -388,27 +388,28 @@ async function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanI
     });
     const hasilCek = await cekBentrok.json();
 
-if (hasilCek.bentrok) {
-    return Swal.fire({
-        title: 'Konflik Jadwal Reservasi',
-        icon: 'warning',
-        html: `
-            <div class="text-start" style="text-align: left;">
-                <p>Terdapat reservasi lain yang telah disetujui pada tanggal tersebut.</p>
-                <p>Prosedur penanganan:</p>
-                <ul style="text-align: left; padding-left: 20px; margin-left: 0;">
-                    <li>Hubungi pemohon melalui WhatsApp untuk konfirmasi</li>
-                    <li>Berikan opsi tanggal alternatif yang tersedia</li>
-                    <li>Apabila disetujui, minta pemohon mengajukan reservasi baru</li>
-                    <li>Alternatif lain: Batalkan reservasi lain yang telah disetujui sebelum menerima pengajuan ini</li>
-                </ul>
-            </div>
-        `,
-        confirmButtonText: 'Mengerti',
-        confirmButtonColor: '#6c757d',
-        width: '600px'
-    });
-}
+    if (hasilCek.bentrok) {
+        return Swal.fire({
+            title: 'Konflik Jadwal Reservasi',
+            icon: 'warning',
+            html: `
+                <div class="text-start" style="text-align: left;">
+                    <p>Terdapat jadwal reservasi aula yang telah disetujui pada tanggal yang sama.</p>
+                    <p>Prosedur penanganan:</p>
+                    <ul style="text-align: left; padding-left: 20px; margin-left: 0;">
+                        <li>Hubungi pemohon untuk konfirmasi lebih lanjut</li>
+                        <li>Berikan opsi tanggal alternatif yang tersedia</li>
+                        <li>Jika disetujui, minta pemohon mengajukan reservasi baru</li>
+                        <li>Atau batalkan reservasi lain yang telah disetujui sebelum menerima pengajuan ini</li>
+                    </ul>
+                </div>
+            `,
+            confirmButtonText: 'Mengerti',
+            confirmButtonColor: '#6c757d',
+            width: '600px'
+        });
+    }
+
     // Jika tidak bentrok, tampilkan dialog konfirmasi seperti biasa
     let btnText = status == 1 ? ['Terima Ajuan', 'Tolak Ajuan'] : ['Terima Reschedule', 'Tolak Reschedule'];
 
@@ -455,7 +456,7 @@ if (hasilCek.bentrok) {
         }
     });
 }
-// Pasang event listener tombol
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-handle-status').forEach(btn => {
         btn.addEventListener('click', () => {
