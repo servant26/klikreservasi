@@ -134,7 +134,7 @@
     </div>
 
     <div class="form-group">
-        <label>Upload Surat (JPG/JPEG/PNG)</label>
+        <label>Upload Surat (JPG)</label>
         <input type="file" name="surat" accept=".jpg,.jpeg,.png"
             class="form-control @error('surat') is-invalid @enderror">
         @if($ajuan->surat)

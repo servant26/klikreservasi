@@ -53,79 +53,92 @@ class UserController extends Controller
         return view('user.kunjungan', compact('user', 'jenis', 'ajuan'));
     } 
 
-    public function store(Request $request)
-    {
-        $input = $request->all();
-    
-        $validator = Validator::make($input, [
-            'jumlah_orang' => 'required|integer|min:1',
-            'tanggal' => 'required|string',
-            'jam' => 'required|string',
-            'jenis' => 'required|in:1,2',
-            'surat' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
-            'deskripsi' => 'required|string',
-        ], [
-            'surat.required' => 'File surat wajib diupload.',
-            'surat.file' => 'File surat harus berupa file yang valid.',
-            'surat.mimes' => 'File surat harus berupa gambar berformat JPG,JPEG,PNG.',
-            'surat.max' => 'Ukuran file surat maksimal 2048 KB.',
-        ]);
-    
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-    
-        $jumlah_orang = (int) $request->input('jumlah_orang');
-        $jenis = (int) $request->input('jenis');
-    
-        if ($jenis === 1 && $jumlah_orang > 100) {
-            return redirect()->back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk reservasi aula adalah 100 orang'])->withInput();
-        } elseif ($jenis === 2 && $jumlah_orang > 50) {
-            return redirect()->back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk kunjungan perpustakaan adalah 50 orang'])->withInput();
-        }
-    
-        try {
-            $tanggal = Carbon::createFromFormat('d/m/Y', $request->input('tanggal'))->format('Y-m-d');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid'])->withInput();
-        }
-    
-        $jam = $request->input('jam');
-        $hari = Carbon::parse($tanggal)->dayOfWeek;
-    
-        if (Carbon::parse($tanggal)->lt(Carbon::today())) {
-            return redirect()->back()->withErrors(['tanggal' => 'Tidak bisa membuat ajuan untuk tanggal yang sudah lewat'])->withInput();
-        }
-    
-        if ($hari == 0 || $hari == 6) {
-            return redirect()->back()->withErrors(['tanggal' => 'Ajuan hanya bisa dibuat pada hari kerja (Senin - Jumat)'])->withInput();
-        }
-    
-        if ($hari >= 1 && $hari <= 4 && ($jam < '08:00' || $jam > '16:00')) {
-            return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Senin-Kamis hanya antara 08:00 - 16:00'])->withInput();
-        } elseif ($hari == 5 && ($jam < '08:00' || $jam > '15:00')) {
-            return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Jumat hanya antara 08:00 - 15:00'])->withInput();
-        }
-    
-        $fileName = null;
-        if ($request->hasFile('surat')) {
-            $file = $request->file('surat');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/surat'), $fileName);
-        }
-    
-        Ajuan::create([
-            'user_id' => Auth::id(),
-            'jumlah_orang' => $jumlah_orang,
-            'jenis' => $jenis,
-            'tanggal' => $tanggal,
-            'jam' => $jam,
-            'surat' => $fileName,
-            'deskripsi' => $request->input('deskripsi'),
-        ]);
-    
-        return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
+public function store(Request $request)
+{
+    $input = $request->all();
+
+    $validator = Validator::make($input, [
+        'jumlah_orang' => 'required|integer|min:1',
+        'tanggal' => 'required|string',
+        'jam' => 'required|string',
+        'jenis' => 'required|in:1,2',
+        'surat' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
+        'deskripsi' => 'required|string',
+    ], [
+        'surat.required' => 'File surat wajib diupload.',
+        'surat.file' => 'File surat harus berupa file yang valid.',
+        'surat.mimes' => 'File surat harus berupa gambar berformat JPG,JPEG,PNG.',
+        'surat.max' => 'Ukuran file surat maksimal 2048 KB.',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
+
+    $jumlah_orang = (int) $request->input('jumlah_orang');
+    $jenis = (int) $request->input('jenis');
+
+    if ($jenis === 1 && $jumlah_orang > 100) {
+        return redirect()->back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk reservasi aula adalah 100 orang'])->withInput();
+    } elseif ($jenis === 2 && $jumlah_orang > 50) {
+        return redirect()->back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk kunjungan perpustakaan adalah 50 orang'])->withInput();
+    }
+
+    try {
+        $tanggal = Carbon::createFromFormat('d/m/Y', $request->input('tanggal'))->format('Y-m-d');
+    } catch (\Exception $e) {
+        return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid'])->withInput();
+    }
+
+    $jam = $request->input('jam');
+    $hari = Carbon::parse($tanggal)->dayOfWeek;
+
+    // Cek tanggal sudah lewat
+    if (Carbon::parse($tanggal)->lt(Carbon::today())) {
+        return redirect()->back()->withErrors(['tanggal' => 'Tidak bisa membuat ajuan untuk tanggal yang sudah lewat'])->withInput();
+    }
+
+    // Cek akhir pekan
+    if ($hari == 0 || $hari == 6) {
+        return redirect()->back()->withErrors(['tanggal' => 'Ajuan hanya bisa dibuat pada hari kerja (Senin - Jumat)'])->withInput();
+    }
+
+    // Cek jam operasional
+    if ($hari >= 1 && $hari <= 4 && ($jam < '08:00' || $jam > '16:00')) {
+        return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Senin-Kamis hanya antara 08:00 - 16:00'])->withInput();
+    } elseif ($hari == 5 && ($jam < '08:00' || $jam > '15:00')) {
+        return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Jumat hanya antara 08:00 - 15:00'])->withInput();
+    }
+
+    // Cek hari libur nasional (yang tanggalnya fix setiap tahun)
+    $liburFix = ['01-01', '01-05', '17-08', '25-12'];
+    $formatBulanHari = Carbon::parse($tanggal)->format('d-m');
+
+    if (in_array($formatBulanHari, $liburFix)) {
+        return redirect()->back()->withErrors(['tanggal' => 'Tanggal yang dipilih adalah hari libur nasional, silahkan ajukan untuk tgl lain'])->withInput();
+    }
+
+    // Upload file surat
+    $fileName = null;
+    if ($request->hasFile('surat')) {
+        $file = $request->file('surat');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/surat'), $fileName);
+    }
+
+    Ajuan::create([
+        'user_id' => Auth::id(),
+        'jumlah_orang' => $jumlah_orang,
+        'jenis' => $jenis,
+        'tanggal' => $tanggal,
+        'jam' => $jam,
+        'surat' => $fileName,
+        'deskripsi' => $request->input('deskripsi'),
+    ]);
+
+    return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
+}
+
     
     public function edit($id)
     {
@@ -150,95 +163,105 @@ class UserController extends Controller
         return view('user.edit', compact('ajuan', 'ajuanLain'));
     }
     
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'jumlah_orang' => 'required|integer|min:1',
-            'tanggal' => 'required|string',
-            'jam' => 'required|date_format:H:i',
-            'jenis' => 'required|in:1,2',
-            'deskripsi' => 'required|string|max:500',
-            'surat' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048', // TIDAK wajib
-        ],
-[
-            'surat.file' => 'File surat harus berupa file yang valid.',
-            'surat.image' => 'File surat harus berupa gambar.',
-            'surat.mimes' => 'File surat harus berupa gambar berformat JPG, JPEG, atau PNG.',
-            'surat.max' => 'Ukuran file surat maksimal 2048 KB.',
-        ]
-    );
-    
-        $jumlahOrang = (int) $request->jumlah_orang;
-        $jenis = (int) $request->jenis;
-    
-        if ($jenis === 1 && $jumlahOrang > 100) {
-            return back()->withErrors(['jumlah_orang' => 'Maksimal 100 orang untuk reservasi aula.'])->withInput();
-        } elseif ($jenis === 2 && $jumlahOrang > 50) {
-            return back()->withErrors(['jumlah_orang' => 'Maksimal 50 orang untuk kunjungan perpustakaan.'])->withInput();
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'jumlah_orang' => 'required|integer|min:1',
+        'tanggal' => 'required|string',
+        'jam' => 'required|date_format:H:i',
+        'jenis' => 'required|in:1,2',
+        'deskripsi' => 'required|string|max:500',
+        'surat' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048',
+    ], [
+        'surat.file' => 'File surat harus berupa file yang valid.',
+        'surat.image' => 'File surat harus berupa gambar.',
+        'surat.mimes' => 'File surat harus berupa gambar berformat JPG, JPEG, atau PNG.',
+        'surat.max' => 'Ukuran file surat maksimal 2048 KB.',
+    ]);
+
+    $jumlahOrang = (int) $request->jumlah_orang;
+    $jenis = (int) $request->jenis;
+
+    if ($jenis === 1 && $jumlahOrang > 100) {
+        return back()->withErrors(['jumlah_orang' => 'Maksimal 100 orang untuk reservasi aula.'])->withInput();
+    } elseif ($jenis === 2 && $jumlahOrang > 50) {
+        return back()->withErrors(['jumlah_orang' => 'Maksimal 50 orang untuk kunjungan perpustakaan.'])->withInput();
+    }
+
+    $ajuan = DB::table('ajuan')->where('id', $id)->first();
+    if (!$ajuan) {
+        return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
+    }
+
+    try {
+        $tanggalInput = Carbon::createFromFormat('d/m/Y', $request->tanggal);
+    } catch (\Exception $e) {
+        return back()->withErrors(['tanggal' => 'Format tanggal tidak valid (dd/mm/yyyy).'])->withInput();
+    }
+
+    // Validasi tanggal tidak boleh ke belakang
+    if ($tanggalInput->isPast() && !$tanggalInput->isToday()) {
+        return back()->withErrors(['tanggal' => 'Tanggal tidak boleh kurang dari hari ini.'])->withInput();
+    }
+
+    // Cek hari libur nasional fix (yang tanggalnya sama setiap tahun)
+    $liburFix = ['01-01', '01-05', '17-08', '25-12'];
+    $formatBulanHari = $tanggalInput->format('d-m');
+    if (in_array($formatBulanHari, $liburFix)) {
+        return back()->withErrors(['tanggal' => 'Tanggal yang dipilih adalah hari libur nasional, silahkan ajukan untuk tgl lain.'])->withInput();
+    }
+
+    // Validasi akhir pekan
+    $dayOfWeek = $tanggalInput->dayOfWeek;
+    if ($dayOfWeek == 0 || $dayOfWeek == 6) {
+        return back()->withErrors(['tanggal' => 'Hanya bisa ajukan di hari kerja (Senin–Jumat).'])->withInput();
+    }
+
+    // Validasi jam berdasarkan hari
+    $jamInput = $request->jam;
+    if ($dayOfWeek >= 1 && $dayOfWeek <= 4) {
+        if ($jamInput < '08:00' || $jamInput > '16:00') {
+            return back()->withErrors(['jam' => 'Jam reservasi Senin–Kamis: 08:00–16:00.'])->withInput();
         }
-    
-        $ajuan = DB::table('ajuan')->where('id', $id)->first();
-        if (!$ajuan) {
-            return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
+    } elseif ($dayOfWeek == 5) {
+        if ($jamInput < '08:00' || $jamInput > '15:00') {
+            return back()->withErrors(['jam' => 'Jam reservasi Jumat: 08:00–15:00.'])->withInput();
         }
-    
-        try {
-            $tanggalInput = Carbon::createFromFormat('d/m/Y', $request->tanggal);
-        } catch (\Exception $e) {
-            return back()->withErrors(['tanggal' => 'Format tanggal tidak valid (dd/mm/yyyy).'])->withInput();
-        }
-        
-        $jamInput = $request->jam;
-    
-        if ($tanggalInput->isPast() && !$tanggalInput->isToday()) {
-            return back()->withErrors(['tanggal' => 'Tanggal tidak boleh kurang dari hari ini.'])->withInput();
-        }
-    
-        $dayOfWeek = $tanggalInput->dayOfWeek;
-        if ($dayOfWeek == 0 || $dayOfWeek == 6) {
-            return back()->withErrors(['tanggal' => 'Hanya bisa ajukan di hari kerja (Senin–Jumat).'])->withInput();
-        }
-    
-        if ($dayOfWeek >= 1 && $dayOfWeek <= 4) {
-            if ($jamInput < '08:00' || $jamInput > '16:00') {
-                return back()->withErrors(['jam' => 'Jam reservasi Senin–Kamis: 08:00–16:00.'])->withInput();
-            }
-        } elseif ($dayOfWeek == 5) {
-            if ($jamInput < '08:00' || $jamInput > '15:00') {
-                return back()->withErrors(['jam' => 'Jam reservasi Jumat: 08:00–15:00.'])->withInput();
-            }
-        }
-    
-        $dataToUpdate = [
-            'jumlah_orang' => $jumlahOrang,
-            'jenis' => $jenis,
-            'tanggal' => $tanggalInput->format('Y-m-d'),
-            'jam' => $jamInput,
-            'status' => 3,
-            'deskripsi' => $request->deskripsi,
-            'updated_at' => now(),
-        ];
-    
-    // Jika ada file surat baru, hapus file lama dan upload file baru
+    }
+
+    // Persiapan data update
+    $dataToUpdate = [
+        'jumlah_orang' => $jumlahOrang,
+        'jenis' => $jenis,
+        'tanggal' => $tanggalInput->format('Y-m-d'),
+        'jam' => $jamInput,
+        'status' => 3,
+        'deskripsi' => $request->deskripsi,
+        'updated_at' => now(),
+    ];
+
+    // Ganti file surat jika ada
     if ($request->hasFile('surat')) {
-        // Hapus surat lama jika ada
         if ($ajuan->surat) {
             $oldFilePath = public_path('uploads/surat/' . $ajuan->surat);
             if (file_exists($oldFilePath)) {
-                unlink($oldFilePath); // Menghapus file surat lama
+                unlink($oldFilePath);
             }
         }
 
-        // Unggah file surat baru
         $filename = time() . '_' . $request->file('surat')->getClientOriginalName();
-        $path = $request->file('surat')->move(public_path('uploads/surat'), $filename);
+        $request->file('surat')->move(public_path('uploads/surat'), $filename);
         $dataToUpdate['surat'] = $filename;
     }
-    
-        $updated = DB::table('ajuan')->where('id', $id)->update($dataToUpdate);
-    
-        return redirect()->route('user.dashboard')->with($updated ? 'success' : 'error', $updated ? 'Data berhasil diperbarui.' : 'Gagal memperbarui data.');
-    }
+
+    $updated = DB::table('ajuan')->where('id', $id)->update($dataToUpdate);
+
+    return redirect()->route('user.dashboard')->with(
+        $updated ? 'success' : 'error',
+        $updated ? 'Data berhasil diperbarui.' : 'Gagal memperbarui data.'
+    );
+}
+
     
     public function destroy($id)
     {
