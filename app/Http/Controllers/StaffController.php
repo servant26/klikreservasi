@@ -118,9 +118,25 @@ public function handleAction(Request $request)
         return response()->json(['success' => false, 'message' => 'Ajuan tidak ditemukan!']);
     }
 
-    $statusBaru = null;
-
     if ($action === 'accept') {
+        // Cek bentrok tanggal untuk jenis reservasi
+        if ($ajuan->jenis == 1) {
+            $bentrok = DB::table('ajuan')
+                ->where('tanggal', $ajuan->tanggal)
+                ->where('jenis', 1)
+                ->where('status', 2)
+                ->where('id', '!=', $ajuan->id)
+                ->exists();
+
+            if ($bentrok) {
+                return response()->json([
+                    'success' => false,
+                    'conflict' => true,
+                    'message' => 'Sudah ada reservasi yang di-ACC pada tanggal tersebut!'
+                ]);
+            }
+        }
+
         $statusBaru = 2;
     } elseif ($action === 'reject') {
         $statusBaru = 4;
@@ -141,6 +157,7 @@ public function handleAction(Request $request)
 
     return response()->json(['success' => true, 'new_status' => $statusBaru]);
 }
+
 
 
     public function showBalasForm($id)

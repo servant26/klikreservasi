@@ -107,31 +107,6 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['jam' => 'Jam reservasi untuk Jumat hanya antara 08:00 - 15:00'])->withInput();
         }
     
-        if ($jenis === 1) {
-            $existsDate = Ajuan::where('tanggal', $tanggal)
-                            ->where('jenis', 1)
-                            ->exists();
-
-            if ($existsDate) {
-                return redirect()->back()->withErrors([
-                    'tanggal' => 'Sudah ada reservasi di tanggal tersebut (lihat jadwal di atas).'
-                ])->withInput();
-            }
-        }
-
-        if ($jenis === 2) {
-            $kunjunganCount = Ajuan::where('tanggal', $tanggal)
-                                ->where('jam', $jam)
-                                ->where('jenis', 2)
-                                ->count();
-
-            if ($kunjunganCount >= 5) {
-                return redirect()->back()->withErrors([
-                    'jam' => 'Kuota kunjungan perpustakaan pada jam tersebut sudah penuh, silahkan ajukan pada jam lain.'
-                ])->withInput();
-            }
-        }
-    
         $fileName = null;
         if ($request->hasFile('surat')) {
             $file = $request->file('surat');
@@ -233,36 +208,6 @@ class UserController extends Controller
                 return back()->withErrors(['jam' => 'Jam reservasi Jumat: 08:00–15:00.'])->withInput();
             }
         }
-    
-        if ($jenis === 1) {
-            $existingDate = DB::table('ajuan')
-                ->where('tanggal', $tanggalInput->format('Y-m-d'))
-                ->where('jenis', 1)
-                ->where('id', '!=', $id)
-                ->first();
-
-            if ($existingDate) {
-                return back()->withErrors([
-                    'tanggal' => 'Sudah ada reservasi di tanggal tersebut (lihat jadwal di atas).'
-                ])->withInput();
-            }
-        }
-
-        if ($jenis === 2) {
-            $kunjunganCount = DB::table('ajuan')
-                ->where('tanggal', $tanggalInput->format('Y-m-d'))
-                ->where('jam', $jamInput)
-                ->where('jenis', 2)
-                ->where('id', '!=', $id)
-                ->count();
-
-            if ($kunjunganCount >= 5) {
-                return back()->withErrors([
-                    'jam' => 'Kuota kunjungan perpustakaan pada jam tersebut sudah penuh, silahkan ajukan pada jam lain.'
-                ])->withInput();
-            }
-        }
-
     
         $dataToUpdate = [
             'jumlah_orang' => $jumlahOrang,
