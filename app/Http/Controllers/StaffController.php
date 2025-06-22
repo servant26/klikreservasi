@@ -159,7 +159,23 @@ public function handleAction(Request $request)
 }
 
 
+public function cekBentrok(Request $request)
+{
+    $ajuan = DB::table('ajuan')->where('id', $request->ajuan_id)->first();
 
+    if (!$ajuan) {
+        return response()->json(['bentrok' => false]);
+    }
+
+    $bentrok = DB::table('ajuan')
+        ->where('tanggal', $ajuan->tanggal)
+        ->where('jenis', 1)
+        ->where('status', 2)
+        ->where('id', '!=', $ajuan->id)
+        ->exists();
+
+    return response()->json(['bentrok' => $bentrok]);
+}
     public function showBalasForm($id)
     {
         $ajuan = DB::table('ajuan')

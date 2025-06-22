@@ -355,7 +355,7 @@ function normalizeWhatsapp(raw) {
     return wa;
 }
 
-function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanId = null) {
+async function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanId = null) {
     let wa = normalizeWhatsapp(whatsapp);
     let linkWA = `https://wa.me/${wa}`;
 
@@ -380,6 +380,36 @@ function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanId = nu
         return;
     }
 
+    // Cek bentrok terlebih dahulu
+    const cekBentrok = await fetch('/staff/cek-bentrok?ajuan_id=' + ajuanId, {
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    });
+    const hasilCek = await cekBentrok.json();
+
+if (hasilCek.bentrok) {
+    return Swal.fire({
+        title: 'Konflik Jadwal Reservasi',
+        icon: 'warning',
+        html: `
+            <div class="text-start" style="text-align: left;">
+                <p>Terdapat reservasi lain yang telah disetujui pada tanggal tersebut.</p>
+                <p>Prosedur penanganan:</p>
+                <ul style="text-align: left; padding-left: 20px; margin-left: 0;">
+                    <li>Hubungi pemohon melalui WhatsApp untuk konfirmasi</li>
+                    <li>Berikan opsi tanggal alternatif yang tersedia</li>
+                    <li>Apabila disetujui, minta pemohon mengajukan reservasi baru</li>
+                    <li>Alternatif lain: Batalkan reservasi lain yang telah disetujui sebelum menerima pengajuan ini</li>
+                </ul>
+            </div>
+        `,
+        confirmButtonText: 'Mengerti',
+        confirmButtonColor: '#6c757d',
+        width: '600px'
+    });
+}
+    // Jika tidak bentrok, tampilkan dialog konfirmasi seperti biasa
     let btnText = status == 1 ? ['Terima Ajuan', 'Tolak Ajuan'] : ['Terima Reschedule', 'Tolak Reschedule'];
 
     Swal.fire({
@@ -397,7 +427,6 @@ function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanId = nu
     }).then((result) => {
         if (result.isConfirmed || result.isDenied) {
             window.open(linkWA, '_blank');
-
             let action = result.isConfirmed ? 'accept' : 'reject';
 
             fetch('/staff/update-status', {
@@ -426,7 +455,6 @@ function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanId = nu
         }
     });
 }
-
 // Pasang event listener tombol
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-handle-status').forEach(btn => {
