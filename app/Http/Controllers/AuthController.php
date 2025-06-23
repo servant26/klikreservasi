@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // Method helper untuk redirect berdasarkan role
+    protected function redirectToDashboard()
+    {
+        $role = Auth::user()->role;
+        
+        return match($role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'staff' => redirect()->route('staff.dashboard'),
+            default => redirect()->route('user.dashboard')
+        };
+    }
+
     // Menampilkan halaman login
     public function showLogin()
     {
@@ -18,7 +30,6 @@ class AuthController extends Controller
     // Proses login
     public function login(Request $request)
     {
-        // Validasi input
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8',
@@ -27,21 +38,11 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $role = Auth::user()->role;
-
-            if ($role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            } elseif ($role === 'staff') {
-                return redirect()->route('staff.dashboard');
-            } else {
-                return redirect()->route('user.dashboard');
-            }
+            return $this->redirectToDashboard();
         }
 
-        // Jika gagal login
         return back()->withErrors(['loginError' => 'Email atau Password salah'])->withInput();
     }
-
 
     // Menampilkan halaman register
     public function showRegister()
@@ -62,10 +63,8 @@ class AuthController extends Controller
             'email.unique' => 'Email telah terdaftar',
         ]);
 
-    
-        // Normalisasi nomor WhatsApp ke format 0815xxxx
-        $rawWhatsapp = preg_replace('/[^0-9]/', '', $request->whatsapp); // hapus karakter non-angka
-    
+        $rawWhatsapp = preg_replace('/[^0-9]/', '', $request->whatsapp);
+        
         if (str_starts_with($rawWhatsapp, '62')) {
             $normalizedWhatsapp = '0' . substr($rawWhatsapp, 2);
         } elseif (str_starts_with($rawWhatsapp, '8')) {
@@ -73,10 +72,9 @@ class AuthController extends Controller
         } elseif (str_starts_with($rawWhatsapp, '0')) {
             $normalizedWhatsapp = $rawWhatsapp;
         } else {
-            // fallback jika input tidak dikenali
             $normalizedWhatsapp = $rawWhatsapp;
         }
-    
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -87,14 +85,13 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-    
-        return redirect()->route('user.dashboard');
-    }    
+        return $this->redirectToDashboard();
+    }
 
     // Logout
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route('home'); // Kembali ke homepage setelah logout
     }
 }
