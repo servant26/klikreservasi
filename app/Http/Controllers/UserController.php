@@ -182,6 +182,8 @@ class UserController extends Controller
 
         if ($jenis === 1 && $jumlahOrang > 100) {
             return back()->withErrors(['jumlah_orang' => 'Maksimal 100 orang untuk reservasi aula.'])->withInput();
+        } elseif ($jenis === 2 && $jumlahOrang > 50) {
+            return back()->withErrors(['jumlah_orang' => 'Maksimal 50 orang untuk kunjungan perpustakaan.'])->withInput();
         }
 
         $ajuan = DB::table('ajuan')->where('id', $id)->first();

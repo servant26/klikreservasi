@@ -66,7 +66,7 @@
         </div>
 <div class="container">
     <div class="mx-1">
-<form id="rescheduleForm" action="{{ route('user.update', $ajuan->id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('user.update', $ajuan->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     
     <div class="form-group">
