@@ -74,7 +74,7 @@
               <div class="card-header">
                 <h3 class="card-title">Silahkan isi datanya</h3>
               </div>
-              <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
+              <form id="kunjunganForm" action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <!-- Nama User -->

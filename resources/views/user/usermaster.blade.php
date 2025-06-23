@@ -276,6 +276,37 @@ $(function () {
         }
     });
 }
+document.getElementById('kunjunganForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Hentikan submit sementara
+    
+    const jenis = document.querySelector('input[name="jenis"]').value;
+    const jumlahOrang = parseInt(document.querySelector('input[name="jumlah_orang"]').value);
+    const form = this;
+
+    if (jenis === '2' && jumlahOrang > 50) {
+        Swal.fire({
+            title: 'Kunjungan Melebihi Batas Maksimal',
+            text: 'Anda mengajukan Kunjungan Perpustakaan dengan jumlah '+jumlahOrang+' orang (maksimal 50). Lanjutkan ke Reservasi Aula?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Lanjutkan ke Reservasi Aula',
+            cancelButtonText: 'Kembali',
+            reverseButtons: true,
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect ke halaman reservasi
+                window.location.href = "{{ route('user.reservasi') }}";
+            } else {
+                // Kembali ke form (batal submit)
+                Swal.fire('Dibatalkan', 'Silahkan perbaiki jumlah orang', 'info');
+            }
+        });
+    } else {
+        // Jika valid, lanjut submit form
+        form.submit();
+    }
+});
 </script>
 
 </body>
