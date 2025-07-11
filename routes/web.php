@@ -18,16 +18,17 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-//admin
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-Route::middleware(['auth', 'role:admin'])->get('/admin/datatable', [AdminController::class, 'datatable'])->name('admin.datatable');
-// Profil admin
-Route::middleware(['auth', 'role:admin'])->get('/admin/profile', [AdminController::class, 'editProfile'])->name('admin.profile');
-Route::middleware(['auth', 'role:admin'])->post('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
-Route::middleware(['auth', 'role:admin'])->get('/admin/management', [AdminController::class, 'manageEmployee'])->name('admin.management');
-Route::middleware(['auth', 'role:admin'])->post('/admin/management/store', [AdminController::class, 'storeStaff'])->name('admin.management.store');
-Route::middleware(['auth', 'role:admin'])->delete('/admin/management/{id}', [AdminController::class, 'deleteStaff'])->name('admin.management.delete');
-
+//user
+Route::middleware(['auth', 'role:user'])->get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+Route::middleware(['auth', 'role:user'])->get('/user/reservasi', [UserController::class, 'reservasi'])->name('user.reservasi');
+Route::middleware(['auth', 'role:user'])->get('/user/kunjungan', [UserController::class, 'kunjungan'])->name('user.kunjungan');
+Route::middleware(['auth', 'role:user'])->post('/user/store', [UserController::class, 'store'])->name('user.store');
+Route::middleware(['auth', 'role:user'])->get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+Route::middleware(['auth', 'role:user'])->post('/user/edit/{id}', [UserController::class, 'update'])->name('user.update');
+Route::middleware(['auth', 'role:user'])->delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+Route::middleware(['auth', 'role:user'])->get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
+Route::middleware(['auth', 'role:user'])->get('/user/profile/edit', [UserController::class, 'editProfile'])->name('user.profile.edit');
+Route::middleware(['auth', 'role:user'])->post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
 
 //staff
 Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', [StaffController::class, 'index'])->name('staff.dashboard');
@@ -45,23 +46,14 @@ Route::middleware(['auth', 'role:staff'])->get('/staff/kunjungan', [StaffControl
 Route::middleware(['auth', 'role:staff'])->get('/staff/reservasi', [StaffController::class, 'reservasi'])->name('staff.reservasi');
 Route::middleware(['auth', 'role:staff'])->get('/staff/history', [StaffController::class, 'history'])->name('staff.history');
 Route::middleware(['auth', 'role:staff'])->post('/staff/restore/{id}', [StaffController::class, 'restore'])->name('staff.restore');
-
-
-// Profil staff
 Route::middleware(['auth', 'role:staff'])->get('/staff/profile', [StaffController::class, 'editProfile'])->name('staff.profile');
 Route::middleware(['auth', 'role:staff'])->post('/staff/profile/update', [StaffController::class, 'updateProfile'])->name('staff.profile.update');
 
-
-//user
-Route::middleware(['auth', 'role:user'])->get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
-Route::middleware(['auth', 'role:user'])->get('/user/reservasi', [UserController::class, 'reservasi'])->name('user.reservasi');
-Route::middleware(['auth', 'role:user'])->get('/user/kunjungan', [UserController::class, 'kunjungan'])->name('user.kunjungan');
-Route::middleware(['auth', 'role:user'])->post('/user/store', [UserController::class, 'store'])->name('user.store');
-Route::middleware(['auth', 'role:user'])->get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
-Route::middleware(['auth', 'role:user'])->post('/user/edit/{id}', [UserController::class, 'update'])->name('user.update');
-Route::middleware(['auth', 'role:user'])->delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
-// Profil user
-Route::middleware(['auth', 'role:user'])->get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
-Route::middleware(['auth', 'role:user'])->get('/user/profile/edit', [UserController::class, 'editProfile'])->name('user.profile.edit');
-Route::middleware(['auth', 'role:user'])->post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
-
+//admin
+Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::middleware(['auth', 'role:admin'])->get('/admin/datatable', [AdminController::class, 'datatable'])->name('admin.datatable');
+Route::middleware(['auth', 'role:admin'])->get('/admin/profile', [AdminController::class, 'editProfile'])->name('admin.profile');
+Route::middleware(['auth', 'role:admin'])->post('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+Route::middleware(['auth', 'role:admin'])->get('/admin/management', [AdminController::class, 'manageEmployee'])->name('admin.management');
+Route::middleware(['auth', 'role:admin'])->post('/admin/management/store', [AdminController::class, 'storeStaff'])->name('admin.management.store');
+Route::middleware(['auth', 'role:admin'])->delete('/admin/management/{id}', [AdminController::class, 'deleteStaff'])->name('admin.management.delete');

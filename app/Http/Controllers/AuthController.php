@@ -21,29 +21,6 @@ class AuthController extends Controller
         };
     }
 
-    // Menampilkan halaman login
-    public function showLogin()
-    {
-        return view('auth.login');
-    }
-
-    // Proses login
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:8',
-        ]);
-
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            return $this->redirectToDashboard();
-        }
-
-        return back()->withErrors(['loginError' => 'Email atau Password salah'])->withInput();
-    }
-
     // Menampilkan halaman register
     public function showRegister()
     {
@@ -86,6 +63,29 @@ class AuthController extends Controller
 
         Auth::login($user);
         return $this->redirectToDashboard();
+    }
+
+    // Menampilkan halaman login
+    public function showLogin()
+    {
+        return view('auth.login');
+    }
+
+    // Proses login
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            return $this->redirectToDashboard();
+        }
+
+        return back()->withErrors(['loginError' => 'Email atau Password salah'])->withInput();
     }
 
     // Logout

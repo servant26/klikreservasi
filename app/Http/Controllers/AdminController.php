@@ -220,7 +220,6 @@ class AdminController extends Controller
         return view('admin.datatable', compact('ajuan', 'reschedule', 'history', 'kunjungan', 'reservasi'));
     }
     
-    
     public function editProfile()
     {
         $admin = Auth::user();

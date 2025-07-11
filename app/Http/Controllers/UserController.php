@@ -22,7 +22,7 @@ class UserController extends Controller
 
         return view('user.dashboard', compact('ajuan'));
     }   
-      
+
     public function reservasi()
     {
         $user = Auth::user(); 
@@ -137,7 +137,6 @@ class UserController extends Controller
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
 
-    
     public function edit($id)
     {
         $ajuan = DB::table('ajuan')
@@ -259,7 +258,6 @@ class UserController extends Controller
             $updated ? 'Data berhasil diperbarui.' : 'Gagal memperbarui data.'
         );
     }
-
     
     public function destroy($id)
     {
@@ -331,5 +329,4 @@ class UserController extends Controller
     
         return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
     }
-
 }    
