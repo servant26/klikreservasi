@@ -247,9 +247,11 @@
 <!-- jQuery Knob Chart -->
 <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
 <!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- LINK ONLINE <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+<script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
 <!-- Tambahkan sebelum </body> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- LINK ONLINE <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+<script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 @yield('js')
 <script>
 function confirmStatusChange(url) {

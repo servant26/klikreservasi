@@ -20,47 +20,46 @@
 @endsection
 
 @section('content')
-<div class="container mt-3">
-    @if (session('success'))
-        <div class="alert alert-primary" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
+  <div class="container mt-3">
+      @if (session('success'))
+          <div class="alert alert-primary" role="alert">
+              {{ session('success') }}
+          </div>
+      @endif
 
-    <form action="{{ route('staff.profile.update') }}" method="POST">
+      <form action="{{ route('staff.profile.update') }}" method="POST">
         @csrf
+          <div class="form-group mb-2">
+              <label>Nama</label>
+              <input type="text" name="name" class="form-control"
+                value="{{ old('name', $staff->name) }}"
+                required pattern="[A-Za-z\s]+"
+                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
+                oninput="this.setCustomValidity('')" autofocus>
+          </div>
 
-        <div class="form-group mb-2">
-            <label>Nama</label>
-            <input type="text" name="name" class="form-control"
-                  value="{{ old('name', $staff->name) }}"
-                  required pattern="[A-Za-z\s]+"
-                  oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
-                  oninput="this.setCustomValidity('')" autofocus>
-        </div>
+          <div class="form-group mb-2">
+              <label>Email</label>
+              <input type="email" name="email" class="form-control"
+                value="{{ old('email', $staff->email) }}"
+                required
+                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                oninput="this.setCustomValidity('')">
+          </div>
 
-        <div class="form-group mb-2">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control"
-                  value="{{ old('email', $staff->email) }}"
-                  required
-                  oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
-                  oninput="this.setCustomValidity('')">
-        </div>
+          <div class="form-group mb-2">
+              <label>Ganti Password (opsional)</label>
+              <input type="password" name="password" class="form-control">
+          </div>
 
-        <div class="form-group mb-2">
-            <label>Ganti Password (opsional)</label>
-            <input type="password" name="password" class="form-control">
-        </div>
+          <div class="form-group mb-3">
+              <label>Konfirmasi Password Baru</label>
+              <input type="password" name="password_confirmation" class="form-control">
+          </div>
 
-        <div class="form-group mb-3">
-            <label>Konfirmasi Password Baru</label>
-            <input type="password" name="password_confirmation" class="form-control">
-        </div>
-
-        <a href="{{ route('staff.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
+          <a href="{{ route('staff.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
+          <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+  </div>
 @endsection
 
