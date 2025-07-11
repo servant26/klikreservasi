@@ -20,64 +20,61 @@
 @endsection
 
 @section('content')
-<div class="container">
-<form action="{{ route('user.profile.update') }}" method="POST">
-    @csrf
+  <div class="container">
+    <form action="{{ route('user.profile.update') }}" method="POST">
+      @csrf
+        <div class="form-group mb-2">
+            <label>Nama</label>
+            <input type="text" name="name" class="form-control"
+                  value="{{ old('name', $user->name) }}"
+                  required
+                  pattern="[A-Za-z\s]+"
+                  oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi' : 'Nama hanya boleh huruf')"
+                  oninput="this.setCustomValidity('')"
+                  autofocus>
+        </div>
 
-    <div class="form-group mb-2">
-        <label>Nama</label>
-        <input type="text" name="name" class="form-control"
-               value="{{ old('name', $user->name) }}"
-               required
-               pattern="[A-Za-z\s]+"
-               oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi' : 'Nama hanya boleh huruf')"
-               oninput="this.setCustomValidity('')"
-               autofocus>
-    </div>
+        <div class="form-group mb-2">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control"
+                  value="{{ old('email', $user->email) }}"
+                  required
+                  oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi' : 'Masukkan format email yang benar')"
+                  oninput="this.setCustomValidity('')">
+        </div>
 
-    <div class="form-group mb-2">
-        <label>Email</label>
-        <input type="email" name="email" class="form-control"
-               value="{{ old('email', $user->email) }}"
-               required
-               oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi' : 'Masukkan format email yang benar')"
-               oninput="this.setCustomValidity('')">
-    </div>
+        <div class="form-group mb-2">
+            <label>Whatsapp</label>
+            <input type="number" name="whatsapp" class="form-control"
+                  value="{{ old('whatsapp', $user->whatsapp) }}"
+                  required
+                  oninvalid="this.setCustomValidity('Form ini wajib diisi')"
+                  oninput="this.setCustomValidity('')">
+        </div>
 
-    <div class="form-group mb-2">
-        <label>Whatsapp</label>
-        <input type="number" name="whatsapp" class="form-control"
-               value="{{ old('whatsapp', $user->whatsapp) }}"
-               required
-               oninvalid="this.setCustomValidity('Form ini wajib diisi')"
-               oninput="this.setCustomValidity('')">
-    </div>
+        <div class="form-group mb-3">
+            <label>Asal</label>
+            <input type="text" name="asal" class="form-control"
+                  value="{{ old('asal', $user->asal) }}"
+                  required
+                  oninvalid="this.setCustomValidity('Form ini wajib diisi')"
+                  oninput="this.setCustomValidity('')">
+        </div>
 
-    <div class="form-group mb-3">
-        <label>Asal</label>
-        <input type="text" name="asal" class="form-control"
-               value="{{ old('asal', $user->asal) }}"
-               required
-               oninvalid="this.setCustomValidity('Form ini wajib diisi')"
-               oninput="this.setCustomValidity('')">
-    </div>
+        <div class="form-group mb-3">
+            <label>Ganti Password (Opsional)</label>
+            <input type="password" name="password" class="form-control">
+        </div>
 
-    <div class="form-group mb-3">
-        <label>Ganti Password (Opsional)</label>
-        <input type="password" name="password" class="form-control">
-    </div>
+        <div class="form-group mb-3">
+            <label>Konfirmasi Password Baru</label>
+            <input type="password" name="password_confirmation" class="form-control">
+        </div>
 
-    <div class="form-group mb-3">
-        <label>Konfirmasi Password Baru</label>
-        <input type="password" name="password_confirmation" class="form-control">
-    </div>
+        <a href="{{ route('user.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
+        <button type="submit" class="btn btn-primary">Submit</button>
 
-    <a href="{{ route('user.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
-    <button type="submit" class="btn btn-primary">Submit</button>
-
-    <br><br><br>
-
-</form>
-
-</div>
+        <br><br><br>
+    </form>
+  </div>
 @endsection
