@@ -120,133 +120,131 @@
 
 
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-<script>
-  // Hitung total untuk pie chart
-  const reservasi = {{ $chartData['reservasi'] }};
-  const kunjungan = {{ $chartData['kunjungan'] }};
-  const totalPie = reservasi + kunjungan;
+  <script>
+    // Hitung total untuk pie chart
+    const reservasi = {{ $chartData['reservasi'] }};
+    const kunjungan = {{ $chartData['kunjungan'] }};
+    const totalPie = reservasi + kunjungan;
 
-  // Pie Chart
-  const pieCtx = document.getElementById('pieChart').getContext('2d');
-  new Chart(pieCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Reservasi', 'Kunjungan'],
-      datasets: [{
-        data: [reservasi, kunjungan],
-        backgroundColor: ['#c82333', '#28a745']
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        title: { display: true, text: 'Statistik berdasarkan Pie Chart' },
-        datalabels: {
-          color: '#fff',
-          formatter: (value) => {
-            const percentage = ((value / totalPie) * 100).toFixed(0);
-            return `${percentage}% (${value} Reservasi)`;
+    // Pie Chart
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Reservasi', 'Kunjungan'],
+        datasets: [{
+          data: [reservasi, kunjungan],
+          backgroundColor: ['#c82333', '#28a745']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: { display: true, text: 'Statistik berdasarkan Pie Chart' },
+          datalabels: {
+            color: '#fff',
+            formatter: (value) => {
+              const percentage = ((value / totalPie) * 100).toFixed(0);
+              return `${percentage}% (${value} Reservasi)`;
+            }
           }
         }
-      }
-    },
-    plugins: [ChartDataLabels]
-  });
+      },
+      plugins: [ChartDataLabels]
+    });
 
-// Bar Chart
-const barCtx = document.getElementById('barChart').getContext('2d');
-new Chart(barCtx, {
-  type: 'bar',
-  data: {
-    labels: [''],  // label kosong karena data horizontal cuma 1 bar per dataset
-    datasets: [
-      {
-        label: 'Reservasi',
-        data: [reservasi],  // 1 data di bar chart
-        backgroundColor: '#c82333',
-        minBarLength: 30
+    // Bar Chart
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: [''],  // label kosong karena data horizontal cuma 1 bar per dataset
+        datasets: [
+          {
+            label: 'Reservasi',
+            data: [reservasi],  // 1 data di bar chart
+            backgroundColor: '#c82333',
+            minBarLength: 30
+          },
+          {
+            label: 'Kunjungan',
+            data: [kunjungan],
+            backgroundColor: '#28a745',
+            minBarLength: 30
+          }
+        ]
       },
-      {
-        label: 'Kunjungan',
-        data: [kunjungan],
-        backgroundColor: '#28a745',
-        minBarLength: 30
-      }
-    ]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    plugins: {
-      legend: { display: true }, // aktifkan legend supaya bisa klik toggle
-      title: {
-        display: true,
-        text: 'Statistik berdasarkan Bar Chart'
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: {
+          legend: { display: true }, // aktifkan legend supaya bisa klik toggle
+          title: {
+            display: true,
+            text: 'Statistik berdasarkan Bar Chart'
+          },
+          datalabels: {
+            anchor: 'center',
+            align: 'center',
+            color: '#fff',
+            font: { weight: 'bold' },
+            formatter: (value, context) => {
+              return `${value} ${context.dataset.label}`;
+            }
+          }
+        },
+        scales: {
+          x: { beginAtZero: true },
+          y: { ticks: { display: false } }  // sembunyikan label y karena cuma 1 bar
+        }
       },
-      datalabels: {
-        anchor: 'center',
-        align: 'center',
-        color: '#fff',
-        font: { weight: 'bold' },
-        formatter: (value, context) => {
-          return `${value} ${context.dataset.label}`;
+      plugins: [ChartDataLabels]
+    });
+
+    // Line Chart
+    const lineCtx = document.getElementById('lineChart').getContext('2d');
+    new Chart(lineCtx, {
+      type: 'line',
+      data: {
+        labels: {!! json_encode($lineChart['labels']) !!},
+        datasets: [
+          {
+            label: 'Reservasi',
+            data: {!! json_encode($lineChart['reservasi']) !!},
+            borderColor: '#dc3545',
+            backgroundColor: 'rgba(220, 53, 69, 0.2)',
+            tension: 0.4
+          },
+          {
+            label: 'Kunjungan',
+            data: {!! json_encode($lineChart['kunjungan']) !!},
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.2)',
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Statistik berdasarkan Line Chart'  // title statis, gak ngikut filter waktu
+          }
+        },
+        scales: {
+          y: { beginAtZero: true }
         }
       }
-    },
-    scales: {
-      x: { beginAtZero: true },
-      y: { ticks: { display: false } }  // sembunyikan label y karena cuma 1 bar
-    }
-  },
-  plugins: [ChartDataLabels]
-});
+    });
 
-  // Line Chart
-const lineCtx = document.getElementById('lineChart').getContext('2d');
-new Chart(lineCtx, {
-  type: 'line',
-  data: {
-    labels: {!! json_encode($lineChart['labels']) !!},
-    datasets: [
-      {
-        label: 'Reservasi',
-        data: {!! json_encode($lineChart['reservasi']) !!},
-        borderColor: '#dc3545',
-        backgroundColor: 'rgba(220, 53, 69, 0.2)',
-        tension: 0.4
-      },
-      {
-        label: 'Kunjungan',
-        data: {!! json_encode($lineChart['kunjungan']) !!},
-        borderColor: '#28a745',
-        backgroundColor: 'rgba(40, 167, 69, 0.2)',
-        tension: 0.4
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Statistik berdasarkan Line Chart'  // title statis, gak ngikut filter waktu
-      }
-    },
-    scales: {
-      y: { beginAtZero: true }
+    // Download Chart Function
+    function downloadChart(chartId, filename) {
+      const canvas = document.getElementById(chartId);
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png', 1.0);
+      link.download = filename;
+      link.click();
     }
-  }
-});
-
-  // Download Chart Function
-  function downloadChart(chartId, filename) {
-    const canvas = document.getElementById(chartId);
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png', 1.0);
-    link.download = filename;
-    link.click();
-  }
-</script>
+  </script>
 @endsection

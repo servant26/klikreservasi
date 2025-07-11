@@ -30,7 +30,8 @@
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
   <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- LINK ONLINE <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+  <script src="{{ asset('sweetalert2/sweetalert2.all.min.js') }}"></script>
 </head>
 <body class="hold-transition light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -98,65 +99,65 @@
       </div>
 
       <!-- Sidebar Menu -->
-<nav class="mt-2">
-    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <!-- Menu Dashboard dengan dropdown -->
-        <li class="nav-item menu-open">
-            <a href="#" class="nav-link {{ Request::is('admin/dashboard') || Request::is('admin/datatable') ? 'active' : '' }}">
-                <i class="nav-icon fa fa-tachometer-alt"></i>
-                <p>
-                    Dashboard
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="/admin/dashboard" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Chart</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/admin/datatable" class="nav-link {{ Request::is('admin/datatable') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Datatable</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
+      <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+              <!-- Menu Dashboard dengan dropdown -->
+              <li class="nav-item menu-open">
+                  <a href="#" class="nav-link {{ Request::is('admin/dashboard') || Request::is('admin/datatable') ? 'active' : '' }}">
+                      <i class="nav-icon fa fa-tachometer-alt"></i>
+                      <p>
+                          Dashboard
+                          <i class="right fas fa-angle-left"></i>
+                      </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                          <a href="/admin/dashboard" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
+                              <i class="far fa-circle nav-icon"></i>
+                              <p>Chart</p>
+                          </a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="/admin/datatable" class="nav-link {{ Request::is('admin/datatable') ? 'active' : '' }}">
+                              <i class="far fa-circle nav-icon"></i>
+                              <p>Datatable</p>
+                          </a>
+                      </li>
+                  </ul>
+              </li>
 
-        <!-- Menu Profile -->
-        <li class="nav-item">
-            <a href="/admin/profile" class="nav-link {{ Request::is('admin/profile') ? 'active' : '' }}">
-                <i class="nav-icon fa fa-user"></i>
-                <p>
-                    Profile
-                </p>
-            </a>
-        </li>
+              <!-- Menu Profile -->
+              <li class="nav-item">
+                  <a href="/admin/profile" class="nav-link {{ Request::is('admin/profile') ? 'active' : '' }}">
+                      <i class="nav-icon fa fa-user"></i>
+                      <p>
+                          Profile
+                      </p>
+                  </a>
+              </li>
 
-        <!-- Menu Management Employee -->
-        <li class="nav-item">
-            <a href="/admin/management" class="nav-link {{ Request::is('admin/management') ? 'active' : '' }}">
-                <i class="nav-icon fa fa-users"></i>
-                <p>
-                    Management Staff
-                </p>
-            </a>
-        </li>
+              <!-- Menu Management Employee -->
+              <li class="nav-item">
+                  <a href="/admin/management" class="nav-link {{ Request::is('admin/management') ? 'active' : '' }}">
+                      <i class="nav-icon fa fa-users"></i>
+                      <p>
+                          Management Staff
+                      </p>
+                  </a>
+              </li>
 
-        <!-- Menu Logout -->
-        <li class="nav-item">
-            <a href="#" class="nav-link" onclick="confirmLogout(event)">
-                <i class="nav-icon fa fa-power-off"></i>
-                <p>Logout</p>
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </li>
-    </ul>
-</nav>
+              <!-- Menu Logout -->
+              <li class="nav-item">
+                  <a href="#" class="nav-link" onclick="confirmLogout(event)">
+                      <i class="nav-icon fa fa-power-off"></i>
+                      <p>Logout</p>
+                  </a>
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                  </form>
+              </li>
+          </ul>
+      </nav>
 
       <!-- /.sidebar-menu -->
     </div>
@@ -204,7 +205,8 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- LINK ONLINE <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+<script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- DataTables & Plugins -->
 <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -219,9 +221,12 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <!-- ChartJS -->
+<!--LINK ONLINE <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<!-- LINK ONLINE<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
+<script src="{{ asset('chartjs/chart.umd.min.js') }}"></script>
+<script src="{{ asset('chartjs/plugins/chartjs-plugin-datalabels.min.js') }}"></script>
+
 
 <!-- Sparkline -->
 <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
@@ -245,7 +250,6 @@
 <script src="{{ asset('dist/js/demo.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
 //chartjs
