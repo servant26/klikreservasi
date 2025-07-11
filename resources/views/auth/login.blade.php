@@ -47,13 +47,14 @@
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row border rounded-5 p-3 bg-white shadow box-area">
-        <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: linear-gradient(135deg,rgb(26, 89, 161),rgb(128, 63, 111));">
+            <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: linear-gradient(135deg,rgb(26, 89, 161),rgb(128, 63, 111));">
                 <div class="featured-image mb-3">
-                <img src="{{ asset('dist/img/logres.png') }}" class="img-fluid" style="width: 250px;">
+                    <img src="{{ asset('dist/img/logres.png') }}" class="img-fluid" style="width: 250px;">
                 </div>
                 <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Login</p>
                 <small class="text-white text-wrap text-center" style="width: 17rem; font-family: 'Courier New', Courier, monospace;">Layanan Reservasi Aula dan Kunjungan Perpustakaan</small>
             </div>
+            
             <div class="col-md-6 right-box">
                 <div class="row align-items-center">
                     <div class="header-text mb-2">
@@ -72,7 +73,6 @@
                     @endif
                     <form action="{{ route('login.post') }}" method="POST" autocomplete="off">
                         @csrf
-
                         <!-- Email -->
                         <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
