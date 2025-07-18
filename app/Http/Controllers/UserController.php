@@ -152,28 +152,53 @@ class UserController extends Controller
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
 
-    public function edit($id)
-    {
-        $ajuan = DB::table('ajuan')
-            ->join('users', 'ajuan.user_id', '=', 'users.id')
-            ->select('ajuan.*', 'users.name', 'users.email', 'users.whatsapp', 'users.asal')
-            ->where('ajuan.id', $id)
-            ->first();
-    
-        if (!$ajuan) {
-            return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
-        }
-    
-        // Ambil ajuan lain yang jenisnya sama, bukan milik user sendiri, dan tanggal hari ini ke atas
-        $ajuanLain = Ajuan::where('user_id', '!=', $ajuan->user_id)
-            ->where('jenis', $ajuan->jenis)
-            ->whereDate('tanggal', '>=', Carbon::today())
-            ->orderBy('tanggal', 'asc')
-            ->with('user')
-            ->get();
-    
-        return view('user.edit', compact('ajuan', 'ajuanLain'));
+public function edit($id)
+{
+    $ajuan = DB::table('ajuan')
+        ->join('users', 'ajuan.user_id', '=', 'users.id')
+        ->select('ajuan.*', 'users.name', 'users.email', 'users.whatsapp', 'users.asal')
+        ->where('ajuan.id', $id)
+        ->first();
+
+    if (!$ajuan) {
+        return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
     }
+
+    // Ambil ajuan lain yang jenisnya sama, bukan milik user sendiri, dan tanggal hari ini ke atas
+    $ajuanLain = Ajuan::where('user_id', '!=', $ajuan->user_id)
+        ->where('jenis', $ajuan->jenis)
+        ->whereDate('tanggal', '>=', Carbon::today())
+        ->orderBy('tanggal', 'asc')
+        ->with('user')
+        ->get();
+
+    // Generate seluruh tanggal hari kerja dalam bulan ini
+    $startOfMonth = Carbon::now()->startOfMonth();
+    $endOfMonth = Carbon::now()->endOfMonth();
+    $tanggalList = [];
+
+    foreach (Carbon::parse($startOfMonth)->daysUntil($endOfMonth) as $tanggal) {
+        if (!$tanggal->isWeekend()) {
+            $tanggalList[] = [
+                'date' => $tanggal->format('Y-m-d'),
+                'label' => $tanggal->translatedFormat('l, d F Y') // Contoh: Senin, 27 Juli 2025
+            ];
+        }
+    }
+
+    // Ambil data ajuan yang disetujui untuk tanggal-tanggal di bulan ini
+    $tanggalArray = array_column($tanggalList, 'date');
+
+    $ajuanAcc = Ajuan::whereIn('tanggal', $tanggalArray)
+        ->where('jenis', 1)
+        ->where('status', 2)
+        ->with('user')
+        ->get()
+        ->groupBy('tanggal');
+
+    return view('user.edit', compact('ajuan', 'ajuanLain', 'tanggalList', 'ajuanAcc'));
+}
+
     
     public function update(Request $request, $id)
     {

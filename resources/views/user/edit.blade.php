@@ -53,16 +53,66 @@
                     </div>
                     --}}
 
-                    <div class="form-group">
-                        <label>Tanggal</label>
-                        <input type="text" id="tanggal" name="tanggal"
-                            class="form-control @error('tanggal') is-invalid @enderror"
-                            required
-                            value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
-                        @error('tanggal')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+<div class="form-group">
+    <label>Tanggal</label>
+
+    @if ($ajuan->jenis == 2)
+        <input type="text" id="tanggal" name="tanggal"
+            class="form-control @error('tanggal') is-invalid @enderror"
+            required
+            value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
+        <!-- @error('tanggal')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror -->
+    @else
+        {{-- Tampilkan pilihan tombol tanggal --}}
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <tr>
+                    @php $cols = 5; $i = 0; @endphp
+                    @foreach ($tanggalList as $tgl)
+                        @php
+                            $isAcc = isset($ajuanAcc[$tgl['date']]);
+                            $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+                        @endphp
+                        <td>
+                            @if ($isAcc)
+                                <span data-bs-toggle="tooltip"
+                                    title="Telah direservasi oleh: {{ $instansi }}">
+                                    <button type="button"
+                                            class="btn btn-danger w-100"
+                                            disabled>
+                                        {{ $tgl['label'] }}
+                                    </button>
+                                </span>
+                            @else
+                                <button type="button"
+                                        class="btn btn-outline-primary tanggal-btn w-100"
+                                        data-tanggal="{{ $tgl['date'] }}">
+                                    {{ $tgl['label'] }}
+                                </button>
+                            @endif
+                        </td>
+                        @php $i++; @endphp
+                        @if ($i % $cols == 0)</tr><tr>@endif
+                    @endforeach
+                    @for ($j = $i % $cols; $j < $cols && $j != 0; $j++) <td></td> @endfor
+                </tr>
+            </table>
+        </div>
+
+        <div class="form-group mt-3">
+            <label><strong>Tanggal Terpilih</strong></label>
+            <input type="text" id="tanggalDisplay" class="form-control" placeholder="Belum ada tanggal dipilih" readonly disabled>
+        </div>
+
+        <input type="hidden" name="tanggal" id="selectedTanggal" value="{{ old('tanggal', $ajuan->tanggal) }}">
+        @error('tanggal')
+            <div class="text-danger mt-2">{{ $message }}</div>
+        @enderror
+    @endif
+</div>
+
 
                     <div class="form-group">
                         <label>Jam</label>
@@ -127,6 +177,38 @@
     $(document).ready(function() {
         $("#tanggal").datepicker({
             dateFormat: "dd/mm/yy"
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        @if ($ajuan->jenis == 2)
+            $("#tanggal").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+        @endif
+
+        // Script untuk jenis == 1
+        const tanggalButtons = document.querySelectorAll('.tanggal-btn');
+        const hiddenInput = document.getElementById('selectedTanggal');
+        const displayInput = document.getElementById('tanggalDisplay');
+
+        tanggalButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const tanggal = this.getAttribute('data-tanggal');
+                const label = this.innerText;
+
+                hiddenInput.value = tanggal;
+                displayInput.value = label;
+
+                tanggalButtons.forEach(btn => {
+                    btn.classList.remove('btn-primary');
+                    btn.classList.add('btn-outline-primary');
+                });
+
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-primary');
+            });
         });
     });
 </script>
