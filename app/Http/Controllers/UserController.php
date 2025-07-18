@@ -98,10 +98,21 @@ class UserController extends Controller
         }
 
         try {
-            $tanggal = Carbon::createFromFormat('Y-m-d', $request->input('tanggal'))->format('Y-m-d');
+            $tanggalInput = $request->input('tanggal');
+
+            if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $tanggalInput)) {
+                // Format dd/mm/yyyy
+                $tanggal = Carbon::createFromFormat('d/m/Y', $tanggalInput)->format('Y-m-d');
+            } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $tanggalInput)) {
+                // Format yyyy-mm-dd
+                $tanggal = Carbon::createFromFormat('Y-m-d', $tanggalInput)->format('Y-m-d');
+            } else {
+                return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid'])->withInput();
+            }
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid'])->withInput();
         }
+
 
         $jam = $request->input('jam');
         $hari = Carbon::parse($tanggal)->dayOfWeek;
@@ -152,52 +163,52 @@ class UserController extends Controller
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
 
-public function edit($id)
-{
-    $ajuan = DB::table('ajuan')
-        ->join('users', 'ajuan.user_id', '=', 'users.id')
-        ->select('ajuan.*', 'users.name', 'users.email', 'users.whatsapp', 'users.asal')
-        ->where('ajuan.id', $id)
-        ->first();
+    public function edit($id)
+    {
+        $ajuan = DB::table('ajuan')
+            ->join('users', 'ajuan.user_id', '=', 'users.id')
+            ->select('ajuan.*', 'users.name', 'users.email', 'users.whatsapp', 'users.asal')
+            ->where('ajuan.id', $id)
+            ->first();
 
-    if (!$ajuan) {
-        return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
-    }
-
-    // Ambil ajuan lain yang jenisnya sama, bukan milik user sendiri, dan tanggal hari ini ke atas
-    $ajuanLain = Ajuan::where('user_id', '!=', $ajuan->user_id)
-        ->where('jenis', $ajuan->jenis)
-        ->whereDate('tanggal', '>=', Carbon::today())
-        ->orderBy('tanggal', 'asc')
-        ->with('user')
-        ->get();
-
-    // Generate seluruh tanggal hari kerja dalam bulan ini
-    $startOfMonth = Carbon::now()->startOfMonth();
-    $endOfMonth = Carbon::now()->endOfMonth();
-    $tanggalList = [];
-
-    foreach (Carbon::parse($startOfMonth)->daysUntil($endOfMonth) as $tanggal) {
-        if (!$tanggal->isWeekend()) {
-            $tanggalList[] = [
-                'date' => $tanggal->format('Y-m-d'),
-                'label' => $tanggal->translatedFormat('l, d F Y') // Contoh: Senin, 27 Juli 2025
-            ];
+        if (!$ajuan) {
+            return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
+
+        // Ambil ajuan lain yang jenisnya sama, bukan milik user sendiri, dan tanggal hari ini ke atas
+        $ajuanLain = Ajuan::where('user_id', '!=', $ajuan->user_id)
+            ->where('jenis', $ajuan->jenis)
+            ->whereDate('tanggal', '>=', Carbon::today())
+            ->orderBy('tanggal', 'asc')
+            ->with('user')
+            ->get();
+
+        // Generate seluruh tanggal hari kerja dalam bulan ini
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $tanggalList = [];
+
+        foreach (Carbon::parse($startOfMonth)->daysUntil($endOfMonth) as $tanggal) {
+            if (!$tanggal->isWeekend()) {
+                $tanggalList[] = [
+                    'date' => $tanggal->format('Y-m-d'),
+                    'label' => $tanggal->translatedFormat('l, d F Y') // Contoh: Senin, 27 Juli 2025
+                ];
+            }
+        }
+
+        // Ambil data ajuan yang disetujui untuk tanggal-tanggal di bulan ini
+        $tanggalArray = array_column($tanggalList, 'date');
+
+        $ajuanAcc = Ajuan::whereIn('tanggal', $tanggalArray)
+            ->where('jenis', 1)
+            ->where('status', 2)
+            ->with('user')
+            ->get()
+            ->groupBy('tanggal');
+
+        return view('user.edit', compact('ajuan', 'ajuanLain', 'tanggalList', 'ajuanAcc'));
     }
-
-    // Ambil data ajuan yang disetujui untuk tanggal-tanggal di bulan ini
-    $tanggalArray = array_column($tanggalList, 'date');
-
-    $ajuanAcc = Ajuan::whereIn('tanggal', $tanggalArray)
-        ->where('jenis', 1)
-        ->where('status', 2)
-        ->with('user')
-        ->get()
-        ->groupBy('tanggal');
-
-    return view('user.edit', compact('ajuan', 'ajuanLain', 'tanggalList', 'ajuanAcc'));
-}
 
     
     public function update(Request $request, $id)
@@ -231,9 +242,15 @@ public function edit($id)
         }
 
         try {
-            $tanggalInput = Carbon::createFromFormat('d/m/Y', $request->tanggal);
+            if ($request->jenis == 1) {
+                // Tombol tanggal kirim dalam format Y-m-d
+                $tanggalInput = Carbon::createFromFormat('Y-m-d', $request->tanggal);
+            } else {
+                // Datepicker biasa (dd/mm/yyyy)
+                $tanggalInput = Carbon::createFromFormat('d/m/Y', $request->tanggal);
+            }
         } catch (\Exception $e) {
-            return back()->withErrors(['tanggal' => 'Format tanggal tidak valid (dd/mm/yyyy).'])->withInput();
+            return back()->withErrors(['tanggal' => 'Format tanggal tidak valid.'])->withInput();
         }
 
         // Validasi tanggal tidak boleh ke belakang
