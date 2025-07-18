@@ -15,6 +15,10 @@
         font-size: 0.7rem !important;
         line-height: 1 !important;
       }
+      .not-selectable {
+    cursor: not-allowed !important;
+    opacity: 0.6;
+  }
     }
   </style>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

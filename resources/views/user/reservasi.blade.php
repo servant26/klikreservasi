@@ -22,49 +22,6 @@
 @section('content')
 <section class="content">
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card card-primary collapsed-card">
-          <div class="card-header">
-            <h3 class="card-title">Lihat Jadwal</h3>
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-              </button>
-            </div>
-          </div>
-          <!-- /.card-header -->
-          <div class="card-body">
-            @if($ajuan->isEmpty())
-              <p>Tidak ada jadwal yang akan datang.</p>
-            @else
-              <ul>
-                @foreach($ajuan as $a)
-                  @php
-                    $tanggal = \Carbon\Carbon::parse($a->tanggal);
-                    $jam = \Carbon\Carbon::parse($a->jam);
-                    $waktu = $jam->format('H:i');
-                    $periode = match (true) {
-                      $jam->hour < 12 => 'pagi',
-                      $jam->hour < 15 => 'siang',
-                      $jam->hour < 18 => 'sore',
-                      default => 'malam',
-                    };
-                  @endphp
-                <li>
-                  {{ $a->user->asal ?? 'Asal tidak diketahui' }} :
-                  {{ $tanggal->translatedFormat('l, d F Y') }} jam {{ $waktu }} {{ $periode }}
-                </li>
-                @endforeach
-              </ul>
-            @endif
-          </div>
-          <!-- /.card-body -->
-        </div>
-            <!-- /.card -->
-      </div>
-          <!-- /.col -->
-    </div>
-
     <!-- /.row -->
     <div class="row">
       <!-- left column -->
@@ -72,7 +29,7 @@
         <!-- general form elements -->
         <div class="card card-primary">
           <div class="card-header">
-            <h3 class="card-title">Silahkan isi datanya</h3>
+            <h3 class="card-title">Silahkan isi form berikut :</h3>
           </div>
           <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -83,14 +40,68 @@
                     <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
                 </div>
 
-                <!-- Tanggal -->
-                <div class="form-group">
-                  <label>Tanggal</label>
-                  <input type="text" id="tanggal" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" value="{{ old('tanggal') }}" required/>
-                    @error('tanggal')
-                      <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+<!-- Pilih Tanggal -->
+<div class="form-group">
+  <label><strong>Pilih Tanggal</strong></label>
+  <div class="table-responsive">
+    <table class="table table-bordered text-center">
+      <tr>
+        @php
+          $cols = 5;
+          $i = 0;
+        @endphp
+
+        @foreach ($tanggalList as $tgl)
+@php
+  $isAcc = isset($ajuanAcc[$tgl['date']]);
+  $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+@endphp
+
+<td>
+  @if ($isAcc)
+    <span data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="Telah direservasi oleh: {{ $instansi }}"
+          style="display: inline-block; width: 100%;">
+      <button type="button"
+              class="btn btn-danger w-100 text-nowrap"
+              style="pointer-events: none;"
+              disabled>
+        {{ $tgl['label'] }}
+      </button>
+    </span>
+  @else
+    <button type="button"
+            class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
+            data-tanggal="{{ $tgl['date'] }}">
+      {{ $tgl['label'] }}
+    </button>
+  @endif
+</td>
+
+
+
+          @php $i++; @endphp
+          @if ($i % $cols == 0)
+            </tr><tr>
+          @endif
+        @endforeach
+
+        {{-- Kosongkan sisa kolom jika kurang dari 7 di akhir --}}
+        @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
+          <td></td>
+        @endfor
+      </tr>
+    </table>
+  </div>
+
+  <input type="hidden" name="tanggal" id="selectedTanggal">
+  @error('tanggal')
+    <div class="text-danger mt-2">{{ $message }}</div>
+  @enderror
+</div>
+
+
 
                 <!-- Jam -->
                 <div class="form-group">
@@ -138,3 +149,33 @@
       </div>
     </div>
 @endsection
+@push('scripts')
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.tanggal-btn');
+    const hiddenInput = document.getElementById('selectedTanggal');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        if (btn.classList.contains('disabled')) return;
+
+        // Hapus semua highlight
+        buttons.forEach(b => b.classList.remove('active', 'btn-success'));
+        // Tambah highlight ke tombol aktif
+        btn.classList.add('active', 'btn-success');
+        // Set nilai ke hidden input
+        hiddenInput.value = btn.getAttribute('data-tanggal');
+      });
+    });
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (el) {
+      new bootstrap.Tooltip(el);
+    });
+  });
+</script>
+
+@endpush
