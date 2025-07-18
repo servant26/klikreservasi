@@ -16,9 +16,9 @@
         line-height: 1 !important;
       }
       .not-selectable {
-    cursor: not-allowed !important;
-    opacity: 0.6;
-  }
+        cursor: not-allowed !important;
+        opacity: 0.6;
+      }
     }
   </style>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -316,7 +316,7 @@ document.getElementById('kunjunganForm').addEventListener('submit', function(e) 
 </script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // Tooltip aktif
+    // Aktifkan semua tooltip
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach(function (el) {
       new bootstrap.Tooltip(el);
@@ -332,19 +332,23 @@ document.getElementById('kunjunganForm').addEventListener('submit', function(e) 
         const tanggal = this.getAttribute('data-tanggal');
         const label = this.innerText;
 
-        // Masukkan nilai ke input tersembunyi dan tampilan
+        // Update input tersembunyi dan tampilan
         hiddenInput.value = tanggal;
         displayInput.value = label;
+
+        // Hapus kelas btn-primary dari semua tombol, kembalikan ke btn-outline-primary
+        tanggalButtons.forEach(btn => {
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn-outline-primary');
+        });
+
+        // Tambahkan kelas btn-primary ke tombol yang dipilih
+        this.classList.remove('btn-outline-primary');
+        this.classList.add('btn-primary');
       });
     });
   });
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function (el) {
-      new bootstrap.Tooltip(el);
-    });
-  });
 </script>
+
 </body>
 </html>

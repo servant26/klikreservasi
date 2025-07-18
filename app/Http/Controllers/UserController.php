@@ -23,33 +23,33 @@ class UserController extends Controller
         return view('user.dashboard', compact('ajuan'));
     }   
 
-public function reservasi()
-{
-    $user = Auth::user(); 
-    $jenis = 1;
+    public function reservasi()
+    {
+        $user = Auth::user(); 
+        $jenis = 1;
 
-    $start = Carbon::now()->startOfMonth();
-    $end = Carbon::now()->endOfMonth();
+        $start = Carbon::now()->startOfMonth();
+        $end = Carbon::now()->endOfMonth();
 
-    $tanggalList = [];
+        $tanggalList = [];
 
-    for ($date = $start->copy(); $date <= $end; $date->addDay()) {
-        if ($date->isWeekday()) {
-            $tanggalList[] = [
-                'date' => $date->format('Y-m-d'),
-                'label' => $date->translatedFormat('l, d F Y'),
-            ];
+        for ($date = $start->copy(); $date <= $end; $date->addDay()) {
+            if ($date->isWeekday()) {
+                $tanggalList[] = [
+                    'date' => $date->format('Y-m-d'),
+                    'label' => $date->translatedFormat('l, d F Y'),
+                ];
+            }
         }
+
+        $ajuanAcc = Ajuan::with('user')
+            ->where('jenis', $jenis)
+            ->where('status', 2)
+            ->get()
+            ->groupBy('tanggal');
+
+        return view('user.reservasi', compact('user', 'jenis', 'tanggalList', 'ajuanAcc'));
     }
-
-    $ajuanAcc = Ajuan::with('user')
-        ->where('jenis', $jenis)
-        ->where('status', 2)
-        ->get()
-        ->groupBy('tanggal');
-
-    return view('user.reservasi', compact('user', 'jenis', 'tanggalList', 'ajuanAcc'));
-}
 
 
     
@@ -98,7 +98,7 @@ public function reservasi()
         }
 
         try {
-            $tanggal = Carbon::createFromFormat('d/m/Y', $request->input('tanggal'))->format('Y-m-d');
+            $tanggal = Carbon::createFromFormat('Y-m-d', $request->input('tanggal'))->format('Y-m-d');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['tanggal' => 'Format tanggal tidak valid'])->withInput();
         }
