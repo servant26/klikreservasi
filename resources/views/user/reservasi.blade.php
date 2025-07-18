@@ -40,66 +40,68 @@
                     <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
                 </div>
 
-              <!-- Pilih Tanggal -->
-              <div class="form-group">
-                <label><strong>Pilih Tanggal</strong></label>
-                <div class="table-responsive">
-                  <table class="table table-bordered text-center">
-                    <tr>
-                      @php
-                        $cols = 5;
-                        $i = 0;
-                      @endphp
+                <!-- Pilih Tanggal -->
+                <div class="form-group">
+                  <label><strong>Pilih Tanggal</strong></label>
+                  <div class="table-responsive">
+                    <table class="table table-bordered text-center">
+                      <tr>
+                        @php
+                          $cols = 5;
+                          $i = 0;
+                        @endphp
 
-                      @foreach ($tanggalList as $tgl)
-              @php
-                $isAcc = isset($ajuanAcc[$tgl['date']]);
-                $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
-              @endphp
+                        @foreach ($tanggalList as $tgl)
+                          @php
+                            $isAcc = isset($ajuanAcc[$tgl['date']]);
+                            $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+                          @endphp
+                        <td>
+                          @if ($isAcc)
+                            <span data-bs-toggle="tooltip"
+                                  data-bs-placement="top"
+                                  title="Telah direservasi oleh: {{ $instansi }}"
+                                  style="display: inline-block; width: 100%;">
+                              <button type="button"
+                                      class="btn btn-danger w-100 text-nowrap"
+                                      style="pointer-events: none;"
+                                      disabled>
+                                {{ $tgl['label'] }}
+                              </button>
+                            </span>
+                          @else
+                            <button type="button"
+                                    class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
+                                    data-tanggal="{{ $tgl['date'] }}">
+                              {{ $tgl['label'] }}
+                            </button>
+                          @endif
+                        </td>
+                          @php $i++; @endphp
+                          @if ($i % $cols == 0)
+                            </tr><tr>
+                          @endif
+                        @endforeach
 
-              <td>
-                @if ($isAcc)
-                  <span data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Telah direservasi oleh: {{ $instansi }}"
-                        style="display: inline-block; width: 100%;">
-                    <button type="button"
-                            class="btn btn-danger w-100 text-nowrap"
-                            style="pointer-events: none;"
-                            disabled>
-                      {{ $tgl['label'] }}
-                    </button>
-                  </span>
-                @else
-                  <button type="button"
-                          class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
-                          data-tanggal="{{ $tgl['date'] }}">
-                    {{ $tgl['label'] }}
-                  </button>
-                @endif
-              </td>
+                        {{-- Kosongkan sisa kolom jika kurang dari 7 di akhir --}}
+                        @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
+                          <td></td>
+                        @endfor
+                      </tr>
+                    </table>
+                  </div>
+                  <!-- Tampilkan label tanggal yang dipilih -->
+                  <div class="form-group mt-3">
+                    <label><strong>Tanggal Terpilih</strong></label>
+                    <input type="text" id="tanggalDisplay" class="form-control" placeholder="Belum ada tanggal dipilih" readonly disabled>
+                  </div>
 
-
-
-                        @php $i++; @endphp
-                        @if ($i % $cols == 0)
-                          </tr><tr>
-                        @endif
-                      @endforeach
-
-                      {{-- Kosongkan sisa kolom jika kurang dari 7 di akhir --}}
-                      @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
-                        <td></td>
-                      @endfor
-                    </tr>
-                  </table>
+                  <!-- Input hidden yang dikirim ke backend -->
+                  <input type="hidden" name="tanggal" id="selectedTanggal">
+                  @error('tanggal')
+                    <div class="text-danger mt-2">{{ $message }}</div>
+                  @enderror
                 </div>
-
-                <input type="hidden" name="tanggal" id="selectedTanggal">
-                @error('tanggal')
-                  <div class="text-danger mt-2">{{ $message }}</div>
-                @enderror
-              </div>
 
                 <!-- Jam -->
                 <div class="form-group">
@@ -147,33 +149,3 @@
       </div>
     </div>
 @endsection
-@push('scripts')
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const buttons = document.querySelectorAll('.tanggal-btn');
-    const hiddenInput = document.getElementById('selectedTanggal');
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', function () {
-        if (btn.classList.contains('disabled')) return;
-
-        // Hapus semua highlight
-        buttons.forEach(b => b.classList.remove('active', 'btn-success'));
-        // Tambah highlight ke tombol aktif
-        btn.classList.add('active', 'btn-success');
-        // Set nilai ke hidden input
-        hiddenInput.value = btn.getAttribute('data-tanggal');
-      });
-    });
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function (el) {
-      new bootstrap.Tooltip(el);
-    });
-  });
-</script>
-
-@endpush

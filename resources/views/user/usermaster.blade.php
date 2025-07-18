@@ -314,6 +314,37 @@ document.getElementById('kunjunganForm').addEventListener('submit', function(e) 
     }
 });
 </script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Tooltip aktif
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (el) {
+      new bootstrap.Tooltip(el);
+    });
 
+    // Ambil semua tombol tanggal
+    const tanggalButtons = document.querySelectorAll('.tanggal-btn');
+    const hiddenInput = document.getElementById('selectedTanggal');
+    const displayInput = document.getElementById('tanggalDisplay');
+
+    tanggalButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const tanggal = this.getAttribute('data-tanggal');
+        const label = this.innerText;
+
+        // Masukkan nilai ke input tersembunyi dan tampilan
+        hiddenInput.value = tanggal;
+        displayInput.value = label;
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (el) {
+      new bootstrap.Tooltip(el);
+    });
+  });
+</script>
 </body>
 </html>
