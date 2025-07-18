@@ -39,6 +39,11 @@
                 <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
               </div>
 
+              <!-- Tombol Lihat Foto Perpustakaan -->
+              <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#carouselModal">
+                Lihat Foto Perpustakaan
+              </button>
+
               <!-- Tanggal -->
               <div class="form-group">
                 <label>Tanggal</label>
@@ -89,6 +94,34 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
           </form>
+          <!-- Modal Carousel -->
+          <div class="modal fade" id="carouselModal" tabindex="-1" aria-labelledby="carouselModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="carouselModalLabel">Foto Perpustakaan</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                  <div id="carouselAula" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      @for ($i = 1; $i <= 4; $i++)
+                        <div class="carousel-item {{ $i == 1 ? 'active' : '' }}">
+                          <img src="{{ asset('dist/img/perpustakaan' . $i . '.jpg') }}" class="d-block w-100" alt="perpustakaan {{ $i }}">
+                        </div>
+                      @endfor
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselAula" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselAula" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <br><br>
         </div>
       </div>

@@ -30,17 +30,6 @@ Route::middleware(['auth', 'role:user'])->get('/user/profile', [UserController::
 Route::middleware(['auth', 'role:user'])->get('/user/profile/edit', [UserController::class, 'editProfile'])->name('user.profile.edit');
 Route::middleware(['auth', 'role:user'])->post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
 
-// langsung return view tanpa controller
-Route::middleware(['auth', 'role:user'])->get('/user/foto_reservasi', function () {
-    return view('user.foto_reservasi');
-})->name('user.foto_reservasi');
-
-Route::middleware(['auth', 'role:user'])->get('/user/foto_kunjungan', function () {
-    return view('user.foto_kunjungan');
-})->name('user.foto_kunjungan');
-
-
-
 //staff
 Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', [StaffController::class, 'index'])->name('staff.dashboard');
 Route::middleware(['auth', 'role:staff'])->get('/staff/balas/{id}', [StaffController::class, 'showBalasForm'])->name('staff.balasForm');

@@ -152,7 +152,7 @@
 <div class="row">
   <!-- Reservasi Aula -->
   <div class="col-lg-6 col-md-12 mb-4">
-    <a href="{{ route('user.foto_reservasi') }}" style="text-decoration: none;">
+    <a href="{{ route('user.reservasi') }}" style="text-decoration: none;">
       <div class="small-box"
         style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;"
         onmouseover="this.querySelector('.desc').style.opacity='1'"
@@ -174,7 +174,7 @@
 
   <!-- Kunjungan Perpustakaan -->
   <div class="col-lg-6 col-md-12 mb-4">
-    <a href="{{ route('user.foto_kunjungan') }}" style="text-decoration: none;">
+    <a href="{{ route('user.kunjungan') }}" style="text-decoration: none;">
       <div class="small-box"
         style="position: relative; overflow: hidden; border-radius: 10px; height: 200px; cursor: pointer;"
         onmouseover="this.querySelector('.desc').style.opacity='1'"
