@@ -119,11 +119,12 @@
                   <td class="text-center">
                     <div class="d-grid gap-2">
                       @if($a->status == 2)
-                        <a class="btn btn-primary btn-block"
+                      <a class="btn btn-primary btn-block" href="javascript:void(0);">Telah Ditanggapi</a>
+                        <!-- <a class="btn btn-primary btn-block"
                           href="javascript:void(0);"
                           onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}', '{{ route('staff.updateStatus', $a->id) }}')">
                           Telah Ditanggapi
-                        </a>
+                        </a> -->
                       @elseif($a->status == 1 || $a->status == 3)
                         <a class="btn
                           @if($a->status == 1) btn-danger

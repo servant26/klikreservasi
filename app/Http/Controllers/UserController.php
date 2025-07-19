@@ -35,10 +35,13 @@ class UserController extends Controller
 
         for ($date = $start->copy(); $date <= $end; $date->addDay()) {
             if ($date->isWeekday()) {
-                $tanggalList[] = [
-                    'date' => $date->format('Y-m-d'),
-                    'label' => $date->translatedFormat('l, d F Y'),
-                ];
+                // Only include dates that are at least 2 days from today
+                if ($date->diffInDays(Carbon::today()) >= 2) {
+                    $tanggalList[] = [
+                        'date' => $date->format('Y-m-d'),
+                        'label' => $date->translatedFormat('l, d F Y'),
+                    ];
+                }
             }
         }
 
@@ -210,9 +213,7 @@ class UserController extends Controller
             ->groupBy('tanggal');
 
         return view('user.edit', compact('ajuan', 'ajuanLain', 'tanggalList', 'ajuanAcc'));
-    }
-
-    
+    }  
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -260,6 +261,11 @@ class UserController extends Controller
             return back()->withErrors(['tanggal' => 'Tanggal tidak boleh kurang dari hari ini.'])->withInput();
         }
 
+        // Validasi minimal 2 hari sebelumnya untuk jenis 1 (aula)
+        if ($jenis === 1 && $tanggalInput->lte(Carbon::today()->addDay())) {
+            return back()->withErrors(['tanggal' => 'Reservasi aula hanya bisa diajukan minimal 2 hari sebelumnya'])->withInput();
+        }
+        
         // Cek hari libur nasional fix (yang tanggalnya sama setiap tahun)
         $liburFix = ['01-01', '01-05', '17-08', '25-12'];
         $formatBulanHari = $tanggalInput->format('d-m');

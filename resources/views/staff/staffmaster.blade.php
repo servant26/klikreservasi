@@ -361,26 +361,26 @@ async function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanI
     let wa = normalizeWhatsapp(whatsapp);
     let linkWA = `https://wa.me/${wa}`;
 
-    if (status == 2) {
-        Swal.fire({
-            title: 'Batalkan Penerimaan?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Batalkan',
-            cancelButtonText: 'Kembali',
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.open(linkWA, '_blank');
-                setTimeout(() => {
-                    window.location.href = urlUpdate;
-                }, 500);
-            }
-        });
-        return;
-    }
+    // if (status == 2) {
+    //     Swal.fire({
+    //         title: 'Batalkan Penerimaan?',
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonText: 'Batalkan',
+    //         cancelButtonText: 'Kembali',
+    //         confirmButtonColor: '#d33',
+    //         cancelButtonColor: '#6c757d',
+    //         reverseButtons: true
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             window.open(linkWA, '_blank');
+    //             setTimeout(() => {
+    //                 window.location.href = urlUpdate;
+    //             }, 500);
+    //         }
+    //     });
+    //     return;
+    // }
 
     // Cek bentrok hanya untuk jenis reservasi (1)
 const cekBentrok = await fetch('/staff/cek-bentrok?ajuan_id=' + ajuanId, {
