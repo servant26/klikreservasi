@@ -50,8 +50,6 @@ class UserController extends Controller
 
         return view('user.reservasi', compact('user', 'jenis', 'tanggalList', 'ajuanAcc'));
     }
-
-
     
     public function kunjungan()
     {
@@ -122,6 +120,11 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['tanggal' => 'Tidak bisa membuat ajuan untuk tanggal yang sudah lewat'])->withInput();
         }
 
+        // ✅ Tambahan validasi hanya untuk jenis 1 (reservasi aula)
+        if ($jenis === 1 && Carbon::parse($tanggal)->lte(Carbon::today()->addDay())) {
+            return redirect()->back()->withErrors(['tanggal' => 'Reservasi aula hanya bisa diajukan minimal 2 hari sebelumnya'])->withInput();
+        }
+
         // Cek akhir pekan
         if ($hari == 0 || $hari == 6) {
             return redirect()->back()->withErrors(['tanggal' => 'Ajuan hanya bisa dibuat pada hari kerja (Senin - Jumat)'])->withInput();
@@ -162,7 +165,6 @@ class UserController extends Controller
 
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
-
     public function edit($id)
     {
         $ajuan = DB::table('ajuan')
