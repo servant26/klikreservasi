@@ -130,7 +130,7 @@ class StaffController extends Controller
                     return response()->json([
                         'success' => false,
                         'conflict' => true,
-                        'message' => 'Sudah ada reservasi yang di-ACC pada tanggal tersebut!'
+                        'message' => 'Telah ada reservasi yang di-ACC di tanggal tersebut!'
                     ]);
                 }
             }
@@ -169,7 +169,7 @@ class StaffController extends Controller
             $bentrok = DB::table('ajuan')
                 ->where('tanggal', $ajuan->tanggal)
                 ->where('jenis', 1) // Hanya untuk jenis reservasi
-                ->where('status', 2) // Hanya yang sudah diterima
+                ->whereIn('status', [1, 2, 3]) // 1: Belum di-ACC, 3: Reschedule
                 ->where('id', '!=', $ajuan->id)
                 ->exists();
 

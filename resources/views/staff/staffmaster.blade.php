@@ -383,34 +383,101 @@ async function handleStatusAction(status, nama, whatsapp, urlUpdate = '', ajuanI
     }
 
     // Cek bentrok hanya untuk jenis reservasi (1)
-    const cekBentrok = await fetch('/staff/cek-bentrok?ajuan_id=' + ajuanId, {
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    });
-    const hasilCek = await cekBentrok.json();
+const cekBentrok = await fetch('/staff/cek-bentrok?ajuan_id=' + ajuanId, {
+    headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    }
+});
+const hasilCek = await cekBentrok.json();
 
-    if (hasilCek.bentrok) {
-        return Swal.fire({
-            title: 'Konflik Jadwal Reservasi',
-            icon: 'warning',
-            html: `
-                <div class="text-start" style="text-align: left;">
-                    <p>Terdapat jadwal reservasi aula yang telah disetujui pada tanggal yang sama.</p>
-                    <p>Prosedur penanganan:</p>
-                    <ul style="text-align: left; padding-left: 20px; margin-left: 0;">
-                        <li>Hubungi pemohon untuk konfirmasi lebih lanjut</li>
-                        <li>Berikan opsi tanggal alternatif yang tersedia</li>
-                        <li>Jika disetujui, minta pemohon mengajukan reservasi baru</li>
-                        <li>Atau batalkan reservasi lain yang telah disetujui sebelum menerima pengajuan ini</li>
-                    </ul>
-                </div>
-            `,
-            confirmButtonText: 'Mengerti',
-            confirmButtonColor: '#6c757d',
-            width: '600px'
+if (hasilCek.bentrok) {
+    let btnText = status == 1 ? 'Terima Ajuan' : 'Terima Reschedule';
+
+    const result = await Swal.fire({
+        title: 'Pengingat Jadwal Sama',
+        icon: 'warning',
+        html: `
+            <div class="text-start" style="text-align: left;">
+                <p>Terdapat pengajuan reservasi aula lain dengan tanggal yang sama.</p>
+                <p>Prosedur penanganan:</p>
+                <ul style="text-align: left; padding-left: 20px; margin-left: 0;">
+                    <li>Hubungi pemohon untuk konfirmasi lebih lanjut</li>
+                    <li>Berikan opsi tanggal alternatif yang tersedia</li>
+                    <li>Jika disetujui, minta pemohon mengubah tanggal ajuan</li>
+                    <li>Atau tunggu keputusan untuk pengajuan yang lain sebelum melanjutkan</li>
+                </ul>
+            </div>
+        `,
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: btnText,
+        denyButtonText: 'Tolak Ajuan',
+        cancelButtonText: 'Kembali',
+        confirmButtonColor: '#198754', // Hijau
+        denyButtonColor: '#dc3545',     // Merah
+        cancelButtonColor: '#6c757d',   // Abu
+        reverseButtons: true,
+        width: '600px'
+    });
+
+    if (result.isConfirmed) {
+        // Klik "Terima"
+        window.open(linkWA, '_blank');
+
+        fetch('/staff/update-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id: ajuanId, action: 'accept' })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (data.new_status === 4) {
+                    document.getElementById('row-' + ajuanId)?.remove();
+                } else {
+                    location.reload();
+                }
+            } else {
+                Swal.fire('Gagal', data.message, 'error');
+            }
+        })
+        .catch(() => {
+            Swal.fire('Error', 'Tidak bisa menghubungi server.', 'error');
+        });
+
+    } else if (result.isDenied) {
+        // Klik "Tolak"
+        fetch('/staff/update-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id: ajuanId, action: 'reject' })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (data.new_status === 4) {
+                    document.getElementById('row-' + ajuanId)?.remove();
+                } else {
+                    location.reload();
+                }
+            } else {
+                Swal.fire('Gagal', data.message, 'error');
+            }
+        })
+        .catch(() => {
+            Swal.fire('Error', 'Tidak bisa menghubungi server.', 'error');
         });
     }
+
+    return; // Stop proses apapun di luar alert ini
+}
+
 
     // Jika tidak bentrok, tampilkan dialog konfirmasi seperti biasa
     let btnText = status == 1 ? ['Terima Ajuan', 'Tolak Ajuan'] : ['Terima Reschedule', 'Tolak Reschedule'];
