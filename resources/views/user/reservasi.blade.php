@@ -96,16 +96,25 @@
                     </table>
                   </div>
                   <!-- Tampilkan label tanggal yang dipilih -->
-                  <div class="form-group mt-3">
-                    <label><strong>Tanggal Terpilih</strong></label>
-                    <input type="text" id="tanggalDisplay" class="form-control" placeholder="Belum ada tanggal dipilih" readonly disabled>
+                  <div class="form-group mt-2" 
+                      @error('tanggal') data-error-target="true" @enderror>
+                      <label><strong>Tanggal Terpilih</strong></label>
+                      <input 
+                          type="text" 
+                          id="tanggalDisplay" 
+                          name="tanggal_display"
+                          class="form-control @error('tanggal') is-invalid @enderror" 
+                          placeholder="Belum ada tanggal dipilih" 
+                          readonly>
                   </div>
 
-                  <!-- Input hidden yang dikirim ke backend -->
+                  <!-- Input hidden untuk backend -->
                   <input type="hidden" name="tanggal" id="selectedTanggal">
+
                   @error('tanggal')
-                    <div class="text-danger mt-2">{{ $message }}</div>
+                      <div class="text-danger">{{ $message }}</div>
                   @enderror
+
                 </div>
 
                 <!-- Jam -->

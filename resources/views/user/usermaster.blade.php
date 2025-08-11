@@ -20,6 +20,17 @@
         opacity: 0.6;
       }
     }
+
+.error-inline {
+    display: inline-block; /* supaya selebar teks */
+    background-color: #dc3545; /* merah */
+    color: #fff; /* putih */
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 4px;
+}  
+
   </style>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="icon" href="{{ asset('dist/img/logorbg.png') }}" type="image/png">
@@ -349,6 +360,14 @@ document.getElementById('kunjunganForm').addEventListener('submit', function(e) 
     });
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let errorElement = document.querySelector("[data-error-target='true'], .is-invalid, .error-inline");
+    if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+});
 
+</script>
 </body>
 </html>
