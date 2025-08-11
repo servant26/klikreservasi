@@ -53,65 +53,83 @@
                     </div>
                     --}}
 
-<div class="form-group">
-    <label>Tanggal</label>
+                    <div class="form-group">
+                        <label>Tanggal</label>
 
-    @if ($ajuan->jenis == 2)
-        <input type="text" id="tanggal" name="tanggal"
-            class="form-control @error('tanggal') is-invalid @enderror"
-            required
-            value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
-        <!-- @error('tanggal')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror -->
-    @else
-        {{-- Tampilkan pilihan tombol tanggal --}}
-        <div class="table-responsive">
-            <table class="table table-bordered text-center">
-                <tr>
-                    @php $cols = 5; $i = 0; @endphp
-                    @foreach ($tanggalList as $tgl)
-                        @php
-                            $isAcc = isset($ajuanAcc[$tgl['date']]);
-                            $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
-                        @endphp
-                        <td>
-                            @if ($isAcc)
-                                <span data-bs-toggle="tooltip"
-                                    title="Telah direservasi oleh: {{ $instansi }}">
-                                    <button type="button"
-                                            class="btn btn-danger w-100"
-                                            disabled>
-                                        {{ $tgl['label'] }}
-                                    </button>
-                                </span>
-                            @else
-                                <button type="button"
-                                        class="btn btn-outline-primary tanggal-btn w-100"
-                                        data-tanggal="{{ $tgl['date'] }}">
-                                    {{ $tgl['label'] }}
-                                </button>
-                            @endif
-                        </td>
-                        @php $i++; @endphp
-                        @if ($i % $cols == 0)</tr><tr>@endif
-                    @endforeach
-                    @for ($j = $i % $cols; $j < $cols && $j != 0; $j++) <td></td> @endfor
-                </tr>
-            </table>
-        </div>
+                        @if ($ajuan->jenis == 2)
+                            {{-- Input manual untuk jenis 2 --}}
+                            <input type="text" id="tanggal" name="tanggal"
+                                class="form-control @error('tanggal') is-invalid @enderror"
+                                required
+                                value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
+                        @else
+                            {{-- Pilihan tombol tanggal untuk jenis 1 --}}
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center">
+                                    <tr>
+                                        @php 
+                                            $cols = 5; 
+                                            $i = 0; 
+                                        @endphp
 
-        <div class="form-group mt-3">
-            <label><strong>Tanggal Terpilih</strong></label>
-            <input type="text" id="tanggalDisplay" class="form-control" placeholder="Belum ada tanggal dipilih" readonly disabled>
-        </div>
+                                        @foreach ($tanggalList as $tgl)
+                                            @php
+                                                $isAcc = isset($ajuanAcc[$tgl['date']]);
+                                                $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+                                                $isSelected = $tgl['date'] === $ajuan->tanggal;
+                                            @endphp
+                                            <td>
+                                            @if ($isAcc)
+                                                <button type="button"
+                                                        class="btn btn-danger"
+                                                        style="min-width: 150px; white-space: nowrap;"
+                                                        disabled>
+                                                    {{ $tgl['label'] }}
+                                                </button>
+                                            @else
+                                                <button type="button"
+                                                        class="btn {{ $isSelected ? 'btn-primary active' : 'btn-outline-primary' }} tanggal-btn"
+                                                        style="min-width: 150px; white-space: nowrap;"
+                                                        data-tanggal="{{ $tgl['date'] }}">
+                                                    {{ $tgl['label'] }}
+                                                </button>
+                                            @endif
+                                            </td>
 
-        <input type="hidden" name="tanggal" id="selectedTanggal" value="{{ old('tanggal', $ajuan->tanggal) }}">
-        @error('tanggal')
-            <div class="text-danger mt-2">{{ $message }}</div>
-        @enderror
-    @endif
-</div>
+
+                                            @php $i++; @endphp
+                                            @if ($i % $cols == 0)
+                                                </tr><tr>
+                                            @endif
+                                        @endforeach
+
+
+                                        {{-- Kosongkan sisa kolom jika tidak genap --}}
+                                        @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
+                                            <td></td>
+                                        @endfor
+                                    </tr>
+                                </table>
+                            </div>
+
+                            {{-- Field tanggal terpilih --}}
+                            <div class="form-group mt-3">
+                                <label><strong>Tanggal Terpilih</strong></label>
+                                <input type="text" id="tanggalDisplay" 
+                                    class="form-control" 
+                                    value="{{ \Carbon\Carbon::parse(old('tanggal', $ajuan->tanggal))->translatedFormat('l, d F Y') }}"
+                                    readonly disabled>
+                            </div>
+
+                            {{-- Hidden input --}}
+                            <input type="hidden" name="tanggal" id="selectedTanggal" value="{{ old('tanggal', $ajuan->tanggal) }}">
+
+                            @error('tanggal')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
+                        @endif
+                    </div>
+
 
 
                     <div class="form-group">
@@ -211,5 +229,29 @@
             });
         });
     });
+
+tanggalButtons.forEach(button => {
+    button.addEventListener('click', function () {
+        if (this.disabled) return; // tombol merah tidak bisa dipilih
+
+        const tanggal = this.getAttribute('data-tanggal');
+        const label = this.innerText;
+
+        hiddenInput.value = tanggal;
+        displayInput.value = label;
+
+        tanggalButtons.forEach(btn => {
+            // Hanya reset tombol yang BUKAN merah (btn-danger)
+            if (!btn.classList.contains('btn-danger')) {
+                btn.classList.remove('btn-primary', 'active');
+                btn.classList.add('btn-outline-primary');
+            }
+        });
+
+        this.classList.remove('btn-outline-primary');
+        this.classList.add('btn-primary', 'active');
+    });
+});
+
 </script>
 @endsection

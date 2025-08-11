@@ -176,6 +176,11 @@ class UserController extends Controller
             return redirect()->route('user.dashboard')->with('error', 'Data tidak ditemukan.');
         }
 
+        if ($ajuan->jenis == 1 && Carbon::parse($ajuan->tanggal)->lte(Carbon::today()->addDay())) {
+            return redirect()->route('user.dashboard')
+                ->with('error', 'Ajuan tidak dapat diubah jika acara kurang dari 2 hari lagi.');
+        }
+
         // Ambil ajuan lain yang jenisnya sama, bukan milik user sendiri, dan tanggal hari ini ke atas
         $ajuanLain = Ajuan::where('user_id', '!=', $ajuan->user_id)
             ->where('jenis', $ajuan->jenis)
