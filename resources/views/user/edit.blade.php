@@ -53,82 +53,87 @@
                     </div>
                     --}}
 
-                    <div class="form-group">
-                        <label>Tanggal</label>
+<div class="form-group">
+    <label>Tanggal</label>
 
-                        @if ($ajuan->jenis == 2)
-                            {{-- Input manual untuk jenis 2 --}}
-                            <input type="text" id="tanggal" name="tanggal"
-                                class="form-control @error('tanggal') is-invalid @enderror"
-                                required
-                                value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
+    @if ($ajuan->jenis == 2)
+        {{-- Input manual untuk jenis 2 --}}
+        <input type="text" id="tanggal" name="tanggal"
+            class="form-control @error('tanggal') is-invalid @enderror"
+            @error('tanggal') data-error-target="true" @enderror
+            required
+            value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
+    @else
+        {{-- Pilihan tombol tanggal untuk jenis 1 --}}
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <tr>
+                    @php 
+                        $cols = 5; 
+                        $i = 0; 
+                    @endphp
+
+                    @foreach ($tanggalList as $tgl)
+                        @php
+                            $isAcc = isset($ajuanAcc[$tgl['date']]);
+                            $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+                            $isSelected = $tgl['date'] === $ajuan->tanggal;
+                        @endphp
+                        <td>
+                        @if ($isAcc)
+                            <button type="button"
+                                    class="btn btn-danger"
+                                    style="min-width: 150px; white-space: nowrap;"
+                                    disabled>
+                                {{ $tgl['label'] }}
+                            </button>
                         @else
-                            {{-- Pilihan tombol tanggal untuk jenis 1 --}}
-                            <div class="table-responsive">
-                                <table class="table table-bordered text-center">
-                                    <tr>
-                                        @php 
-                                            $cols = 5; 
-                                            $i = 0; 
-                                        @endphp
-
-                                        @foreach ($tanggalList as $tgl)
-                                            @php
-                                                $isAcc = isset($ajuanAcc[$tgl['date']]);
-                                                $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
-                                                $isSelected = $tgl['date'] === $ajuan->tanggal;
-                                            @endphp
-                                            <td>
-                                            @if ($isAcc)
-                                                <button type="button"
-                                                        class="btn btn-danger"
-                                                        style="min-width: 150px; white-space: nowrap;"
-                                                        disabled>
-                                                    {{ $tgl['label'] }}
-                                                </button>
-                                            @else
-                                                <button type="button"
-                                                        class="btn {{ $isSelected ? 'btn-primary active' : 'btn-outline-primary' }} tanggal-btn"
-                                                        style="min-width: 150px; white-space: nowrap;"
-                                                        data-tanggal="{{ $tgl['date'] }}">
-                                                    {{ $tgl['label'] }}
-                                                </button>
-                                            @endif
-                                            </td>
-
-
-                                            @php $i++; @endphp
-                                            @if ($i % $cols == 0)
-                                                </tr><tr>
-                                            @endif
-                                        @endforeach
-
-
-                                        {{-- Kosongkan sisa kolom jika tidak genap --}}
-                                        @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
-                                            <td></td>
-                                        @endfor
-                                    </tr>
-                                </table>
-                            </div>
-
-                            {{-- Field tanggal terpilih --}}
-                            <div class="form-group mt-3">
-                                <label><strong>Tanggal Terpilih</strong></label>
-                                <input type="text" id="tanggalDisplay" 
-                                    class="form-control" 
-                                    value="{{ \Carbon\Carbon::parse(old('tanggal', $ajuan->tanggal))->translatedFormat('l, d F Y') }}"
-                                    readonly disabled>
-                            </div>
-
-                            {{-- Hidden input --}}
-                            <input type="hidden" name="tanggal" id="selectedTanggal" value="{{ old('tanggal', $ajuan->tanggal) }}">
-
-                            @error('tanggal')
-                                <div class="text-danger mt-2">{{ $message }}</div>
-                            @enderror
+                            <button type="button"
+                                    class="btn {{ $isSelected ? 'btn-primary active' : 'btn-outline-primary' }} tanggal-btn"
+                                    style="min-width: 150px; white-space: nowrap;"
+                                    data-tanggal="{{ $tgl['date'] }}">
+                                {{ $tgl['label'] }}
+                            </button>
                         @endif
-                    </div>
+                        </td>
+
+                        @php $i++; @endphp
+                        @if ($i % $cols == 0)
+                            </tr><tr>
+                        @endif
+                    @endforeach
+
+                    {{-- Kosongkan sisa kolom jika tidak genap --}}
+                    @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
+                        <td></td>
+                    @endfor
+                </tr>
+            </table>
+        </div>
+
+        <div class="form-group mt-2" 
+            @error('tanggal') data-error-target="true" @enderror>
+            <label><strong>Tanggal Terpilih</strong></label>
+            <input 
+                type="text" 
+                id="tanggalDisplay" 
+                name="tanggal_display"
+                class="form-control @error('tanggal') is-invalid @enderror" 
+                placeholder="Belum ada tanggal dipilih" 
+                readonly
+                value="{{ old('tanggal_display') }}">
+        </div>
+
+        <!-- Input hidden untuk backend -->
+        <input type="hidden" name="tanggal" id="selectedTanggal">
+
+        @error('tanggal')
+            <div class="text-danger">{{ $message }}</div>
+        @enderror
+
+    @endif
+</div>
+
 
 
 
