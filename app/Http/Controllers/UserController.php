@@ -262,9 +262,10 @@ class UserController extends Controller
             return back()->withErrors(['tanggal' => 'Tanggal tidak boleh kurang dari hari ini.'])->withInput();
         }
 
-        // Validasi minimal 2 hari sebelumnya untuk jenis 1 (aula)
-        if ($jenis === 1 && $tanggalInput->lte(Carbon::today()->addDay())) {
-            return back()->withErrors(['tanggal' => 'Reservasi aula hanya bisa diajukan minimal 2 hari sebelumnya'])->withInput();
+        if ($jenis === 1 && $tanggalInput->lte(Carbon::today()->addDays(2))) {
+            return back()->withErrors([
+                'tanggal' => 'Reservasi aula hanya bisa diajukan minimal 2 hari sebelumnya'
+            ])->withInput();
         }
         
         // Cek hari libur nasional fix (yang tanggalnya sama setiap tahun)
