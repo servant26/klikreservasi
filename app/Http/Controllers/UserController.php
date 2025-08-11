@@ -35,13 +35,10 @@ class UserController extends Controller
 
         for ($date = $start->copy(); $date <= $end; $date->addDay()) {
             if ($date->isWeekday()) {
-                // Only include dates that are at least 2 days from today
-                if ($date->diffInDays(Carbon::today()) >= 2) {
-                    $tanggalList[] = [
-                        'date' => $date->format('Y-m-d'),
-                        'label' => $date->translatedFormat('l, d F Y'),
-                    ];
-                }
+                $tanggalList[] = [
+                    'date' => $date->format('Y-m-d'),
+                    'label' => $date->translatedFormat('l, d F Y'),
+                ];
             }
         }
 
@@ -123,9 +120,8 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['tanggal' => 'Tidak bisa membuat ajuan untuk tanggal yang sudah lewat'])->withInput();
         }
 
-        // ✅ Tambahan validasi hanya untuk jenis 1 (reservasi aula)
         if ($jenis === 1 && Carbon::parse($tanggal)->lte(Carbon::today()->addDay())) {
-            return redirect()->back()->withErrors(['tanggal' => 'Reservasi aula hanya bisa diajukan minimal 2 hari sebelumnya'])->withInput();
+            return redirect()->back()->withErrors(['tanggal' => 'Reservasi aula hanya bisa diajukan paling tidak 2 hari sebelum acara'])->withInput();
         }
 
         // Cek akhir pekan
