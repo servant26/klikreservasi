@@ -53,89 +53,86 @@
                     </div>
                     --}}
 
-<div class="form-group">
-    <label>Tanggal</label>
+                    <div class="form-group">
+                        <label>Tanggal</label>
 
-    @if ($ajuan->jenis == 2)
-        {{-- Input manual untuk jenis 2 --}}
-        <input type="text" id="tanggal" name="tanggal"
-            class="form-control @error('tanggal') is-invalid @enderror"
-            @error('tanggal') data-error-target="true" @enderror
-            required
-            value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
-    @else
-        {{-- Pilihan tombol tanggal untuk jenis 1 --}}
-        <div class="table-responsive">
-            <table class="table table-bordered text-center">
-                <tr>
-                    @php 
-                        $cols = 5; 
-                        $i = 0; 
-                    @endphp
-
-                    @foreach ($tanggalList as $tgl)
-                        @php
-                            $isAcc = isset($ajuanAcc[$tgl['date']]);
-                            $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
-                            $isSelected = $tgl['date'] === $ajuan->tanggal;
-                        @endphp
-                        <td>
-                        @if ($isAcc)
-                            <button type="button"
-                                    class="btn btn-danger"
-                                    style="min-width: 150px; white-space: nowrap;"
-                                    disabled>
-                                {{ $tgl['label'] }}
-                            </button>
+                        @if ($ajuan->jenis == 2)
+                            {{-- Input manual untuk jenis 2 --}}
+                            <input type="text" id="tanggal" name="tanggal"
+                                class="form-control @error('tanggal') is-invalid @enderror"
+                                @error('tanggal') data-error-target="true" @enderror
+                                required
+                                value="{{ old('tanggal', \Carbon\Carbon::parse($ajuan->tanggal)->format('d/m/Y')) }}">
                         @else
-                            <button type="button"
-                                    class="btn {{ $isSelected ? 'btn-primary active' : 'btn-outline-primary' }} tanggal-btn"
-                                    style="min-width: 150px; white-space: nowrap;"
-                                    data-tanggal="{{ $tgl['date'] }}">
-                                {{ $tgl['label'] }}
-                            </button>
+                            {{-- Pilihan tombol tanggal untuk jenis 1 --}}
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center">
+                                    <tr>
+                                        @php 
+                                            $cols = 5; 
+                                            $i = 0; 
+                                        @endphp
+
+                                        @foreach ($tanggalList as $tgl)
+                                            @php
+                                                $isAcc = isset($ajuanAcc[$tgl['date']]);
+                                                $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+                                                $isSelected = $tgl['date'] === $ajuan->tanggal;
+                                            @endphp
+                                            <td>
+                                            @if ($isAcc)
+                                                <button type="button"
+                                                        class="btn btn-danger"
+                                                        style="min-width: 150px; white-space: nowrap;"
+                                                        disabled>
+                                                    {{ $tgl['label'] }}
+                                                </button>
+                                            @else
+                                                <button type="button"
+                                                        class="btn {{ $isSelected ? 'btn-primary active' : 'btn-outline-primary' }} tanggal-btn"
+                                                        style="min-width: 150px; white-space: nowrap;"
+                                                        data-tanggal="{{ $tgl['date'] }}">
+                                                    {{ $tgl['label'] }}
+                                                </button>
+                                            @endif
+                                            </td>
+
+                                            @php $i++; @endphp
+                                            @if ($i % $cols == 0)
+                                                </tr><tr>
+                                            @endif
+                                        @endforeach
+
+                                        {{-- Kosongkan sisa kolom jika tidak genap --}}
+                                        @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
+                                            <td></td>
+                                        @endfor
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="form-group mt-2" 
+                                @error('tanggal') data-error-target="true" @enderror>
+                                <label><strong>Tanggal Terpilih</strong></label>
+                                <input 
+                                    type="text" 
+                                    id="tanggalDisplay" 
+                                    name="tanggal_display"
+                                    class="form-control @error('tanggal') is-invalid @enderror" 
+                                    placeholder="Belum ada tanggal dipilih" 
+                                    readonly
+                                    value="{{ old('tanggal_display') }}">
+                            </div>
+
+                            <!-- Input hidden untuk backend -->
+                            <input type="hidden" name="tanggal" id="selectedTanggal">
+
+                            @error('tanggal')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+
                         @endif
-                        </td>
-
-                        @php $i++; @endphp
-                        @if ($i % $cols == 0)
-                            </tr><tr>
-                        @endif
-                    @endforeach
-
-                    {{-- Kosongkan sisa kolom jika tidak genap --}}
-                    @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
-                        <td></td>
-                    @endfor
-                </tr>
-            </table>
-        </div>
-
-        <div class="form-group mt-2" 
-            @error('tanggal') data-error-target="true" @enderror>
-            <label><strong>Tanggal Terpilih</strong></label>
-            <input 
-                type="text" 
-                id="tanggalDisplay" 
-                name="tanggal_display"
-                class="form-control @error('tanggal') is-invalid @enderror" 
-                placeholder="Belum ada tanggal dipilih" 
-                readonly
-                value="{{ old('tanggal_display') }}">
-        </div>
-
-        <!-- Input hidden untuk backend -->
-        <input type="hidden" name="tanggal" id="selectedTanggal">
-
-        @error('tanggal')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-
-    @endif
-</div>
-
-
-
+                    </div>
 
                     <div class="form-group">
                         <label>Jam</label>
@@ -152,7 +149,7 @@
                         <label>Deskripsi</label>
                         <textarea name="deskripsi"
                             class="form-control @error('deskripsi') is-invalid @enderror"
-                            required>{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
+                            required placeholder="Masukkan deskripsi (misal, acara seminar, kunjungan dari SMA... dsb)">{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
                         @error('deskripsi')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -162,8 +159,8 @@
                         <label>Jumlah Orang</label>
                         <input type="number" name="jumlah_orang"
                             class="form-control @error('jumlah_orang') is-invalid @enderror"
-                            required
-                            value="{{ old('jumlah_orang', $ajuan->jumlah_orang) }}">
+                            required 
+                            value="{{ old('jumlah_orang', $ajuan->jumlah_orang) }}" placeholder="Masukkan jumlah orang">
                         @error('jumlah_orang')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

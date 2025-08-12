@@ -27,7 +27,7 @@
       <!-- Nama -->
       <div class="form-group mb-2">
           <label>Nama</label>
-          <input type="text" name="name" class="form-control"
+          <input type="text" name="name" class="form-control" placeholder="Masukkan nama"
               value="{{ old('name', $user->name) }}"
               required pattern="[A-Za-z\s]+"
               oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
@@ -38,7 +38,7 @@
       <!-- Email -->
       <div class="form-group mb-2">
           <label>Email</label>
-          <input type="email" name="email" class="form-control"
+          <input type="email" name="email" class="form-control" placeholder="Masukkan email"
               value="{{ old('email', $user->email) }}"
               required
               oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan format email yang benar!')"
@@ -49,7 +49,7 @@
       <!-- Whatsapp (kembalikan ke number sesuai request) -->
       <div class="form-group mb-2">
           <label>Whatsapp</label>
-          <input type="number" name="whatsapp" class="form-control"
+          <input type="number" name="whatsapp" class="form-control" placeholder="Masukkan Whatsapp"
               value="{{ old('whatsapp', $user->whatsapp) }}"
               required
               oninvalid="this.setCustomValidity('Nomor WhatsApp wajib diisi')"
@@ -60,7 +60,7 @@
       <!-- Asal -->
       <div class="form-group mb-3">
           <label>Asal</label>
-          <input type="text" name="asal" class="form-control"
+          <input type="text" name="asal" class="form-control" placeholder="Masukkan asal"
               value="{{ old('asal', $user->asal) }}"
               required
               oninvalid="this.setCustomValidity('Form ini wajib diisi!')"
@@ -71,7 +71,7 @@
       <!-- Password (opsional, minlength 8) -->
       <div class="form-group mb-3">
           <label>Ganti Password (Opsional)</label>
-          <input type="password" name="password" id="password" class="form-control"
+          <input type="password" name="password" id="password" class="form-control" placeholder="Password minimal 8 karakter"
               minlength="8"
               oninvalid="this.setCustomValidity(this.validity.valueMissing ? '' : 'Password minimal 8 karakter!')"
               oninput="this.setCustomValidity('')">
@@ -82,10 +82,9 @@
       <!-- Konfirmasi Password (will become required if password is filled) -->
       <div class="form-group mb-3">
           <label>Konfirmasi Password Baru</label>
-          <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
+          <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Masukkan konfirmasi password"
               oninvalid="this.setCustomValidity('Konfirmasi password wajib diisi')"
               oninput="this.setCustomValidity('')">
-          <small id="confirmHint" class="text-danger d-none">Konfirmasi password tidak sama</small>
       </div>
 
       <a href="{{ route('user.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>

@@ -130,64 +130,64 @@
                     </div>
                 @endif
 
-<form action="{{ route('register.post') }}" method="POST" autocomplete="off">
-    @csrf
+                <form action="{{ route('register.post') }}" method="POST" autocomplete="off">
+                    @csrf
 
-    <!-- Nama -->
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-user"></i></span>
-        <input type="text" id="name" name="name"
-            class="form-control form-control-lg bg-light fs-6"
-            placeholder="Masukkan Nama" required autofocus pattern="[A-Za-z\s]+"
-            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
-            oninput="this.setCustomValidity('')" autocomplete="off">
-    </div>
+                    <!-- Nama -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" id="name" name="name"
+                            class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Masukkan Nama" required autofocus pattern="[A-Za-z\s]+"
+                            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
+                            oninput="this.setCustomValidity('')" autocomplete="off">
+                    </div>
 
-    <!-- Email -->
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-        <input type="email" id="email" name="email"
-            class="form-control form-control-lg bg-light fs-6"
-            placeholder="Masukkan Email" required
-            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
-            oninput="this.setCustomValidity('')" autocomplete="off">
-    </div>
+                    <!-- Email -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        <input type="email" id="email" name="email"
+                            class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Masukkan Email" required
+                            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                            oninput="this.setCustomValidity('')" autocomplete="off">
+                    </div>
 
-    <!-- WhatsApp -->
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-        <input type="number" id="whatsapp" name="whatsapp"
-            class="form-control form-control-lg bg-light fs-6"
-            placeholder="Masukkan Nomor WhatsApp" required
-            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan hanya angka!')"
-            oninput="this.setCustomValidity('')" autocomplete="off">
-    </div>
+                    <!-- WhatsApp -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        <input type="number" id="whatsapp" name="whatsapp"
+                            class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Masukkan Nomor WhatsApp" required
+                            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan hanya angka!')"
+                            oninput="this.setCustomValidity('')" autocomplete="off">
+                    </div>
 
-    <!-- Asal -->
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-building"></i></span>
-        <input type="text" id="asal" name="asal"
-            class="form-control form-control-lg bg-light fs-6"
-            placeholder="Masukkan Asal Instansi" required
-            oninvalid="this.setCustomValidity('Form ini wajib diisi!')"
-            oninput="this.setCustomValidity('')" autocomplete="off">
-    </div>
+                    <!-- Asal -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-building"></i></span>
+                        <input type="text" id="asal" name="asal"
+                            class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Masukkan Asal Instansi" required
+                            oninvalid="this.setCustomValidity('Form ini wajib diisi!')"
+                            oninput="this.setCustomValidity('')" autocomplete="off">
+                    </div>
 
-    <!-- Password -->
-    <div class="input-group mb-3">
-        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-        <input type="password" id="password" name="password"
-            class="form-control form-control-lg bg-light fs-6"
-            placeholder="Masukkan Password" required minlength="8" autocomplete="new-password"
-            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
-            oninput="this.setCustomValidity('')">
-    </div>
+                    <!-- Password -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" id="password" name="password"
+                            class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Masukkan Password" required minlength="8" autocomplete="new-password"
+                            oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
+                            oninput="this.setCustomValidity('')">
+                    </div>
 
-    <!-- Tombol -->
-    <div class="input-group mb-3">
-        <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Daftar</button>
-    </div>
-</form>
+                    <!-- Tombol -->
+                    <div class="input-group mb-3">
+                        <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Daftar</button>
+                    </div>
+                </form>
 
 
                 <div class="text-center">

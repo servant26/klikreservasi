@@ -129,7 +129,7 @@
                 <!-- Deskripsi -->
                 <div class="form-group">
                   <label>Deskripsi</label>
-                    <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi') }}</textarea>
+                    <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required placeholder="Masukkan deskripsi (misal, acara seminar, kunjungan dari SMA... dsb)">{{ old('deskripsi') }}</textarea>
                       @error('deskripsi')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
@@ -138,7 +138,7 @@
                 <!-- Jumlah Orang -->
                 <div class="form-group">
                   <label>Jumlah Orang</label>
-                    <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" value="{{ old('jumlah_orang') }}" required>
+                    <input type="number" name="jumlah_orang" class="form-control @error('jumlah_orang') is-invalid @enderror" value="{{ old('jumlah_orang') }}" required placeholder="Masukkan jumlah orang">
                       @error('jumlah_orang')
                         <div class="invalid-feedback">{{ $message }}</div>
                       @enderror

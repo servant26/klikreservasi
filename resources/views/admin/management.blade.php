@@ -43,7 +43,7 @@
         <div class="row g-3">
             <!-- Nama -->
             <div class="col-12 col-sm-6 col-md-3 mb-1 mb-md-0">
-                <input type="text" name="name" class="form-control" placeholder="Nama"
+                <input type="text" name="name" class="form-control" placeholder="Masukkan nama"
                     value="{{ old('name') }}" required autofocus
                     pattern="[A-Za-z\s]+"
                     oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
@@ -52,7 +52,7 @@
 
             <!-- Email -->
             <div class="col-12 col-sm-6 col-md-3 mb-1 mb-md-0">
-                <input type="email" name="email" class="form-control" placeholder="Email"
+                <input type="email" name="email" class="form-control" placeholder="Masukkan email"
                     value="{{ old('email') }}" required
                     oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
                     oninput="this.setCustomValidity('')" autocomplete="off">
@@ -60,7 +60,7 @@
 
             <!-- Password -->
             <div class="col-12 col-sm-6 col-md-3 mb-1 mb-md-0">
-                <input type="password" name="password" class="form-control" placeholder="Password"
+                <input type="password" name="password" class="form-control" placeholder="Masukkan password"
                     required minlength="8"
                     oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Password minimal 8 karakter!')"
                     oninput="this.setCustomValidity('')" autocomplete="new-password">

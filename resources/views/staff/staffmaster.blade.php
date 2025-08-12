@@ -542,7 +542,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('profileForm');
+    const password = document.getElementById('password');
+    const confirm = document.getElementById('password_confirmation');
+    const confirmHint = document.getElementById('confirmHint');
 
+    function updateConfirmRequirement() {
+        if (password.value.length > 0) {
+            confirm.required = true;
+            confirm.setAttribute('aria-required', 'true');
+        } else {
+            confirm.required = false;
+            confirm.removeAttribute('aria-required');
+            confirm.setCustomValidity('');
+            confirmHint.classList.add('d-none');
+        }
+    }
+
+    function checkMatch() {
+        if (password.value.length === 0) {
+            confirm.setCustomValidity('');
+            confirmHint.classList.add('d-none');
+            return;
+        }
+
+        if (password.value !== confirm.value) {
+            confirm.setCustomValidity('Konfirmasi password tidak sama');
+            confirmHint.classList.remove('d-none');
+        } else {
+            confirm.setCustomValidity('');
+            confirmHint.classList.add('d-none');
+        }
+    }
+
+    password.addEventListener('input', function () {
+        updateConfirmRequirement();
+        checkMatch();
+    });
+
+    confirm.addEventListener('input', function () {
+        checkMatch();
+    });
+
+    form.addEventListener('submit', function (e) {
+        updateConfirmRequirement();
+        checkMatch();
+
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            form.reportValidity();
+        }
+    });
+});
+</script>
 </body>
 </html>
 

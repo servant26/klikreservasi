@@ -508,6 +508,65 @@ $(function () {
 });
 
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('profileForm');
+    const password = document.getElementById('password');
+    const confirm = document.getElementById('password_confirmation');
+
+    function updateConfirmRequirement() {
+        if (password.value.length > 0) {
+            confirm.required = true;
+            confirm.setAttribute('aria-required', 'true');
+        } else {
+            confirm.required = false;
+            confirm.removeAttribute('aria-required');
+            confirm.setCustomValidity('');
+        }
+    }
+
+    function checkLength() {
+        if (password.value.length > 0 && password.value.length < 8) {
+            password.setCustomValidity('Password minimal 8 karakter');
+        } else {
+            password.setCustomValidity('');
+        }
+    }
+
+    function checkMatch() {
+        if (password.value.length === 0) {
+            confirm.setCustomValidity('');
+            return;
+        }
+        if (password.value !== confirm.value) {
+            confirm.setCustomValidity('Konfirmasi password tidak sama');
+        } else {
+            confirm.setCustomValidity('');
+        }
+    }
+
+    password.addEventListener('input', function () {
+        updateConfirmRequirement();
+        checkLength(); // ✅ cek panjang langsung
+        checkMatch();
+    });
+
+    confirm.addEventListener('input', function () {
+        checkMatch();
+    });
+
+    form.addEventListener('submit', function (e) {
+        updateConfirmRequirement();
+        checkLength(); // ✅ cek panjang sebelum submit
+        checkMatch();
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            form.reportValidity();
+        }
+    });
+});
+</script>
+
 @yield('js')
 </body>
 </html>

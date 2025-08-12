@@ -27,42 +27,47 @@
       </div>
     @endif
 
-    <form action="{{ route('admin.profile.update') }}" method="POST">
+    <form id="profileForm" action="{{ route('admin.profile.update') }}" method="POST">
         @csrf
         <!-- Nama -->
         <div class="form-group mb-2">
-          <label>Nama</label>
-          <input type="text" name="name" class="form-control"
-              value="{{ old('name', $admin->name) }}" required autofocus pattern="[A-Za-z\s]+"
-              oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
-              oninput="this.setCustomValidity('')">
+            <label>Nama</label>
+            <input type="text" name="name" class="form-control" placeholder="Masukkan nama"
+                value="{{ old('name', $admin->name) }}" required autofocus pattern="[A-Za-z\s]+"
+                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Nama hanya boleh huruf!')"
+                oninput="this.setCustomValidity('')">
         </div>
 
         <!-- Email -->
         <div class="form-group mb-2">
             <label>Email</label>
-            <input type="email" name="email" class="form-control"
-              value="{{ old('email', $admin->email) }}" required
-              oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
-              oninput="this.setCustomValidity('')">
+            <input type="email" name="email" class="form-control" placeholder="Masukkan email"
+                value="{{ old('email', $admin->email) }}" required
+                oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Form ini wajib diisi!' : 'Masukkan alamat email yang valid!')"
+                oninput="this.setCustomValidity('')">
         </div>
 
         <!-- Password (opsional) -->
-        <div class="form-group mb-2">
-          <label>Ganti Password (opsional)</label>
-          <input type="password" name="password" class="form-control">
-        </div>
+          <div class="form-group mb-2">
+              <label>Ganti Password (opsional)</label>
+              <input type="password" name="password" id="password" class="form-control"
+                    minlength="8" placeholder="Password minimal 8 karakter"
+                    oninvalid="this.setCustomValidity(this.validity.valueMissing ? 'Password minimal 8 karakter!' : 'Password minimal 8 karakter!')"
+                    oninput="this.setCustomValidity('')">
+                    <small class="form-text text-muted">Kosongkan jika tidak ingin mengganti password.</small>
+          </div>
 
         <!-- Konfirmasi Password -->
         <div class="form-group mb-3">
-          <label>Konfirmasi Password Baru</label>
-          <input type="password" name="password_confirmation" class="form-control">
+            <label>Konfirmasi Password Baru</label>
+            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Masukkan konfirmasi password"
+                oninvalid="this.setCustomValidity('Konfirmasi password wajib diisi')"
+                oninput="this.setCustomValidity('')">
         </div>
 
         <a href="{{ route('admin.dashboard') }}" class="btn btn-danger" style="margin-right: 4px;">Back</a>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
 </div>
 @endsection
 
