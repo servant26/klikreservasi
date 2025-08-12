@@ -92,7 +92,7 @@ class UserController extends Controller
         $jenis = (int) $request->input('jenis');
 
         if ($jenis === 1 && $jumlah_orang > 100) {
-            return redirect()->back()->withErrors(['jumlah_orang' => 'Jumlah maksimal untuk reservasi aula adalah 100 orang'])->withInput();
+            return redirect()->back()->withErrors(['jumlah_orang' => 'Batas maksimal untuk reservasi aula adalah 100 orang.'])->withInput();
         }
 
         try {
@@ -117,11 +117,11 @@ class UserController extends Controller
 
         // Cek tanggal sudah lewat
         if (Carbon::parse($tanggal)->lt(Carbon::today())) {
-            return redirect()->back()->withErrors(['tanggal' => 'Tidak bisa membuat ajuan untuk tanggal yang sudah lewat'])->withInput();
+            return redirect()->back()->withErrors(['tanggal' => 'Anda tidak dapat membuat ajuan untuk tanggal yang telah lewat.'])->withInput();
         }
 
         if ($jenis === 1 && Carbon::parse($tanggal)->lte(Carbon::today()->addDay())) {
-            return redirect()->back()->withErrors(['tanggal' => 'Reservasi aula hanya bisa diajukan paling tidak 2 hari sebelum acara'])->withInput();
+            return redirect()->back()->withErrors(['tanggal' => 'Reservasi aula hanya bisa diajukan paling tidak 2 hari sebelum acara.'])->withInput();
         }
 
         // Cek akhir pekan
@@ -235,9 +235,9 @@ class UserController extends Controller
         $jenis = (int) $request->jenis;
 
         if ($jenis === 1 && $jumlahOrang > 100) {
-            return back()->withErrors(['jumlah_orang' => 'Maksimal 100 orang untuk reservasi aula.'])->withInput();
+            return back()->withErrors(['jumlah_orang' => 'Batas maksimal untuk reservasi aula adalah 100 orang..'])->withInput();
         } elseif ($jenis === 2 && $jumlahOrang > 50) {
-            return back()->withErrors(['jumlah_orang' => 'Maksimal 50 orang untuk kunjungan perpustakaan.'])->withInput();
+            return back()->withErrors(['jumlah_orang' => 'Batas maksimal untuk kunjungan perpustakaan adalah 50 orang..'])->withInput();
         }
 
         $ajuan = DB::table('ajuan')->where('id', $id)->first();
@@ -259,12 +259,12 @@ class UserController extends Controller
 
         // Validasi tanggal tidak boleh ke belakang
         if ($tanggalInput->isPast() && !$tanggalInput->isToday()) {
-            return back()->withErrors(['tanggal' => 'Tanggal tidak boleh kurang dari hari ini.'])->withInput();
+            return back()->withErrors(['tanggal' => 'Anda tidak dapat mengubah ajuan untuk tanggal yang telah lewat.'])->withInput();
         }
 
         if ($jenis === 1 && $tanggalInput->lte(Carbon::today()->addDays(2))) {
             return back()->withErrors([
-                'tanggal' => 'Reservasi aula hanya bisa diajukan minimal 2 hari sebelumnya'
+                'tanggal' => 'Reservasi aula hanya bisa diajukan paling tidak 2 hari sebelum acara.'
             ])->withInput();
         }
         
