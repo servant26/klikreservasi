@@ -358,20 +358,24 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-    
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'whatsapp' => 'nullable|string|max:20',
+            'whatsapp' => 'nullable|digits_between:12,20',
             'asal' => 'nullable|string|max:100',
             'password' => 'nullable|string|min:8|confirmed',
+        ], [
+            'whatsapp.digits_between' => 'Nomor WhatsApp minimal 12 digit.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak sama.',
         ]);
-    
-        // Normalisasi WhatsApp ke format 0815xxxxxx
+
+        // Normalisasi WhatsApp
         $normalizedWhatsapp = null;
         if ($request->filled('whatsapp')) {
             $rawWhatsapp = preg_replace('/[^0-9]/', '', $request->whatsapp);
-    
+
             if (str_starts_with($rawWhatsapp, '62')) {
                 $normalizedWhatsapp = '0' . substr($rawWhatsapp, 2);
             } elseif (str_starts_with($rawWhatsapp, '8')) {
@@ -382,18 +386,19 @@ class UserController extends Controller
                 $normalizedWhatsapp = $rawWhatsapp;
             }
         }
-    
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->whatsapp = $normalizedWhatsapp;
         $user->asal = $request->asal;
-    
+
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
-    
+
         $user->save();
-    
+
         return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
     }
+
 }    

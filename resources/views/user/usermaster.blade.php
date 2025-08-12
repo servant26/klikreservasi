@@ -369,5 +369,67 @@ document.getElementById('kunjunganForm').addEventListener('submit', function(e) 
 });
 
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('profileForm');
+    const password = document.getElementById('password');
+    const confirm = document.getElementById('password_confirmation');
+    const confirmHint = document.getElementById('confirmHint');
+
+    // atur requirement konfirmasi berdasarkan apakah password diisi atau tidak
+    function updateConfirmRequirement() {
+        if (password.value.length > 0) {
+            confirm.required = true;
+            confirm.setAttribute('aria-required', 'true');
+        } else {
+            confirm.required = false;
+            confirm.removeAttribute('aria-required');
+            confirm.setCustomValidity(''); // clear custom error
+            confirmHint.classList.add('d-none');
+        }
+    }
+
+    // cek kecocokan password <-> konfirmasi dan set customValidity sehingga form nggak submit
+    function checkMatch() {
+        // kalau password kosong, jangan paksa match
+        if (password.value.length === 0) {
+            confirm.setCustomValidity('');
+            confirmHint.classList.add('d-none');
+            return;
+        }
+
+        if (password.value !== confirm.value) {
+            confirm.setCustomValidity('Konfirmasi password tidak sama');
+            confirmHint.classList.remove('d-none');
+        } else {
+            confirm.setCustomValidity('');
+            confirmHint.classList.add('d-none');
+        }
+    }
+
+    // event listener
+    password.addEventListener('input', function () {
+        updateConfirmRequirement();
+        checkMatch();
+    });
+
+    confirm.addEventListener('input', function () {
+        checkMatch();
+    });
+
+    // sebelum submit, pastikan validasi HTML5 & match terpenuhi; jika tidak, tampilkan pesan dan cegah submit
+    form.addEventListener('submit', function (e) {
+        updateConfirmRequirement();
+        checkMatch();
+
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            // tampilkan pesan validasi bawaan browser
+            form.reportValidity();
+        }
+        // kalau valid, biarkan form submit (server-side validation tetap jalan)
+    });
+});
+</script>
 </body>
 </html>
