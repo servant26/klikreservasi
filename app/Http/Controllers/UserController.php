@@ -58,43 +58,40 @@ class UserController extends Controller
         return view('user.reservasi', compact('user', 'jenis', 'tanggalList', 'ajuanAcc', 'ajuanUser'));
     }
 
-public function kunjungan()
-{
-    $user = Auth::user(); 
-    $jenis = 2; // 2 = kunjungan
+    public function kunjungan()
+    {
+        $user = Auth::user(); 
+        $jenis = 2; // 2 = kunjungan
 
-    // Buat daftar tanggal dalam bulan ini (weekday saja)
-    $tanggalList = [];
-    $start = \Carbon\Carbon::now()->startOfMonth();
-    $end = \Carbon\Carbon::now()->endOfMonth();
+        // Buat daftar tanggal dalam bulan ini (weekday saja)
+        $tanggalList = [];
+        $start = \Carbon\Carbon::now()->startOfMonth();
+        $end = \Carbon\Carbon::now()->endOfMonth();
 
-    for ($current = $start->copy(); $current->lte($end); $current->addDay()) {
-        if (!$current->isWeekend()) { // skip Sabtu & Minggu
-            $tanggalList[] = [
-                'date'  => $current->format('Y-m-d'),
-                'label' => $current->translatedFormat('l, j F Y'),
-            ];
+        for ($current = $start->copy(); $current->lte($end); $current->addDay()) {
+            if (!$current->isWeekend()) { // skip Sabtu & Minggu
+                $tanggalList[] = [
+                    'date'  => $current->format('Y-m-d'),
+                    'label' => $current->translatedFormat('l, j F Y'),
+                ];
+            }
         }
+
+        // Data ajuan yg sudah di-ACC (status = 2)
+        $ajuanAcc = Ajuan::with('user')
+            ->where('jenis', $jenis)
+            ->where('status', 2)
+            ->get()
+            ->groupBy('tanggal');
+
+        // Data ajuan milik user login (status apapun, biar dicek di blade)
+        $ajuanUser = Ajuan::where('user_id', $user->id)
+            ->where('jenis', $jenis)
+            ->get()
+            ->keyBy('tanggal');
+
+        return view('user.kunjungan', compact('user', 'jenis', 'tanggalList', 'ajuanAcc', 'ajuanUser'));
     }
-
-    // Data ajuan yg sudah di-ACC (status = 2)
-    $ajuanAcc = Ajuan::with('user')
-        ->where('jenis', $jenis)
-        ->where('status', 2)
-        ->get()
-        ->groupBy('tanggal');
-
-    // Data ajuan milik user login (status apapun, biar dicek di blade)
-    $ajuanUser = Ajuan::where('user_id', $user->id)
-        ->where('jenis', $jenis)
-        ->get()
-        ->keyBy('tanggal');
-
-    return view('user.kunjungan', compact('user', 'jenis', 'tanggalList', 'ajuanAcc', 'ajuanUser'));
-}
-
-
-
 
     public function store(Request $request)
     {
@@ -242,7 +239,13 @@ public function kunjungan()
             ->get()
             ->groupBy('tanggal');
 
-        return view('user.edit', compact('ajuan', 'ajuanLain', 'tanggalList', 'ajuanAcc'));
+        // Ambil ajuan user login (status apapun)
+        $ajuanUser = Ajuan::where('user_id', $ajuan->user_id)
+            ->where('jenis', $ajuan->jenis)
+            ->get()
+            ->keyBy('tanggal');
+
+        return view('user.edit', compact('ajuan', 'ajuanLain', 'tanggalList', 'ajuanAcc', 'ajuanUser'));
     }  
     public function update(Request $request, $id)
     {

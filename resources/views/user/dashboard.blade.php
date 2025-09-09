@@ -114,6 +114,15 @@
                       </a>
 
                       @if($a->status == 4)
+                          <!-- Form Cancel -->
+                          <form id="delete-form-{{ $a->id }}" action="{{ route('user.destroy', $a->id) }}" method="POST" style="display: none;">
+                              @csrf
+                              @method('DELETE')
+                          </form>
+                          <button type="button" class="btn btn-dark btn-sm" onclick="confirmDelete({{ $a->id }})">
+                              Hapus Ajuan
+                          </button>
+
                           <a href="https://wa.me/62812345678" target="_blank" class="btn btn-dark btn-sm" style="color: white;">
                               Hubungi PIC
                           </a>
@@ -134,6 +143,7 @@
                           @endif
                       @endif
                   </div>
+
                 </div>
 
                 <div class="icon">

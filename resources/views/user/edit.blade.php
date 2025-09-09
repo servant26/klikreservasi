@@ -53,91 +53,93 @@
                     </div>
                     --}}
 
-<!-- Pilih Tanggal -->
-<div class="form-group">
-  <label><strong>Pilih Tanggal</strong></label>
-  <div class="table-responsive">
-    <table class="table table-bordered text-center">
-      <tr>
-        @php
-          $cols = 4;
-          $i = 0;
-        @endphp
-        @foreach ($tanggalList as $tgl)
-          @php
-            $dateObj = \Carbon\Carbon::parse($tgl['date']);
-            $isPast  = $dateObj->lt(\Carbon\Carbon::today());
+                    <!-- Pilih Tanggal -->
+                    <div class="form-group">
+                      <label><strong>Pilih Tanggal</strong></label>
+                      <div class="table-responsive">
+                        <table class="table table-bordered text-center">
+                          <tr>
+                            @php
+                              $cols = 4;
+                              $i = 0;
+                            @endphp
+                            @foreach ($tanggalList as $tgl)
+@php
+  $dateObj = \Carbon\Carbon::parse($tgl['date']);
+  $isPast  = $dateObj->lt(\Carbon\Carbon::today());
 
-            // khusus jenis 1
-            $isAcc   = ($ajuan->jenis == 1) ? isset($ajuanAcc[$tgl['date']]) : false;
-            $isUser  = ($ajuan->jenis == 1) ? isset($ajuanUser[$tgl['date']]) : false;
-            $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
-          @endphp
-          <td>
-            @if ($isPast)
-              <span data-bs-toggle="tooltip" title="Tidak dapat membuat ajuan, tanggal sudah lewat">
-                <button type="button" class="btn btn-outline-primary w-100 text-nowrap" disabled>
-                  {{ $tgl['label'] }}
-                </button>
-              </span>
+  $userAjuan = $ajuanUser[$tgl['date']] ?? null;
+  $isUser = $userAjuan && $userAjuan->status != 4;
 
-            @elseif ($ajuan->jenis == 1 && $isUser)
-              <span data-bs-toggle="tooltip" title="Telah diajukan oleh Anda">
-                <button type="button" class="btn btn-primary w-100 text-nowrap">
-                  {{ $tgl['label'] }}
-                </button>
-              </span>
+  // khusus jenis 1
+  $isAcc   = ($ajuan->jenis == 1) ? isset($ajuanAcc[$tgl['date']]) : false;
+  $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+@endphp
 
-            @elseif ($ajuan->jenis == 1 && $isAcc)
-              <span data-bs-toggle="tooltip" title="Telah direservasi oleh: {{ $instansi }}">
-                <button type="button" class="btn btn-danger w-100 text-nowrap" disabled>
-                  {{ $tgl['label'] }}
-                </button>
-              </span>
+<td>
+  @if ($isPast)
+    <span data-bs-toggle="tooltip" title="Tidak dapat membuat ajuan, tanggal sudah lewat">
+      <button type="button" class="btn btn-outline-primary w-100 text-nowrap" disabled>
+        {{ $tgl['label'] }}
+      </button>
+    </span>
 
-            @else
-              <button type="button"
-                      class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
-                      data-tanggal="{{ $tgl['date'] }}">
-                {{ $tgl['label'] }}
-              </button>
-            @endif
-          </td>
+  @elseif ($ajuan->jenis == 1 && $isUser)
+    <span data-bs-toggle="tooltip" title="Telah diajukan oleh Anda">
+      <button type="button" class="btn btn-primary w-100 text-nowrap">
+        {{ $tgl['label'] }}
+      </button>
+    </span>
 
-          @php $i++; @endphp
-          @if ($i % $cols == 0)
-            </tr><tr>
-          @endif
-        @endforeach
+  @elseif ($ajuan->jenis == 1 && $isAcc)
+    <span data-bs-toggle="tooltip" title="Telah direservasi oleh: {{ $instansi }}">
+      <button type="button" class="btn btn-danger w-100 text-nowrap" disabled>
+        {{ $tgl['label'] }}
+      </button>
+    </span>
 
-        {{-- Kosongkan sisa kolom di akhir --}}
-        @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
-          <td></td>
-        @endfor
-      </tr>
-    </table>
-  </div>
+  @else
+    <button type="button"
+            class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
+            data-tanggal="{{ $tgl['date'] }}">
+      {{ $tgl['label'] }}
+    </button>
+  @endif
+</td>
 
-  <!-- Tampilkan label tanggal yang dipilih -->
-  <div class="form-group mt-2" @error('tanggal') data-error-target="true" @enderror>
-    <label><strong>Tanggal Terpilih</strong></label>
-    <input 
-        type="text" 
-        id="tanggalDisplay" 
-        name="tanggal_display"
-        class="form-control @error('tanggal') is-invalid @enderror" 
-        placeholder="Belum ada tanggal dipilih" 
-        readonly>
-  </div>
+                              @php $i++; @endphp
+                              @if ($i % $cols == 0)
+                                </tr><tr>
+                              @endif
+                            @endforeach
 
-  <!-- Input hidden untuk backend -->
-  <input type="hidden" name="tanggal" id="selectedTanggal">
+                            {{-- Kosongkan sisa kolom di akhir --}}
+                            @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
+                              <td></td>
+                            @endfor
+                          </tr>
+                        </table>
+                      </div>
 
-  @error('tanggal')
-    <div class="text-danger">{{ $message }}</div>
-  @enderror
-</div>
+                      <!-- Tampilkan label tanggal yang dipilih -->
+                      <div class="form-group mt-2" @error('tanggal') data-error-target="true" @enderror>
+                        <label><strong>Tanggal Terpilih</strong></label>
+                        <input 
+                            type="text" 
+                            id="tanggalDisplay" 
+                            name="tanggal_display"
+                            class="form-control @error('tanggal') is-invalid @enderror" 
+                            placeholder="Belum ada tanggal dipilih" 
+                            readonly>
+                      </div>
 
+                      <!-- Input hidden untuk backend -->
+                      <input type="hidden" name="tanggal" id="selectedTanggal">
+
+                      @error('tanggal')
+                        <div class="text-danger">{{ $message }}</div>
+                      @enderror
+                    </div>
 
                     <div class="form-group">
                         <label>Jam</label>
@@ -149,17 +151,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    <div class="form-group">
-                        <label>Deskripsi</label>
-                        <textarea name="deskripsi"
-                            class="form-control @error('deskripsi') is-invalid @enderror"
-                            required placeholder="Masukkan deskripsi (misal, acara seminar, kunjungan dari SMA... dsb)">{{ old('deskripsi', $ajuan->deskripsi) }}</textarea>
-                        @error('deskripsi')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
+                    
                     <div class="form-group">
                         <label>Jumlah Orang</label>
                         <input type="number" name="jumlah_orang"
