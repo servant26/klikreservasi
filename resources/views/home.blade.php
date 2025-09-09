@@ -309,7 +309,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 mb-5">
-                    <img src="{{ asset('dist/img/reservasi.jpg') }}" alt="Gambar" class="img-fluid">
+                    <img src="{{ asset('dist/img/reservasi1.jpg') }}" alt="Gambar" class="img-fluid">
                 </div>
 
                 <div class="col-md-6 mt-5">

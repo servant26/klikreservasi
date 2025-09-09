@@ -66,9 +66,16 @@ class AuthController extends Controller
     }
 
     // Menampilkan halaman login
-    public function showLogin()
+    public function showLogin(Request $request)
     {
-        return view('auth.login');
+        // generate captcha random 4 karakter
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $captcha = substr(str_shuffle($characters), 0, 4);
+
+        // simpan ke session
+        $request->session()->put('captcha_code', $captcha);
+
+        return view('auth.login', compact('captcha'));
     }
 
     // Proses login
@@ -77,11 +84,19 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8',
+            'captcha' => 'required|size:4'
         ]);
+
+        // cek captcha (case sensitive)
+        if ($request->captcha !== session('captcha_code')) {
+            return back()->withErrors(['captcha' => 'Kode captcha salah'])->withInput();
+        }
 
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+            // hapus captcha biar tidak reuse
+            $request->session()->forget('captcha_code');
             return $this->redirectToDashboard();
         }
 

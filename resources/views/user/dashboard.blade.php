@@ -158,7 +158,7 @@
         onmouseover="this.querySelector('.desc').style.opacity='1'"
         onmouseout="this.querySelector('.desc').style.opacity='0'">
         
-        <div class="bg-image" style="background: url('{{ asset('dist/img/reservasi.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
+        <div class="bg-image" style="background: url('{{ asset('dist/img/reservasi1.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
         
         <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1;"></div>
         
@@ -180,7 +180,7 @@
         onmouseover="this.querySelector('.desc').style.opacity='1'"
         onmouseout="this.querySelector('.desc').style.opacity='0'">
         
-        <div class="bg-image" style="background: url('{{ asset('dist/img/kunjungan.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
+        <div class="bg-image" style="background: url('{{ asset('dist/img/perpustakaan3.jpg') }}') center/cover no-repeat; width: 100%; height: 100%; transition: transform 0.5s ease;"></div>
         
         <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1;"></div>
         

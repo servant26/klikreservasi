@@ -126,15 +126,6 @@
                       @enderror
                 </div>
 
-                <!-- Deskripsi -->
-                <div class="form-group">
-                  <label>Deskripsi</label>
-                    <textarea name="deskripsi" class="form-control @error('deskripsi') is-invalid @enderror" required placeholder="Masukkan deskripsi (misal, acara seminar, kunjungan dari SMA... dsb)">{{ old('deskripsi') }}</textarea>
-                      @error('deskripsi')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                      @enderror
-                </div>
-
                 <!-- Jumlah Orang -->
                 <div class="form-group">
                   <label>Jumlah Orang</label>

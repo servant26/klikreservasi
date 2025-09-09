@@ -76,7 +76,6 @@ class UserController extends Controller
             'jam' => 'required|string',
             'jenis' => 'required|in:1,2',
             'surat' => 'required|file|image|mimes:jpg,jpeg,png|max:2048',
-            'deskripsi' => 'required|string',
         ], [
             'surat.required' => 'File surat wajib diupload.',
             'surat.file' => 'File surat harus berupa file yang valid.',
@@ -159,7 +158,6 @@ class UserController extends Controller
             'tanggal' => $tanggal,
             'jam' => $jam,
             'surat' => $fileName,
-            'deskripsi' => $request->input('deskripsi'),
         ]);
 
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
@@ -222,7 +220,6 @@ class UserController extends Controller
             'tanggal' => 'required|string',
             'jam' => 'required|date_format:H:i',
             'jenis' => 'required|in:1,2',
-            'deskripsi' => 'required|string|max:500',
             'surat' => 'nullable|file|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'surat.file' => 'File surat harus berupa file yang valid.',
@@ -300,7 +297,6 @@ class UserController extends Controller
             'tanggal' => $tanggalInput->format('Y-m-d'),
             'jam' => $jamInput,
             'status' => 3,
-            'deskripsi' => $request->deskripsi,
             'updated_at' => now(),
         ];
 

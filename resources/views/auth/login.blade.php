@@ -161,6 +161,20 @@
                             oninput="this.setCustomValidity('')">
                     </div>
 
+                    <!-- Captcha -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-shield-alt"></i></span>
+                        <input type="text" id="captcha" name="captcha"
+                            class="form-control form-control-lg bg-light fs-6"
+                            placeholder="Ketik ulang kode di samping" required minlength="4" maxlength="4"
+                            oninvalid="this.setCustomValidity('Form ini wajib diisi dengan 4 karakter!')"
+                            oninput="this.setCustomValidity('')">
+                        <span class="input-group-text bg-dark text-white fw-bold"
+                            style="letter-spacing: 3px; font-family: monospace; font-size: 18px;">
+                            {{ $captcha }}
+                        </span>
+                    </div>
+
                     <!-- Tombol -->
                     <div class="input-group mb-3">
                         <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Login</button>

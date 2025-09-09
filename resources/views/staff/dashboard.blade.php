@@ -90,10 +90,9 @@
               <tr>
                 <th style="min-width: 1px;">No.</th>
                 <th style="min-width: 10px;">Identitas</th>
-                <th style="min-width: 140px;">Jadwal</th>
+                <th style="min-width: 150px;">Jadwal</th>
                 <th style="min-width: 80px;">Asal Instansi</th>
                 <th style="min-width: 30px;">Jenis</th>
-                <th style="min-width: 150px;">Deskripsi</th>
                 <th style="min-width: 150px;">Status</th>
                 <th style="min-width: 50px;">Surat</th>
                 <!-- <th style="width: 8%;">Edit</th> -->
@@ -115,9 +114,6 @@
                     @elseif($a->jenis == 2)
                       Kunjungan Perpustakaan
                     @endif
-                  </td>
-                  <td>
-                    {{ $a->deskripsi }}<br>
                   </td>
                   <!-- kolom lainnya -->
                   <td class="text-center">
