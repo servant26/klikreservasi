@@ -44,69 +44,76 @@
                 Lihat Foto Perpustakaan
               </button>
 
-<!-- Pilih Tanggal -->
-<div class="form-group">
-  <label><strong>Pilih Tanggal</strong></label>
-  <div class="table-responsive">
-    <table class="table table-bordered text-center">
-      <tr>
-        @php
-          $cols = 4;
-          $i = 0;
-        @endphp
-        @foreach ($tanggalList as $tgl)
-          @php
-            $dateObj = \Carbon\Carbon::parse($tgl['date']);
-            $isPast = $dateObj->lt(\Carbon\Carbon::today()); // lewat dari hari ini?
-          @endphp
-          <td>
-            @if ($isPast)
-              <span data-bs-toggle="tooltip" title="Tidak dapat membuat ajuan, tanggal sudah lewat">
-                <button type="button" class="btn btn-outline-primary w-100 text-nowrap" disabled>
-                  {{ $tgl['label'] }}
-                </button>
-              </span>
-            @else
-              <button type="button"
-                      class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
-                      data-tanggal="{{ $tgl['date'] }}">
-                {{ $tgl['label'] }}
-              </button>
-            @endif
-          </td>
-          @php $i++; @endphp
-          @if ($i % $cols == 0)
-            </tr><tr>
-          @endif
-        @endforeach
-        {{-- Kosongkan sisa kolom di akhir --}}
-        @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
-          <td></td>
-        @endfor
-      </tr>
-    </table>
-  </div>
+              <!-- Pilih Tanggal -->
+              <div class="form-group">
+                <label><strong>Pilih Tanggal</strong></label>
+                <div class="table-responsive">
+                  <table class="table table-bordered text-center">
+                    <tr>
+                      @php
+                        $cols = 4;
+                        $i = 0;
+                      @endphp
+                      @foreach ($tanggalList as $tgl)
+                        @php
+                          $dateObj = \Carbon\Carbon::parse($tgl['date']);
+                          $isPast = $dateObj->lt(\Carbon\Carbon::today()); // sudah lewat?
+                          $userAjuan = $ajuanUser[$tgl['date']] ?? null;   // ambil ajuan user (kalau ada)
+                        @endphp
+                        <td>
+                          @if ($isPast)
+                            <span data-bs-toggle="tooltip" title="Tidak dapat membuat ajuan, tanggal sudah lewat">
+                              <button type="button" class="btn btn-outline-primary w-100 text-nowrap" disabled>
+                                {{ $tgl['label'] }}
+                              </button>
+                            </span>
+                          @elseif ($userAjuan && $userAjuan->status != 4)
+                            <span data-bs-toggle="tooltip" title="Telah diajukan oleh Anda">
+                              <button type="button" class="btn btn-primary w-100 text-nowrap">
+                                {{ $tgl['label'] }}
+                              </button>
+                            </span>
+                          @else
+                            <button type="button"
+                                    class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
+                                    data-tanggal="{{ $tgl['date'] }}">
+                              {{ $tgl['label'] }}
+                            </button>
+                          @endif
+                        </td>
+                        @php $i++; @endphp
+                        @if ($i % $cols == 0)
+                          </tr><tr>
+                        @endif
+                      @endforeach
 
-  <!-- Tampilkan label tanggal yang dipilih -->
-  <div class="form-group mt-2" @error('tanggal') data-error-target="true" @enderror>
-    <label><strong>Tanggal Terpilih</strong></label>
-    <input 
-        type="text" 
-        id="tanggalDisplay" 
-        name="tanggal_display"
-        class="form-control @error('tanggal') is-invalid @enderror" 
-        placeholder="Belum ada tanggal dipilih" 
-        readonly>
-  </div>
+                      {{-- Kosongkan sisa kolom di akhir --}}
+                      @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
+                        <td></td>
+                      @endfor
+                    </tr>
+                  </table>
+                </div>
 
-  <!-- Input hidden untuk backend -->
-  <input type="hidden" name="tanggal" id="selectedTanggal">
+                <!-- Tampilkan label tanggal yang dipilih -->
+                <div class="form-group mt-2" @error('tanggal') data-error-target="true" @enderror>
+                  <label><strong>Tanggal Terpilih</strong></label>
+                  <input 
+                      type="text" 
+                      id="tanggalDisplay" 
+                      name="tanggal_display"
+                      class="form-control @error('tanggal') is-invalid @enderror" 
+                      placeholder="Belum ada tanggal dipilih" 
+                      readonly>
+                </div>
 
-  @error('tanggal')
-    <div class="text-danger">{{ $message }}</div>
-  @enderror
-</div>
+                <!-- Input hidden untuk backend -->
+                <input type="hidden" name="tanggal" id="selectedTanggal">
 
+                @error('tanggal')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
+              </div>
 
               <!-- Jam -->
               <div class="form-group">

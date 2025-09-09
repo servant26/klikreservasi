@@ -56,43 +56,44 @@
                           $i = 0;
                         @endphp
                         @foreach ($tanggalList as $tgl)
-                          @php
-                            $dateObj = \Carbon\Carbon::parse($tgl['date']);
-                            $isPast = $dateObj->lt(\Carbon\Carbon::today());
-                            $isAcc = isset($ajuanAcc[$tgl['date']]);
-                            $isUser = isset($ajuanUser[$tgl['date']]); // <== CEK Ajuan User
-                            $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
-                          @endphp
-                          <td>
-                            @if ($isPast)
-                              <span data-bs-toggle="tooltip"
-                                    title="Tidak dapat membuat ajuan, tanggal sudah lewat">
-                                <button class="btn btn-outline-primary w-100 text-nowrap" disabled>
-                                  {{ $tgl['label'] }}
-                                </button>
-                              </span>
-                            @elseif ($isUser)
-                              <span data-bs-toggle="tooltip"
-                                    title="Telah diajukan oleh Anda">
-                                <button class="btn btn-primary w-100 text-nowrap">
-                                  {{ $tgl['label'] }}
-                                </button>
-                              </span>
-                            @elseif ($isAcc)
-                              <span data-bs-toggle="tooltip"
-                                    title="Telah direservasi oleh: {{ $instansi }}">
-                                <button class="btn btn-danger w-100 text-nowrap" disabled>
-                                  {{ $tgl['label'] }}
-                                </button>
-                              </span>
-                            @else
-                              <button type="button"
-                                      class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
-                                      data-tanggal="{{ $tgl['date'] }}">
-                                {{ $tgl['label'] }}
-                              </button>
-                            @endif
-                          </td>
+                        @php
+                          $dateObj = \Carbon\Carbon::parse($tgl['date']);
+                          $isPast = $dateObj->lt(\Carbon\Carbon::today());
+                          $userAjuan = $ajuanUser[$tgl['date']] ?? null;
+                          $instansi = isset($ajuanAcc[$tgl['date']])
+                              ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ')
+                              : '';
+                        @endphp
+<td>
+  @if ($isPast)
+    <span data-bs-toggle="tooltip"
+          title="Tidak dapat membuat ajuan, tanggal sudah lewat">
+      <button class="btn btn-outline-primary w-100 text-nowrap" disabled>
+        {{ $tgl['label'] }}
+      </button>
+    </span>
+  @elseif ($userAjuan && $userAjuan->status != 4)
+    <span data-bs-toggle="tooltip"
+          title="Telah diajukan oleh Anda">
+      <button class="btn btn-primary w-100 text-nowrap">
+        {{ $tgl['label'] }}
+      </button>
+    </span>
+  @elseif (isset($ajuanAcc[$tgl['date']]))
+    <span data-bs-toggle="tooltip"
+          title="Telah direservasi oleh: {{ $instansi }}">
+      <button class="btn btn-danger w-100 text-nowrap" disabled>
+        {{ $tgl['label'] }}
+      </button>
+    </span>
+  @else
+    <button type="button"
+            class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
+            data-tanggal="{{ $tgl['date'] }}">
+      {{ $tgl['label'] }}
+    </button>
+  @endif
+</td>
                           @php $i++; @endphp
                           @if ($i % $cols == 0)
                             </tr><tr>
@@ -126,7 +127,6 @@
                       <div class="text-danger">{{ $message }}</div>
                   @enderror
                 </div>
-
 
                 <!-- Jam -->
                 <div class="form-group">
