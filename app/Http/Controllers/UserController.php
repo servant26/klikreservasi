@@ -42,29 +42,46 @@ class UserController extends Controller
             }
         }
 
+        // Data ajuan yang sudah di-ACC
         $ajuanAcc = Ajuan::with('user')
             ->where('jenis', $jenis)
             ->where('status', 2)
             ->get()
             ->groupBy('tanggal');
 
-        return view('user.reservasi', compact('user', 'jenis', 'tanggalList', 'ajuanAcc'));
+        // Data ajuan milik user login (pending/acc/tolak semua diambil)
+        $ajuanUser = Ajuan::where('user_id', $user->id)
+            ->where('jenis', $jenis)
+            ->get()
+            ->keyBy('tanggal');
+
+        return view('user.reservasi', compact('user', 'jenis', 'tanggalList', 'ajuanAcc', 'ajuanUser'));
     }
-    
+
     public function kunjungan()
     {
         $user = Auth::user(); 
         $jenis = 2; // 2 = kunjungan
-    
-        // Ambil ajuan milik user lain, jenis kunjungan, tanggal hari ini ke atas
-        $ajuan = Ajuan::where('user_id', '!=', $user->id)
-                    ->where('jenis', $jenis)
-                    ->whereDate('tanggal', '>=', Carbon::today())
-                    ->orderBy('tanggal', 'asc')
-                    ->get();
-    
-        return view('user.kunjungan', compact('user', 'jenis', 'ajuan'));
-    } 
+
+        $tanggalList = [];
+        $start = \Carbon\Carbon::now()->startOfMonth();
+        $end = \Carbon\Carbon::now()->endOfMonth();
+
+        $current = $start->copy();
+        while ($current->lte($end)) {
+            if (!$current->isWeekend()) { // Skip Sabtu & Minggu
+                $tanggalList[] = [
+                    'date' => $current->format('Y-m-d'),
+                    'label' => $current->translatedFormat('l, j F Y'),
+                ];
+            }
+            $current->addDay();
+        }
+
+        return view('user.kunjungan', compact('user', 'jenis', 'tanggalList'));
+    }
+
+
 
     public function store(Request $request)
     {
@@ -162,6 +179,7 @@ class UserController extends Controller
 
         return redirect()->route('user.dashboard')->with('success', 'Ajuan berhasil dibuat!');
     }
+
     public function edit($id)
     {
         $ajuan = DB::table('ajuan')

@@ -52,49 +52,60 @@
                     <table class="table table-bordered text-center">
                       <tr>
                         @php
-                          $cols = 5;
+                          $cols = 4;
                           $i = 0;
                         @endphp
-
                         @foreach ($tanggalList as $tgl)
                           @php
+                            $dateObj = \Carbon\Carbon::parse($tgl['date']);
+                            $isPast = $dateObj->lt(\Carbon\Carbon::today());
                             $isAcc = isset($ajuanAcc[$tgl['date']]);
+                            $isUser = isset($ajuanUser[$tgl['date']]); // <== CEK Ajuan User
                             $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
                           @endphp
-                        <td>
-                          @if ($isAcc)
-                            <span data-bs-toggle="tooltip"
-                                  data-bs-placement="top"
-                                  title="Telah direservasi oleh: {{ $instansi }}"
-                                  style="display: inline-block; width: 100%;">
+                          <td>
+                            @if ($isPast)
+                              <span data-bs-toggle="tooltip"
+                                    title="Tidak dapat membuat ajuan, tanggal sudah lewat">
+                                <button class="btn btn-outline-primary w-100 text-nowrap" disabled>
+                                  {{ $tgl['label'] }}
+                                </button>
+                              </span>
+                            @elseif ($isUser)
+                              <span data-bs-toggle="tooltip"
+                                    title="Telah diajukan oleh Anda">
+                                <button class="btn btn-primary w-100 text-nowrap">
+                                  {{ $tgl['label'] }}
+                                </button>
+                              </span>
+                            @elseif ($isAcc)
+                              <span data-bs-toggle="tooltip"
+                                    title="Telah direservasi oleh: {{ $instansi }}">
+                                <button class="btn btn-danger w-100 text-nowrap" disabled>
+                                  {{ $tgl['label'] }}
+                                </button>
+                              </span>
+                            @else
                               <button type="button"
-                                      class="btn btn-danger w-100 text-nowrap"
-                                      style="pointer-events: none;"
-                                      disabled>
+                                      class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
+                                      data-tanggal="{{ $tgl['date'] }}">
                                 {{ $tgl['label'] }}
                               </button>
-                            </span>
-                          @else
-                            <button type="button"
-                                    class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
-                                    data-tanggal="{{ $tgl['date'] }}">
-                              {{ $tgl['label'] }}
-                            </button>
-                          @endif
-                        </td>
+                            @endif
+                          </td>
                           @php $i++; @endphp
                           @if ($i % $cols == 0)
                             </tr><tr>
                           @endif
                         @endforeach
-
-                        {{-- Kosongkan sisa kolom jika kurang dari 7 di akhir --}}
+                        {{-- Kosongkan sisa kolom jika kurang dari 5 di akhir --}}
                         @for ($j = $i % $cols; $j < $cols && $j != 0; $j++)
                           <td></td>
                         @endfor
                       </tr>
                     </table>
                   </div>
+
                   <!-- Tampilkan label tanggal yang dipilih -->
                   <div class="form-group mt-2" 
                       @error('tanggal') data-error-target="true" @enderror>
@@ -114,8 +125,8 @@
                   @error('tanggal')
                       <div class="text-danger">{{ $message }}</div>
                   @enderror
-
                 </div>
+
 
                 <!-- Jam -->
                 <div class="form-group">
