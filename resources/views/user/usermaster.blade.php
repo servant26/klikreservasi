@@ -5,6 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dispursip Samarinda</title>
   <style>
+  /* Atur warna teks search sidebar */
+  .form-control-sidebar {
+    color: #fff !important;          /* teks tetap putih */
+    background-color: #343a40 !important; /* sesuaikan warna background sidebar */
+  }
+
+  /* Saat fokus tetap konsisten */
+  .form-control-sidebar:focus {
+    color: #fff !important;
+    background-color: #343a40 !important;
+    border-color: #6c757d !important; /* kasih border abu biar keliatan */
+    box-shadow: none !important;      /* hilangin efek glow biru bootstrap */
+  }
+
+  /* Biar placeholder juga putih */
+  .form-control-sidebar::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+    opacity: 1 !important; /* jangan transparan */
+  }
+
+  /* Tombol search */
+  .btn-sidebar {
+    color: #fff !important;
+  }
+    a {
+      text-decoration: none !important;
+    }
+    /* Biar transisinya lebih smooth */
+    .accordion-collapse.show {
+      opacity: 1;
+    }
     .small-box:hover .bg-image {
       transform: scale(1.1);
       }

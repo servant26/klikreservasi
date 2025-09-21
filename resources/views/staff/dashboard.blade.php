@@ -27,13 +27,13 @@
       <!-- Bounce Rate -->
       <div class="small-box bg-danger">
         <div class="inner">
-          <h3>{{ $reservasi }}</h3>
-          <p>Ajuan Reservasi Aula</p>
+          <h5>Reservasi Aula</h5>
+          <h5>{{ $reservasi }}</h5>
         </div>
         <div class="icon">
           <i class="fas fa-building"></i>
         </div>
-        <a href="#" class="small-box-footer"><p></p></a>
+        <a href="{{ route('staff.reservasi') }}" class="small-box-footer">More</a>
       </div>
     </div>
     <!-- Column 1: New Orders and Bounce Rate -->
@@ -41,25 +41,25 @@
       <!-- Bounce Rate -->
       <div class="small-box bg-danger">
         <div class="inner">
-          <h3>{{ $kunjungan }}</h3>
-          <p>Ajuan Kunjungan Perpustakaan</p>
+          <h5>Kunjungan Perpustakaan</h5>
+          <h5>{{ $kunjungan }}</h5>
         </div>
         <div class="icon">
           <i class="fas fa-book"></i>
         </div>
-        <a href="#" class="small-box-footer"><p></p></a>
+        <a href="{{ route('staff.kunjungan') }}" class="small-box-footer">More</a>
       </div>
     </div>
     <div class="col-lg-4 col-md-4 col-12">
       <div class="small-box bg-warning mb-3">
         <div class="inner">
-          <h3>{{ $reschedule }}</h3>
-          <p>Reschedule</p>
+          <h5>Reschedule</h5>
+          <h5>{{ $reschedule }}</h5>
         </div>
         <div class="icon">
           <i class="fas fa-sync"></i>
         </div>
-        <a href="#" class="small-box-footer"><p></p></a>
+        <a href="{{ route('staff.reschedule') }}" class="small-box-footer">More</a>
       </div>
     </div>
   </div>

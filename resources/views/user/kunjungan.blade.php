@@ -39,10 +39,24 @@
                 <input type="text" class="form-control" value="{{ Auth::user()->name }}" readonly>
               </div>
 
-              <!-- Tombol Lihat Foto Perpustakaan -->
-              <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#carouselModal">
-                Lihat Foto Perpustakaan
-              </button>
+                <!-- Dropdown Tombol Lihat -->
+                <div class="btn-group mb-3">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Lihat Foto Perpustakaan & SOP Kunjungan
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#carouselModal">
+                        Foto Perpustakaan
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#sopModal">
+                        SOP Kunjungan
+                      </a>
+                    </li>
+                  </ul>
+                </div>
 
               <!-- Pilih Tanggal -->
               <div class="form-group">
@@ -168,6 +182,35 @@
                       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#carouselAula" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal SOP -->
+          <div class="modal fade" id="sopModal" tabindex="-1" aria-labelledby="sopModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="sopModalLabel">SOP Reservasi Aula</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                  <div id="carouselSOP" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                      @for ($i = 3; $i <= 4; $i++)   {{-- ubah jumlah sesuai banyaknya gambar SOP --}}
+                        <div class="carousel-item {{ $i == 3 ? 'active' : '' }}">
+                          <img src="{{ asset('dist/img/sop' . $i . '.png') }}" class="d-block w-100" alt="SOP {{ $i }}">
+                        </div>
+                      @endfor
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselSOP" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselSOP" data-bs-slide="next">
                       <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
                   </div>

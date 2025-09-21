@@ -1,5 +1,6 @@
 @extends('user.usermaster')
 @section('menu')
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -205,6 +206,92 @@
   </div>
 </div>
 
+<h4>Panduan Penggunaan : <br></h4>
+<div class="accordion mb-5" id="accordionExample">
+  <!-- 1 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        <h6>Buat Ajuan (Reservasi Aula/Kunjungan Perpustakaan)</h6>
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
+      <div class="accordion-body">
+        Proses pengajuan <b><a href="{{ route('user.reservasi') }}">Reservasi Aula</a></b> dan <b><a href="{{ route('user.kunjungan') }}">Kunjungan Perpustakaan</a></b> dapat dilakukan pada menu masing-masing, setelah masuk ke salah satu menu, lakukan penginputan data sesuai dengan ketentuan yang ada. <b>Jangan lupa</b> untuk mengupload surat ajuan yang terdapat pada akhir form.
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        <h6>Status Ajuan</h6>
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+      <div class="accordion-body">
+        Terdapat 4 status ajuan pada sistem web ini :
+        <ul>
+          <li><span class="badge bg-secondary">Abu-abu</span> berarti ajuan tersebut <b>sedang diproses</b>.</li>
+          <li><span class="badge bg-danger">Merah</span> berarti ajuan tersebut <b>ditolak</b>.</li>
+          <li><span class="badge bg-warning text-dark">Kuning</span> untuk menandakan bahwa <b>ajuan telah diubah</b>.</li>
+          <li><span class="badge bg-primary">Biru</span> untuk status <b>ajuan diterima</b>.</li>
+        </ul>
+        <b>Pastikan</b> bahwa status ajuan tersebut berwarna <span class="badge bg-primary">Biru</span>! Jika status ajuan berwarna <span class="badge bg-danger">Merah</span>, dipersilahkan untuk membuat ajuan lainnya atau hubungi PIC untuk informasi lebih lanjut.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 3 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        <h6>Reschedule</h6>
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
+      <div class="accordion-body">
+        Data ajuan yang telah dibuat <b>dapat diubah kembali</b>, anda hanya perlu menekan tombol <b>"Ubah Data Ajuan"</b> pada bagian status card, setelah masuk ke halaman reschedule, lakukan penginputan data yang ingin diubah, baik itu tanggal, waktu, dan sebagainya, kemudian tekan tombol submit.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingFour">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+        <h6>Batalkan Ajuan<h6>
+      </button>
+    </h2>
+    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour">
+      <div class="accordion-body">
+        Untuk membatalkan ajuan, anda hanya perlu menekan tombol <b>Batalkan Ajuan</b> yang terdapat pada status ajuan. <b>Perlu dipahami bahwa</b> tombol batalkan ajuan ini hanya akan muncul ketika pengguna telah membuat ajuan.
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingFive">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+        <h6>Ubah Profil<h6>
+      </button>
+    </h2>
+    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive">
+      <div class="accordion-body">
+        Anda dapat melakukan perubahan data pada halaman <b><a href="{{ route('user.profile') }}">profile</a></b>, pada halaman tersebut, anda dapat mengubah data seperti nama, email, whatsapp, hingga password.
+      </div>
+    </div>
+  </div>
+</div>
+<br>
 <div class="card bg-gradient-primary" style="display: none;">
   <div class="card-header border-0">
     <h3 class="card-title">
@@ -286,4 +373,5 @@
           })
       </script>
   @endif
+
 @endsection

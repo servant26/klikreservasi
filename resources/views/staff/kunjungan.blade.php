@@ -20,99 +20,87 @@
 @endsection
 
 @section('content')
-<!-- Small boxes (Stat box) -->
-<div class="card">
-    <!-- /.card-header -->
-    <div class="card-body">
-    <form method="GET" class="mb-3">
-  <div class="form-group">
-    <label for="filter">Filter Waktu:</label>
-    <select name="filter" id="filter" class="form-control" onchange="this.form.submit()">
-      <option value="hari" {{ request('filter', 'bulan') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
-      <option value="minggu" {{ request('filter', 'bulan') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
-      <option value="bulan" {{ request('filter', 'bulan') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
-      <option value="semester" {{ request('filter', 'bulan') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
-      <option value="tahun" {{ request('filter', 'bulan') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
-      <option value="semua" {{ request('filter', 'bulan') == 'semua' ? 'selected' : '' }}>Semua</option>
-    </select>
-  </div>
-</form>
+  <!-- /.row -->
+  <div class="card">
+      <!-- /.card-header -->
+      <div class="card-body">
+        <form method="GET" class="mb-3">
+          <div class="form-group">
+            <label for="filter">Filter Ajuan:</label>
+            <select name="filter" id="filter" class="form-control w-100" onchange="this.form.submit()">
+                <option value="menunggu" {{ request('filter', 'bulan') == 'menunggu' ? 'selected' : '' }}>Menunggu Respon</option>
+                <option value="ditanggapi" {{ request('filter', 'bulan') == 'ditanggapi' ? 'selected' : '' }}>Telah Ditanggapi</option>
+                <option value="hari" {{ request('filter', 'bulan') == 'hari' ? 'selected' : '' }}>Hari Ini</option>
+                <option value="minggu" {{ request('filter', 'bulan') == 'minggu' ? 'selected' : '' }}>Minggu Ini</option>
+                <option value="bulan" {{ request('filter', 'bulan') == 'bulan' ? 'selected' : '' }}>Bulan Ini</option>
+                <option value="semester" {{ request('filter', 'bulan') == 'semester' ? 'selected' : '' }}>Semester Ini</option>
+                <option value="tahun" {{ request('filter', 'bulan') == 'tahun' ? 'selected' : '' }}>Tahun Ini</option>
+                <option value="semua" {{ request('filter', 'bulan') == 'semua' ? 'selected' : '' }}>Semua</option>
+            </select>
+          </div>
+        </form>
+
         <div class="table-responsive-wrapper" style="overflow-x: auto;">
-                <table id="example1" class="table table-bordered table-striped table-hover">
-                    <thead>
-                        <tr>
-                          <th style="min-width: 1px;">No.</th>
-                          <th style="min-width: 10px;">Identitas</th>
-                          <th style="min-width: 120px;">Jadwal</th>
-                          <th style="min-width: 50px;">Asal Instansi</th>
-                          <th style="min-width: 140px;">Status</th>
-                          <th style="min-width: 50px;">Surat</th>
-                            <!-- <th style="width: 8%;">Edit</th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($kunjungan as $a)
-                      <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>
-                          {{ $a->nama }}<br>
-                          <a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a>
-                        </td>
-                        <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
-                        <td>{{ $a->asal }}</td>
-                        <td class="text-center">
-                          <div class="d-grid gap-2">
-                              @if($a->status == 2)
-                                  {{-- Sudah ditanggapi → Bisa dibatalkan --}}
-                                  <a class="btn btn-primary btn-block" 
-                                      href="javascript:void(0);" 
-                                      onclick="confirmStatusChange('{{ route('staff.updateStatus', $a->id) }}')" 
-                                      role="button">
-                                      Telah ditanggapi
-                                  </a>
-                              @elseif($a->status == 1 || $a->status == 3)
-                                  {{-- Belum ditanggapi atau Reschedule → Tautkan ke halaman balas --}}
-                                  <a class="btn 
-                                      @if($a->status == 1) btn-danger 
-                                      @elseif($a->status == 3) btn-warning 
-                                      @endif btn-block" 
-                                      href="{{ route('staff.balasForm', $a->id) }}" 
-                                      role="button">
-                                      @if($a->status == 1) Menunggu balasan @elseif($a->status == 3) Reschedule @endif
-                                  </a>
-                              @endif
-                          </div>
-                        </td>
-                        <td class="text-center">
-                            @if($a->surat)
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Detail
-                                    </button>
-                                    <ul class="dropdown-menu w-100">
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" target="_blank">
-                                                Lihat Surat
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ url('uploads/surat/' . $a->surat) }}" download>
-                                                Download Surat
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            @else
-                                <span class="text-muted">Tidak ada surat</span>
+          <table id="example1" class="table table-bordered table-striped table-hover">
+            <thead>
+              <tr>
+                <th style="min-width: 1px;">No.</th>
+                <th style="min-width: 10px;">Identitas</th>
+                <th style="min-width: 180px;">Jadwal</th>
+                <th style="min-width: 80px;">Asal Instansi</th>
+                <th style="min-width: 150px;">Status</th>
+                <th style="min-width: 100px;">Surat</th>
+                <!-- <th style="width: 8%;">Edit</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($kunjungan as $a)
+                <tr id="row-{{ $a->id }}">
+                  <td>{{ $loop->iteration }}</td>
+                  <td>
+                    {{ $a->nama }}<br>
+                    <a href="https://wa.me/{{ $a->whatsapp }}" target="_blank">{{ $a->whatsapp }}</a>
+                  </td>
+                  <td>{{ \Carbon\Carbon::parse($a->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}<br>{{ substr($a->jam, 0, 5) }}</td>
+                  <td>{{ $a->asal }}</td>
+                  <!-- kolom lainnya -->
+                  <td class="text-center">
+                    <div class="d-grid gap-2">
+                      @if($a->status == 2)
+                      <a class="btn btn-primary btn-block" href="javascript:void(0);">Telah Ditanggapi</a>
+                        <!-- <a class="btn btn-primary btn-block"
+                          href="javascript:void(0);"
+                          onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}', '{{ route('staff.updateStatus', $a->id) }}')">
+                          Telah Ditanggapi
+                        </a> -->
+                      @elseif($a->status == 1 || $a->status == 3)
+                        <a class="btn
+                          @if($a->status == 1) btn-danger
+                          @elseif($a->status == 3) btn-warning
+                          @endif btn-block"
+                            href="javascript:void(0);"
+                            onclick="handleStatusAction({{ $a->status }}, '{{ $a->nama }}', '{{ $a->whatsapp }}', '', {{ $a->id }})">
+                          @if($a->status == 1) Menunggu Respon
+                            @elseif($a->status == 3) Reschedule
                             @endif
-                        </td>
-                    @endforeach  
-                    </tbody>
-                </table>
+                          </a>
+                      @endif
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    @if($a->surat)
+                      <button onclick="showSuratModal('{{ url('uploads/surat/' . $a->surat) }}')" class="btn btn-secondary w-100">
+                        Detail Surat
+                      </button>
+                    @else
+                      <span class="text-muted">Tidak ada surat</span>
+                    @endif
+                  </td>
+                @endforeach  
+            </tbody>
+          </table>
         </div>
-        <a href="{{ route('staff.dashboard') }}" class="btn btn-danger btn-sm mt-4">Back to Dashboard</a>
-    </div>
-    <!-- /.card-body -->
-</div>
-<!-- /.row -->
+      </div>
+      <!-- /.card-body -->
+  </div>
 @endsection

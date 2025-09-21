@@ -64,48 +64,48 @@
                               $i = 0;
                             @endphp
                             @foreach ($tanggalList as $tgl)
-@php
-  $dateObj = \Carbon\Carbon::parse($tgl['date']);
-  $isPast  = $dateObj->lt(\Carbon\Carbon::today());
+                                @php
+                                  $dateObj = \Carbon\Carbon::parse($tgl['date']);
+                                  $isPast  = $dateObj->lt(\Carbon\Carbon::today());
 
-  $userAjuan = $ajuanUser[$tgl['date']] ?? null;
-  $isUser = $userAjuan && $userAjuan->status != 4;
+                                  $userAjuan = $ajuanUser[$tgl['date']] ?? null;
+                                  $isUser = $userAjuan && $userAjuan->status != 4;
 
-  // khusus jenis 1
-  $isAcc   = ($ajuan->jenis == 1) ? isset($ajuanAcc[$tgl['date']]) : false;
-  $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
-@endphp
+                                  // khusus jenis 1
+                                  $isAcc   = ($ajuan->jenis == 1) ? isset($ajuanAcc[$tgl['date']]) : false;
+                                  $instansi = $isAcc ? $ajuanAcc[$tgl['date']]->pluck('user.asal')->filter()->implode(', ') : '';
+                                @endphp
 
-<td>
-  @if ($isPast)
-    <span data-bs-toggle="tooltip" title="Tidak dapat membuat ajuan, tanggal sudah lewat">
-      <button type="button" class="btn btn-outline-primary w-100 text-nowrap" disabled>
-        {{ $tgl['label'] }}
-      </button>
-    </span>
+                                <td>
+                                  @if ($isPast)
+                                    <span data-bs-toggle="tooltip" title="Tidak dapat membuat ajuan, tanggal sudah lewat">
+                                      <button type="button" class="btn btn-outline-primary w-100 text-nowrap" disabled>
+                                        {{ $tgl['label'] }}
+                                      </button>
+                                    </span>
 
-  @elseif ($ajuan->jenis == 1 && $isUser)
-    <span data-bs-toggle="tooltip" title="Telah diajukan oleh Anda">
-      <button type="button" class="btn btn-primary w-100 text-nowrap">
-        {{ $tgl['label'] }}
-      </button>
-    </span>
+                                @elseif ($ajuan->jenis == 1 && $isUser)
+                                  <span data-bs-toggle="tooltip" title="Telah diajukan oleh Anda">
+                                    <button type="button" class="btn btn-primary btn-user-submitted tanggal-btn w-100 text-nowrap" data-tanggal="{{ $tgl['date'] }}">
+                                      {{ $tgl['label'] }}
+                                    </button>
+                                  </span>
 
-  @elseif ($ajuan->jenis == 1 && $isAcc)
-    <span data-bs-toggle="tooltip" title="Telah direservasi oleh: {{ $instansi }}">
-      <button type="button" class="btn btn-danger w-100 text-nowrap" disabled>
-        {{ $tgl['label'] }}
-      </button>
-    </span>
+                                  @elseif ($ajuan->jenis == 1 && $isAcc)
+                                    <span data-bs-toggle="tooltip" title="Telah direservasi oleh: {{ $instansi }}">
+                                      <button type="button" class="btn btn-danger w-100 text-nowrap" disabled>
+                                        {{ $tgl['label'] }}
+                                      </button>
+                                    </span>
 
-  @else
-    <button type="button"
-            class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
-            data-tanggal="{{ $tgl['date'] }}">
-      {{ $tgl['label'] }}
-    </button>
-  @endif
-</td>
+                                  @else
+                                    <button type="button"
+                                            class="btn btn-outline-primary tanggal-btn w-100 text-nowrap"
+                                            data-tanggal="{{ $tgl['date'] }}">
+                                      {{ $tgl['label'] }}
+                                    </button>
+                                  @endif
+                                </td>
 
                               @php $i++; @endphp
                               @if ($i % $cols == 0)
@@ -253,4 +253,57 @@ tanggalButtons.forEach(button => {
 });
 
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tanggalButtons = document.querySelectorAll('.tanggal-btn');
+    const hiddenInput = document.getElementById('selectedTanggal');
+    const displayInput = document.getElementById('tanggalDisplay');
+
+    // 1. Jika ada tanggal sudah dipilih (misal dari DB), tampilkan
+    @if(old('tanggal') || $ajuan->tanggal)
+        const existingTanggal = "{{ old('tanggal', $ajuan->tanggal) }}";
+        const existingLabel = tanggalButtons.length > 0 ? Array.from(tanggalButtons).find(btn => btn.getAttribute('data-tanggal') === existingTanggal)?.innerText : '';
+        if(existingTanggal) {
+            hiddenInput.value = existingTanggal;
+            displayInput.value = existingLabel || existingTanggal;
+
+            // Tandai tombol yang sesuai
+            tanggalButtons.forEach(btn => {
+                if(btn.getAttribute('data-tanggal') === existingTanggal) {
+                    btn.classList.remove('btn-outline-primary');
+                    btn.classList.add('btn-primary', 'active');
+                } else if(!btn.classList.contains('btn-danger')) {
+                    btn.classList.remove('btn-primary', 'active');
+                    btn.classList.add('btn-outline-primary');
+                }
+            });
+        }
+    @endif
+
+    // 2. Klik tombol tanggal
+    tanggalButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            if (this.disabled) return; // tombol merah tidak bisa dipilih
+
+            const tanggal = this.getAttribute('data-tanggal');
+            const label = this.innerText;
+
+            hiddenInput.value = tanggal;
+            displayInput.value = label;
+
+            tanggalButtons.forEach(btn => {
+                if (!btn.classList.contains('btn-danger')) {
+                    btn.classList.remove('btn-primary', 'active');
+                    btn.classList.add('btn-outline-primary');
+                }
+            });
+
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('btn-primary', 'active');
+        });
+    });
+});
+</script>
+
 @endsection

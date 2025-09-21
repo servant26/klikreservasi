@@ -191,6 +191,12 @@ class StaffController extends Controller
         $now = now();
     
         switch ($filter) {
+            case 'menunggu':
+                $query->whereIn('ajuan.status', [1, 3]);
+                break;
+            case 'ditanggapi':
+                $query->where('ajuan.status', 2);
+                break;
             case 'hari':
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
@@ -233,6 +239,12 @@ class StaffController extends Controller
         $now = now();
     
         switch ($filter) {
+            case 'menunggu':
+                $query->whereIn('ajuan.status', [1, 3]);
+                break;
+            case 'ditanggapi':
+                $query->where('ajuan.status', 2);
+                break;
             case 'hari':
                 $query->whereDate('ajuan.tanggal', $now->toDateString());
                 break;
