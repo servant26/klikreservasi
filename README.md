@@ -29,7 +29,7 @@
           <li>php artisan key:generate</li>
       </ul>
       <li>Siapkan Database</li>
-          <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database <br>Ubah file env. sesuaikan dengan struktur database : 
+          <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database <br>Ubah file env. sesuaikan dengan struktur database : </p>
 <ul>
 <li><DB_DATABASE=dispursip</li>
 <li>DB_USERNAME=root</li>
