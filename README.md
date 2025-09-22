@@ -20,8 +20,16 @@
           <li>git clone https://github.com/servant26/klikreservasi.git</li>
           <li>cd klikreservasi</li>
       </ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
+      <li>Install dependency PHP (masih di GIT)</li>
+      <p>composer install</p>
+      <li>Copy file environment</li>
+      <p>cp .env.example .env <br>php artisan key:generate</p>
+      <li>Siapkan Database</li>
+      <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database<br>Ubah file env. sesuaikan dengan struktur database, <b> DB_DATABASE=dispursip<br>
+DB_USERNAME=root<br>
+DB_PASSWORD=</p>
+      <li>Install dependency frontend</li>
+          <p>npm install<br>npm run dev<br>php artisan storage:link</p>
+        <li>Jalankan server laravel</li>
+          <p>Buka XAMPP, klik start pada apache dan mysql, setelah statusnya nyala/start, buka folder klikreservasi, ketikkan cmd pada form folder, lalu setelah cmd terbuka, ketik php artisan serve, buka browser dan ketikkan localhost:8000 </p>
   </ol>
