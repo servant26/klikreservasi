@@ -20,7 +20,7 @@
           <li>git clone https://github.com/servant26/klikreservasi.git</li>
           <li>cd klikreservasi</li>
       </ul>
-      <li>Install dependency PHP (masih di GIT, GITNYA jangan diclose dulu)</li>
+      <li>Install dependency PHP (masih di GIT, GITNYA jangan diclose dulu, poin 2,3,5 itu dilakukan pada GIT)</li>
       <p>composer install</p>
       <li>Copy file environment</li>
       <p>cp .env.example .env <br>php artisan key:generate</p>
