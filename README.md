@@ -1,22 +1,4 @@
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Setup - klikreservasi (README)</title>
-  <style>
-    body{font-family:system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;line-height:1.6;color:#111;padding:24px;max-width:900px;margin:auto}
-    a{color:#0366d6}
-    h3{margin-top:1.2rem;border-left:4px solid #e1e4e8;padding-left:10px}
-    h4{margin-top:1rem;color:#333}
-    ul, ol{margin-left:1.2rem}
-    pre{background:#f6f8fa;padding:12px;border-radius:6px;overflow:auto}
-    code{font-family:SFMono-Regular, Menlo, Monaco, 'Courier New', monospace;font-size:0.95em}
-    .links small{display:block;margin-top:4px;color:#555}
-  </style>
-</head>
-<body>
-  <h3>Requirements (Software yang dibutuhkan)</h3>
+<h3>Requirements (Software yang dibutuhkan)</h3>
   <ul>
     <li>Git — <a href="https://git-scm.com/downloads" target="_blank">https://git-scm.com/downloads</a></li>
     <li>PHP (pastikan sesuai <code>composer.json</code>, disarankan PHP &gt;= 8.1) — <a href="https://www.php.net/downloads.php" target="_blank">https://www.php.net/downloads.php</a></li>
