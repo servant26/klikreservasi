@@ -21,9 +21,13 @@
           <li>cd klikreservasi</li>
       </ul>
       <li>Install dependency PHP (masih di GIT, GITNYA jangan diclose dulu, perintah kode pada poin 2,3,5 itu dilakukan pada GIT)</li>
-      <p>composer install</p>
+      <ul>
+          <li>composer install</li>
+      </ul>
       <li>Copy file environment</li>
-      <p>cp .env.example .env <br>php artisan key:generate</p>
+      <ul><li>cp .env.example .env</li>
+          <li>php artisan key:generate</li>
+      </ul>
       <li>Siapkan Database</li>
       <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database<br>Ubah file env. sesuaikan dengan struktur database,<br> <b> <DB_DATABASE=dispursip<br>
 DB_USERNAME=root<br>
