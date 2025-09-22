@@ -13,7 +13,13 @@
   <h3>Step-by-step Setup</h3>
   <ol>
       <li>Clone repository (pastikan sudah install GIT)</li>
-      <p>Ketikkan perintah berikut secara berurutan (posisi berada di main folder project laravel, klik kanan lalu pilih Git Bash) :             <br>git clone https://github.com/servant26/klikreservasi.git<br>cd klikreservasi</p>
+      <ul>PENTING!!
+          <li>Pastikan posisi folder berada di main project laravel tepatnya di folder XAMPP -> htdocs -> klikreservasi -> </li>
+          <li>Setelah berada di folder klikreservasi, klik kanan pada mouse, lalu pilih opsi Git Bash (pastikan Git telah terinstall)</li>
+          <li>Ketikkan perintah berikut secara berurutan :</li>
+          <li>git clone https://github.com/servant26/klikreservasi.git</li>
+          <li>cd klikreservasi</li>
+      </ul>
       <li></li>
       <li></li>
       <li></li>
