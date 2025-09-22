@@ -29,11 +29,15 @@
           <li>php artisan key:generate</li>
       </ul>
       <li>Siapkan Database</li>
-      <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database<br>Ubah file env. sesuaikan dengan struktur database, <br><b> <DB_DATABASE=dispursip<br>
+      <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database<br>Ubah file env. sesuaikan dengan struktur database, <b> <br><DB_DATABASE=dispursip<br>
 DB_USERNAME=root<br>
 DB_PASSWORD=</p>
       <li>Install dependency frontend</li>
-          <p>npm install<br>npm run dev<br>php artisan storage:link</p>
+          <ul>
+              <li>npm install</li>
+              <li>npm run dev</li>
+              <li>php artisan storage:link</li>
+          </ul>
         <li>Jalankan server laravel</li>
           <p>Buka XAMPP, klik start pada apache dan mysql, setelah statusnya nyala/start, buka folder klikreservasi, ketikkan cmd pada form folder, lalu setelah cmd terbuka, ketik php artisan serve, buka browser dan ketikkan localhost:8000 </p>
   </ol>
