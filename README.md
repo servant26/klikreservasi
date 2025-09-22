@@ -25,7 +25,7 @@
       <li>Copy file environment</li>
       <p>cp .env.example .env <br>php artisan key:generate</p>
       <li>Siapkan Database</li>
-      <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database<br>Ubah file env. sesuaikan dengan struktur database, <b> DB_DATABASE=dispursip<br>
+      <p>Buat Database bernama dispursip di mysql, kemudian export file sql bernama dispursip yang terdapat pada folder bernama database<br>Ubah file env. sesuaikan dengan struktur database,<br> <b> <DB_DATABASE=dispursip<br>
 DB_USERNAME=root<br>
 DB_PASSWORD=</p>
       <li>Install dependency frontend</li>
