@@ -15,83 +15,10 @@
 
   <h3>Step-by-step Setup</h3>
   <ol>
-    <li>
-      <h4>Clone repository</h4>
-      <pre><code>git clone https://github.com/servant26/klikreservasi.git
-cd klikreservasi</code></pre>
-    </li>
-
-    <li>
-      <h4>Install dependency PHP</h4>
-      <pre><code>composer install</code></pre>
-    </li>
-
-    <li>
-      <h4>Copy file environment & generate app key</h4>
-      <pre><code>cp .env.example .env   # Windows: copy .env.example .env
-php artisan key:generate</code></pre>
-      <p>Setelah itu edit <code>.env</code> untuk mengatur koneksi database dan variabel lain (APP_URL, MAIL_*, dsb).</p>
-    </li>
-
-    <li>
-      <h4>Setup database</h4>
-      <p>Buat database (contoh nama: <code>klikreservasi</code>) lalu ubah konfigurasi DB di <code>.env</code>:</p>
-      <pre><code>DB_DATABASE=klikreservasi
-DB_USERNAME=root
-DB_PASSWORD=yourpassword</code></pre>
-    </li>
-
-    <li>
-      <h4>Run migrations & seed (jika ada)</h4>
-      <pre><code>php artisan migrate --seed</code></pre>
-    </li>
-
-    <li>
-      <h4>Install frontend dependencies & build assets</h4>
-      <pre><code>npm install
-npm run dev   # atau npm run production untuk build produksi</code></pre>
-    </li>
-
-    <li>
-      <h4>Buat symlink storage (jika perlu)</h4>
-      <pre><code>php artisan storage:link</code></pre>
-    </li>
-
-    <li>
-      <h4>Set permission (Linux/Mac)</h4>
-      <pre><code>chmod -R 775 storage bootstrap/cache
-# atau
-chown -R $USER:www-data storage bootstrap/cache</code></pre>
-    </li>
-
-    <li>
-      <h4>Jalankan aplikasi</h4>
-      <pre><code>php artisan serve
-# lalu buka http://127.0.0.1:8000</code></pre>
-    </li>
+      <li>Clone repository (pastikan sudah install GIT)</li>
+      <p>git clone https://github.com/servant26/klikreservasi.git<br>cd klikreservasi</p>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
   </ol>
-
-  <h3>Quick Checklist (copy-paste)</h3>
-  <pre><code>git clone https://github.com/servant26/klikreservasi.git
-cd klikreservasi
-composer install
-cp .env.example .env
-php artisan key:generate
-# edit .env -> isi DB
-php artisan migrate --seed
-npm install
-npm run dev
-php artisan storage:link
-php artisan serve</code></pre>
-
-  <h3>Troubleshooting singkat</h3>
-  <ul>
-    <li><strong>Composer memory error</strong> — jalankan: <code>COMPOSER_MEMORY_LIMIT=-1 composer install</code></li>
-    <li><strong>Versi PHP tidak kompatibel</strong> — periksa <code>composer.json</code> & install versi PHP yang sesuai</li>
-    <li><strong>npm build error</strong> — gunakan Node.js versi LTS (mis. 18) atau periksa <code>package.json</code></li>
-    <li><strong>Gagal migrasi</strong> — periksa kredensial DB, hak akses, dan versi database</li>
-  </ul>
-
-  <p class="links">Butuh README.md versi Markdown juga? Saya bisa konversi HTML ini langsung ke Markdown atau buatkan file <code>README.md</code> siap pakai. Beri tahu saya pilihannya.</p>
-</body>
-</html>
