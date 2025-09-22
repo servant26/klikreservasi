@@ -1,3 +1,4 @@
+<h1 align="center">Panduan Pemasangan Web</h1>
 <h3>Requirements (Software yang dibutuhkan)</h3>
   <ul>
     <li>Git — <a href="https://git-scm.com/downloads" target="_blank">https://git-scm.com/downloads</a></li>
