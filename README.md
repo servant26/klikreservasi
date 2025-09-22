@@ -7,11 +7,10 @@
     <li>Database (MySQL atau MariaDB):
       <ul>
         <li>MySQL — <a href="https://dev.mysql.com/downloads/" target="_blank">https://dev.mysql.com/downloads/</a></li>
-        <li>MariaDB — <a href="https://mariadb.org/download/" target="_blank">https://mariadb.org/download/</a></li>
       </ul>
     </li>
-    <li>Editor (opsional): VS Code — <a href="https://code.visualstudio.com/download" target="_blank">https://code.visualstudio.com/download</a></li>
-    <li>Web server (opsional): XAMPP — <a href="https://www.apachefriends.org/download.html" target="_blank">https://www.apachefriends.org/download.html</a> atau Laragon — <a href="https://laragon.org/download/index.html" target="_blank">https://laragon.org/download/index.html</a></li>
+    <li>Editor : VS Code — <a href="https://code.visualstudio.com/download" target="_blank">https://code.visualstudio.com/download</a></li>
+    <li>Web server : XAMPP — <a href="https://www.apachefriends.org/download.html" target="_blank">https://www.apachefriends.org/download.html</a></li>
   </ul>
 
   <h3>Step-by-step Setup</h3>
